@@ -40,6 +40,7 @@ public class Course {
 			sum += assg.getStudentGrade();
 			assgCount++;
 		}
+		
 		double overallGrade = (sum / assgCount);
 		return overallGrade;
 	}
@@ -56,11 +57,15 @@ public class Course {
 		else if(grade >= 70.0 && grade < 80.0){
 			return "C";
 		}
+		else if(grade >= 60.0 && grade < 70.0){
+			return "D";
+		}
 		else{
 			return "F";
 		}
 	}
 
+	//needs encapsulation
 	public ArrayList<Assignment> getUngradedAssignments(){
 		ArrayList<Assignment> ungraded = new ArrayList<Assignment>();
 		for(Assignment assg : assignments){
