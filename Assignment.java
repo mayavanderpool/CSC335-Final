@@ -20,9 +20,6 @@
 	}
 
 	/*SETTERS AND GETTERS */
-	public void setGraded(){
-		this.graded = true;
-	}
 
 	public Boolean isGraded(){
 		return graded;
@@ -38,6 +35,7 @@
 
 	public void setStudentGrade(Double grade){
 		studentGrade = grade;
+		this.graded = true;
 	}
 
 	public Double getStudentGrade(){
