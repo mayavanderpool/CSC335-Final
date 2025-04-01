@@ -13,7 +13,7 @@
 	private Double studentGrade;
 
 	/*CONSTRUCTOR */
-	public Assignment(String name, Double points, Boolean graded){
+	public Assignment(String name, Double points){
 		this.name = name;
 		this.points = points;
 		this.graded = false;
