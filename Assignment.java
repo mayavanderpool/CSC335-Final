@@ -8,11 +8,12 @@
 
 	/*INSTANCE VARIABLES*/
 	private String name;
-	private Float points;
+	private Double points;
 	private Boolean graded;
+	private Double studentGrade;
 
 	/*CONSTRUCTOR */
-	public Assignment(String name, Float points, Boolean graded){
+	public Assignment(String name, Double points, Boolean graded){
 		this.name = name;
 		this.points = points;
 		this.graded = false;
@@ -27,12 +28,21 @@
 		return graded;
 	}
 
-	public Float getTotalPoints(){
+	public Double getTotalPoints(){
 		return points;
 	}
 
 	public String getName(){
 		return name;
 	}
+
+	public void setStudentGrade(Double grade){
+		studentGrade = grade;
+	}
+
+	public Double getStudentGrade(){
+		return studentGrade;
+	}
+
 
  }
