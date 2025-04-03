@@ -128,7 +128,7 @@ public class Teacher extends Person {
 	
 	// removes a student from a class
 	public void removeStudent(Course c, Student s) {
-		courseList.get(getCourse(c)).removeStudent(s);
+		courseList.get(getCourse(c)).removeStudent(s.getFirstName());
 	}
 	
 	// returns a single student's grade
@@ -136,7 +136,7 @@ public class Teacher extends Person {
 		double grade = -1.0;
 		StudentList slist = courseList.get(getCourse(c));
 		for (Student stu : slist) {  // slist needs to be iterable. if not, we can add .getStudents()
-			if (stu == s) grade = s.getGrade();  // s needs a get grade method
+			if (stu == s) grade = s.getGrade(c);  // s needs a get grade method
 		}
 		return grade;  // need to check for negative number somewhere
 	}

@@ -17,7 +17,7 @@ public class Person {
     public String getLastName(){
         return this.LAST;
     }
-
+    
     public void setUser(String username){
         assert username != null;
         this.username = username;
