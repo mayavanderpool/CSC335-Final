@@ -1,4 +1,5 @@
 package model;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 /*File: Student.java
@@ -71,7 +72,7 @@ public class Student extends Person{
         return graded;
     }
 
-    public static Comparator<Student> fisrtNameFirstComporator(){
+    public static Comparator<Student> fisrtNameFirstComparator(){
         return new Comparator<Student>(){
             public int compare(Student s1, Student s2){
                 int comp = s1.getFirstName().compareTo(s2.getFirstName());
@@ -95,7 +96,7 @@ public class Student extends Person{
         };
     }
 
-    public static Comparator<Student> fisrtNameFirstComparator(){
+    public static Comparator<Student> userNameFirstComparator(){
         return new Comparator<Student>(){
             public int compare(Student s1, Student s2){
                 int comp = s1.getUserName().compareTo(s2.getUserName());
