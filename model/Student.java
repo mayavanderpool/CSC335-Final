@@ -105,4 +105,31 @@ public class Student extends Person{
             }
         };
     }
+
+	/* courseGradeNeeded(Double) - What is the minimum grade needed in this course to get target GPA.
+	 * Returns: Double
+	*/
+	public Double courseGradeNeeded(Double target, Course c){
+		ArrayList<Course> current = this.getCurrentCourses();
+		ArrayList<Course> completed = this.getCompletedCourses();
+		Double sum = 0.0;
+
+		for(Course course: current){
+			if(course != c){
+				sum += course.getOverallGrade();
+			}
+		}
+		for(Course course: completed){
+			sum += course.getOverallGrade();
+		}
+		int courses = current.size() + completed.size();
+		Double avg = sum/courses;
+		Double temp = (target * 25) - avg;
+
+		Double result = (temp * (courses + 1)) + avg;
+
+
+		return result;
+
+	}
 }
