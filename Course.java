@@ -1,3 +1,4 @@
+
 /*
  * File: Course.java
  * Author: Maya Vanderpool
