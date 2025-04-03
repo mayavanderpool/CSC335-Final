@@ -1,3 +1,4 @@
+package model;
 
 /*
  * File: Assignment.java
