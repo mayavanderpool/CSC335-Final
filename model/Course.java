@@ -91,12 +91,16 @@ public class Course {
 	}
 
 
-	/* */
+	/* addAssg(Assignment assg) - Adds an assignment to the assignment arraylist.
+	 * Returns: nothing
+	*/
 	public void addAssg(Assignment assg) {
 		assignments.add(assg);
 	}
 
-	/* */
+	/* removeAssg(Assignment assg) - Removes an assignment from the assignment arraylist.
+	 * Returns: nothing
+	*/
 	public void removeAssg(Assignment assg) {
 		assignments.remove(assg);
 	}
