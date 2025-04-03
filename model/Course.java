@@ -40,8 +40,10 @@ public class Course {
 		Double sum = 0.0;
 		int assgCount = 0;
 		for (Assignment assg : assignments) {
-			sum += assg.getStudentGrade();
-			assgCount++;
+			if(assg.isGraded()){
+				sum += assg.getStudentGrade();
+				assgCount++;
+			}
 		}
 		
 		double overallGrade = (sum / assgCount);
@@ -103,6 +105,22 @@ public class Course {
 	*/
 	public void removeAssg(Assignment assg) {
 		assignments.remove(assg);
+	}
+	
+	/* gradeNeeded() - What additional grade is needed on an assignment to get desired grade in course
+	 * Returns: Double
+	*/
+	public Double gradeNeeded(Double target){
+		Double curr = this.getOverallGrade();
+
+		if(curr >= target){
+			return 0.0;
+		}
+		else{
+			Double temp = target - curr;
+			Double result = (temp * assignments.size()) + target;
+			return result;
+		}
 	}
 
 }
