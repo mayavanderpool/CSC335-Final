@@ -21,6 +21,13 @@ package model;
 		this.graded = false;
 	}
 
+	public Assignment(Assignment assg){
+		this.name = assg.getName();
+		this.points = assg.getTotalPoints();
+		this.graded = assg.isGraded();
+		this.studentGrade = assg.getStudentGrade();
+	}
+
 	/*SETTERS AND GETTERS */
 
 	public Boolean isGraded(){
