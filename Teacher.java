@@ -1,4 +1,4 @@
-package cscfinal;
+package model;
 
 import java.util.HashMap;
 import java.util.ArrayList;
@@ -8,8 +8,8 @@ public class Teacher extends Person {
 	
 	public HashMap<Course, StudentList> courseList;
 
-	public Teacher(String fName, String lName, String uName) {
-		super(fName, lName, uName);
+	public Teacher(String fName, String lName) {
+		super(fName, lName);
 		courseList = new HashMap<Course, StudentList>();
 	}
 	
@@ -27,7 +27,7 @@ public class Teacher extends Person {
 	public ArrayList<Course> getCourses() {
 		ArrayList<Course> courses = new ArrayList<Course>();
 		for (Course c : courseList.keySet()) {
-			courses.add(c.getCopy());  // courseName needs a get copy method
+			courses.add(c); // add a copy course? or make method private
 		}
 		return courses;
 	}
@@ -36,7 +36,7 @@ public class Teacher extends Person {
 	public ArrayList<Course> getCompletedOrCurrentCourses(boolean isComplete) {
 		ArrayList<Course> courses = getCourses();
 		for (Course c : courseList.keySet()) {
-			if (c.isComplete() == isComplete) courses.add(c.getCopy());  // c needs method isComplete and getCopy
+			if (c.isCompleted() == isComplete) courses.add(c);  // c needs method isComplete and getCopy
 		}
 		return getCourses();
 	}
@@ -68,27 +68,31 @@ public class Teacher extends Person {
 	
 	// get student list by course. may change to string courseName or something else
 	public StudentList getStudentList(String courseName) {
-		Course course = getCourse(courseName);
 		StudentList slist = courseList.get(courseName);
-		return slist.getCopy();  // slist needs a get copy method
+		return slist;  // slist needs a get copy method
 	}
 	
-	// returns student mean of a student list for a course
-	public double getStudentAverage(Course c) {
-		StudentList slist = courseList.get(getCourse(courseName));
-		return slist.getAverage(); // slist needs a get average method
-	}
-	
-	// returns student median of a student list for a course
-	public double getStudentMedian(String courseName) {
-		StudentList slist = courseList.get(getCourse(courseName));
-		return slist.getMedian(); // slist needs a get median method
-	}
+//	// returns student mean of a student list for a course
+//	public double getStudentAverage(Course c) {
+//		StudentList slist = courseList.get(getCourse(c));
+//		return slist.getAverage(); // slist needs a get average method
+//	}
+//	
+//	// returns student median of a student list for a course
+//	public double getStudentMedian(String courseName) {
+//		StudentList slist = courseList.get(getCourse(courseName));
+//		return slist.getMedian(); // slist needs a get median method
+//	}
 	
 	// group students
-	public StudentList groupStudents(String courseName) {
+	public String makeXGroups(String courseName, int num) {
 		StudentList slist = courseList.get(getCourse(courseName));
-		return slist.makeGroup(); // StudentList needs method makeGroup
+		return slist.makeXGroups(num);
+	}
+	
+	public String makeGroupsOfXStudents(String courseName, int num) {
+		StudentList slist = courseList.get(getCourse(courseName));
+		return slist.makeGroupsOfXStudents(num);
 	}
 	
 	// gets ungraded assignments
@@ -96,11 +100,13 @@ public class Teacher extends Person {
 		return getCourse(courseName).getUngradedAssignments();  // course needs a getUngradedAssignment method
 	}
 	
-	// sort students in course
-	public StudentList sortStudentsBy(Course c, String sortBy) {
-		StudentList slist = courseList.get(getCourse(c));
-		return slist.sortBy(String sortBy);  // slist needs sorting methods
-	}
+	
+	// edit this for sorting!!
+//	// sort students in course
+//	public StudentList sortStudentsBy(Course c, String sortBy) {
+//		StudentList slist = courseList.get(getCourse(c));
+//		return slist.sortBy(sortBy);  // slist needs sorting methods
+//	}
 	
 	
 	
@@ -111,7 +117,7 @@ public class Teacher extends Person {
 	public void addAssignmentGrade(Student s, String courseName, Assignment a, double grade) {
 		StudentList slist = courseList.get(getCourse(courseName));
 		for (Student stu : slist) {
-			if (stu == s) stu.setAssignmentGrade(c, a, grade);  // student needs method setAssignmentGrade
+			if (stu == s) stu.setAssignmentGrade(courseName, a, grade);  // student needs method setAssignmentGrade
 		}
 	}
 	
