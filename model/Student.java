@@ -7,7 +7,6 @@ Author: Rees Hart
 Purpose: This class represents a student object
 */
 
-// NEED TO ADD COMPERATOR
 public class Student extends Person{
     private ArrayList<Course> courseList;
     private double gpa;
@@ -18,12 +17,15 @@ public class Student extends Person{
         this.gpa = 0.0;
     }
 
-    public void setGPA(double gpa){
-        this.gpa = gpa;
-    }
 
     public double getGPA(){
-        return this.gpa;
+        int sum = 0;
+        for (Course c: courseList){
+            if (c.isCompleted()){
+                sum += c.getOverallGrade();
+            }
+        }
+        return (sum / (getCompletedCourses().size() * 100)) * 4;
     }
 
     public void addCourse(Course c){
@@ -104,5 +106,27 @@ public class Student extends Person{
                 return comp;
             }
         };
+    }
+
+    public void setAssignmentGrade(String course, Assignment a, double grade){
+        for(Course c: courseList){
+            if(c.getName().compareTo(course) == 0){
+                for(Assignment assg: c.getAssignments()){
+                    if(assg.getName().compareTo(a.getName()) == 0){
+                        assg.setStudentGrade(grade);
+                    }
+                }
+            }
+        }
+    }
+
+    public double getGrade(Course course){
+        double grade = 0.0;
+        for(Course c : courseList){
+            if(c.equals(course)){
+                grade = course.getOverallGrade();
+            }
+        }
+        return grade;
     }
 }
