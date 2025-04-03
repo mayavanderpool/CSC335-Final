@@ -1,5 +1,6 @@
 package model;
 import java.util.ArrayList;
+import java.util.Comparator;
 /*File: Student.java
 Author: Rees Hart
 Purpose: This class represents a student object
@@ -63,10 +64,44 @@ public class Student extends Person{
         ArrayList<Assignment> graded = new ArrayList<Assignment>();
 
         for(Assignment a : assignments){
-            if(a.graded()){
+            if(a.isGraded()){
                 graded.add(a);
             }
         }
         return graded;
+    }
+
+    public static Comparator<Student> fisrtNameFirstComporator(){
+        return new Comparator<Student>(){
+            public int compare(Student s1, Student s2){
+                int comp = s1.getFirstName().compareTo(s2.getFirstName());
+                if(comp == 0){
+                    comp = s1.getLastName().compareTo(s2.getLastName());
+                }
+                return comp;
+            }
+        };
+    }
+
+    public static Comparator<Student> lastNameFirstComparator(){
+        return new Comparator<Student>(){
+            public int compare(Student s1, Student s2){
+                int comp = s1.getLastName().compareTo(s2.getLastName());
+                if(comp == 0){
+                    comp = s1.getFirstName().compareTo(s2.getFirstName());
+                }
+                return comp;
+            }
+        };
+    }
+
+    public static Comparator<Student> fisrtNameFirstComparator(){
+        return new Comparator<Student>(){
+            public int compare(Student s1, Student s2){
+                int comp = s1.getUserName().compareTo(s2.getUserName());
+                
+                return comp;
+            }
+        };
     }
 }

@@ -1,4 +1,6 @@
+
 package model;
+
 /*
  * File: Course.java
  * Author: Maya Vanderpool
@@ -71,11 +73,14 @@ public class Course {
 		ArrayList<Assignment> ungraded = new ArrayList<Assignment>();
 		for(Assignment assg : assignments){
 			if(assg.isGraded() == false){
+
 				ungraded.add(new Assignment(assg));
+
 			}
 		}
 		return ungraded;
 	}
+
 
 	public ArrayList<Assignment> getAssignments(){
 		ArrayList<Assignment> all = new ArrayList<Assignment>();
@@ -84,6 +89,7 @@ public class Course {
 		}
 		return all;
 	}
+
 
 	/* addAssg(Assignment assg) - Adds an assignment to the assignment arraylist.
 	 * Returns: nothing
