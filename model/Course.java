@@ -1,3 +1,4 @@
+package model;
 /*
  * File: Course.java
  * Author: Maya Vanderpool
@@ -65,15 +66,23 @@ public class Course {
 		}
 	}
 
-	//needs encapsulation
+	
 	public ArrayList<Assignment> getUngradedAssignments(){
 		ArrayList<Assignment> ungraded = new ArrayList<Assignment>();
 		for(Assignment assg : assignments){
 			if(assg.isGraded() == false){
-				ungraded.add(assg);
+				ungraded.add(new Assignment(assg));
 			}
 		}
 		return ungraded;
+	}
+
+	public ArrayList<Assignment> getAllAssignments(){
+		ArrayList<Assignment> all = new ArrayList<Assignment>();
+		for(Assignment assg : assignments){
+			all.add(new Assignment(assg));
+		}
+		return all;
 	}
 
 	/* */

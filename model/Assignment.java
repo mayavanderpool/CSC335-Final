@@ -1,3 +1,5 @@
+package model;
+
 /*
  * File: Assignment.java
  * Author: Maya Vanderpool
@@ -17,6 +19,13 @@
 		this.name = name;
 		this.points = points;
 		this.graded = false;
+	}
+
+	public Assignment(Assignment assg){
+		this.name = assg.getName();
+		this.points = assg.getTotalPoints();
+		this.graded = assg.isGraded();
+		this.studentGrade = assg.getStudentGrade();
 	}
 
 	/*SETTERS AND GETTERS */
