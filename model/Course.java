@@ -66,7 +66,7 @@ public class Course {
 		}
 	}
 
-	
+
 	public ArrayList<Assignment> getUngradedAssignments(){
 		ArrayList<Assignment> ungraded = new ArrayList<Assignment>();
 		for(Assignment assg : assignments){
@@ -77,7 +77,7 @@ public class Course {
 		return ungraded;
 	}
 
-	public ArrayList<Assignment> getAllAssignments(){
+	public ArrayList<Assignment> getAssignments(){
 		ArrayList<Assignment> all = new ArrayList<Assignment>();
 		for(Assignment assg : assignments){
 			all.add(new Assignment(assg));
@@ -85,12 +85,16 @@ public class Course {
 		return all;
 	}
 
-	/* */
+	/* addAssg(Assignment assg) - Adds an assignment to the assignment arraylist.
+	 * Returns: nothing
+	*/
 	public void addAssg(Assignment assg) {
 		assignments.add(assg);
 	}
 
-	/* */
+	/* removeAssg(Assignment assg) - Removes an assignment from the assignment arraylist.
+	 * Returns: nothing
+	*/
 	public void removeAssg(Assignment assg) {
 		assignments.remove(assg);
 	}
