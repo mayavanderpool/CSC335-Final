@@ -107,7 +107,7 @@ public class Course {
 		assignments.remove(assg);
 	}
 	
-	/* gradeNeeded() - What additional grade is needed on an assignment to get desired grade in course
+	/* gradeNeeded(Double) - What additional grade assignment grade is needed to get desired grade in course
 	 * Returns: Double
 	*/
 	public Double gradeNeeded(Double target){
