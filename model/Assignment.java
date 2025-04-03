@@ -51,5 +51,4 @@ package model;
 		return studentGrade;
 	}
 
-
  }

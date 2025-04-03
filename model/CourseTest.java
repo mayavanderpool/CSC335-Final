@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
-class TestCourse {
+class CourseTest {
 
 	@Test
 	void testCompleted() {
@@ -25,7 +25,7 @@ class TestCourse {
 	}
 	
 	@Test
-	void getOverallGrade() {
+	void testGetOverallGrade() {
 		Course one = new Course("335");
 		Assignment assg = new Assignment("assg1", 100.0);
 		
@@ -37,7 +37,7 @@ class TestCourse {
 	}
 	
 	@Test
-	void getLetterGrade() {
+	void testGetLetterGrade() {
 		Course one = new Course("335");
 		Assignment assg = new Assignment("assg1", 100.0);
 		
@@ -64,7 +64,7 @@ class TestCourse {
 	}
 	
 	@Test
-	void getUngradedAssignments() {
+	void testGetUngradedAssignments() {
 		Course one = new Course("335");
 		Assignment assg1 = new Assignment("assg1", 100.0);
 		Assignment assg2 = new Assignment("assg2", 100.0);
@@ -76,18 +76,53 @@ class TestCourse {
 		one.addAssg(assg3);
 		one.addAssg(assg4);
 		
-		ArrayList<Assignment> assignments = new ArrayList<Assignment>();
-		assignments.add(assg1);
-		assignments.add(assg2);
-		assignments.add(assg3);
-		assignments.add(assg4);
 		
-		assertEquals(assignments, one.getUngradedAssignments());
-		
+		assertEquals(one.getUngradedAssignments().size(), 4);
 		one.removeAssg(assg4);
 		assertEquals(one.getUngradedAssignments().size(), 3);
 		
+		assg3.setStudentGrade(97.0);
+		
+		assertEquals(one.getUngradedAssignments().size(), 2);
+	}
 	
+	@Test
+	void testGetAssignments() {
+		Course one = new Course("335");
+		Assignment assg1 = new Assignment("assg1", 100.0);
+		Assignment assg2 = new Assignment("assg2", 100.0);
+		Assignment assg3 = new Assignment("assg3", 100.0);
+		Assignment assg4 = new Assignment("assg4", 100.0);
+		
+		one.addAssg(assg1);
+		one.addAssg(assg2);
+		one.addAssg(assg3);
+		one.addAssg(assg4);
+		
+		assertEquals(one.getAssignments().size(), 4);
+		one.removeAssg(assg4);
+		assertEquals(one.getAssignments().size(), 3);
+	}
+	
+	@Test
+	void testWhatGrade() {
+		Course one = new Course("335");
+		Assignment assg1 = new Assignment("assg1", 100.0);
+		Assignment assg2 = new Assignment("assg2", 100.0);
+		Assignment assg3 = new Assignment("assg3", 100.0);
+		
+		one.addAssg(assg1);
+		one.addAssg(assg2);
+		one.addAssg(assg3);
+		
+		assg1.setStudentGrade(70.0);
+		assg2.setStudentGrade(70.0);
+		assg3.setStudentGrade(70.0);
+		
+		assertEquals(one.gradeNeeded(80.0), 110.0);
+		
+		assertEquals(one.gradeNeeded(70.0), 0.0);
+		
 	}
 
 }

@@ -4,9 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-class TestAssignment {
+class AssignmentTest{
 
-	
 	
 	@Test
 	void testGetTotalPoints() {
@@ -27,6 +26,17 @@ class TestAssignment {
 		Assignment one = new Assignment("one", 100.0);
 		
 		assertTrue(one.getName().equals("one"));
+	}
+	
+	@Test
+	void testCopy() {
+		Assignment one = new Assignment("one", 100.0);
+		Assignment copy = new Assignment(one);
+		
+		assertTrue(copy.getName().equals(one.getName()));
+		assertEquals(copy.getTotalPoints(), one.getTotalPoints());
+		assertEquals(copy.isGraded(), one.isGraded());
+		
 	}
 	
 
