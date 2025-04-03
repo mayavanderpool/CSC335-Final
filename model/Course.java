@@ -82,7 +82,7 @@ public class Course {
 	}
 
 
-	public ArrayList<Assignment> getAllAssignments(){
+	public ArrayList<Assignment> getAssignments(){
 		ArrayList<Assignment> all = new ArrayList<Assignment>();
 		for(Assignment assg : assignments){
 			all.add(new Assignment(assg));
