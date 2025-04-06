@@ -21,6 +21,7 @@ public class Course {
 		this.name = name;
 		this.assignments = new ArrayList<Assignment>();
 		this.completed = false;
+		this.students = new StudentList();
 	}
 
 	/* SETTERS AND GETTERS */
@@ -139,5 +140,7 @@ public class Course {
 			return result;
 		}
 	}
+	
+	
 
 }

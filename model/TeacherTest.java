@@ -12,7 +12,7 @@ class TeacherTest {
 		Course science = new Course("science");
 		
 		assertEquals(first.getCourses().size(), 0);
-		first.addCourse(science, first.getStudentList("science"));
+		first.addCourse(science);
 		assertEquals(first.getCourses().size(), 1);
 	}
 	
@@ -20,7 +20,7 @@ class TeacherTest {
 	void testGetCurrentOrCompletedCourses() {
 		Teacher first = new Teacher("jane", "doe");
 		Course science = new Course("science");
-		first.addCourse(science, first.getStudentList("science"));
+		first.addCourse(science);
 		
 		assertEquals(first.getCompletedOrCurrentCourses(true).size(), 0);
 		assertEquals(first.getCompletedOrCurrentCourses(false).size(), 1);
@@ -38,7 +38,7 @@ class TeacherTest {
 		assertTrue(first.getCourse("science") == null);
 		assertTrue(first.getCourse(science) == null);
 
-		first.addCourse(science, first.getStudentList("science"));
+		first.addCourse(science);
 		
 		assertTrue(first.getCourse("science") == science);
 		assertTrue(first.getCourse(science) == science);
@@ -46,16 +46,21 @@ class TeacherTest {
 	}
 	
 	@Test
-	void testAddStudent() {
+	void testGetStudentList() {
 		Teacher first = new Teacher("jane", "doe");
 		Course science = new Course("science");
-		first.addCourse(science, first.getStudentList("science"));
+		first.addCourse(science);
 		Student stu = new Student("john", "smith");
 		
+		StudentList list = first.getStudentList(science);
+		assertEquals(list.getStudents().size(), 0);
 		first.addStudent(science, stu);
-		StudentList list = first.getStudentList("science");
 		
-		
+		list = first.getStudentList(science);
+		assertEquals(list.getStudents().size(), 1);
 	}
-
+	
+	
+	
+	
 }
