@@ -1,4 +1,3 @@
-
 package model;
 
 /*
@@ -15,6 +14,7 @@ public class Course {
 	private String name;
 	private ArrayList<Assignment> assignments;
 	private Boolean completed;
+	private StudentList students;
 
 	/* CONSTRUCTOR */
 	public Course(String name) {
@@ -90,6 +90,23 @@ public class Course {
 			all.add(new Assignment(assg));
 		}
 		return all;
+	}
+	
+	public StudentList getStudents() {
+		return students;
+	}
+	
+	//
+	public void addStudents(Student stu) {
+		students.addStudent(stu);
+	}
+	
+	public void removeStudents(Student stu) {
+		for(Student s : students) {
+			if(s == stu) {
+				students.removeStudent(stu.getUserName());
+			}
+		}
 	}
 
 
