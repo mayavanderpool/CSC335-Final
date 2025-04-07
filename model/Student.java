@@ -19,13 +19,18 @@ public class Student extends Person{
 
 
     public double getGPA(){
-        int sum = 0;
-        for (Course c: courseList){
+    	if(this.getCompletedCourses().size()== 0) {
+    		return 0.0;
+    	} else {
+        double sum = 0;
+        for (Course c: this.getCompletedCourses()){
             if (c.isCompleted()){
                 sum += c.getOverallGrade();
             }
         }
-        return (sum / (getCompletedCourses().size() * 100)) * 4;
+        double x = getCompletedCourses().size() * 100;
+        return (sum / x) * 4;
+    	}
     }
 
     public void addCourse(Course c){
@@ -134,6 +139,7 @@ public class Student extends Person{
 	/* courseGradeNeeded(Double) - What is the minimum grade needed in this course to get target GPA.
 	 * Returns: Double
 	*/
+    /*
 	public Double courseGradeNeeded(Double target, Course c){
 		ArrayList<Course> current = this.getCurrentCourses();
 		ArrayList<Course> completed = this.getCompletedCourses();
@@ -157,4 +163,6 @@ public class Student extends Person{
 		return result;
 
 	}
+	*/
 }
+

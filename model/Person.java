@@ -4,8 +4,10 @@ public class Person {
     private final String LAST;
     private String username;
 
+    /*
+     * @pre first != null && last != null;
+     */
     public Person(String first, String last){
-        assert first != null && last != null;
         this.FIRST = first;
         this.LAST = last;
         this.username = "";
@@ -17,9 +19,10 @@ public class Person {
     public String getLastName(){
         return this.LAST;
     }
-    
+    /*
+     * @pre username != null
+     */
     public void setUser(String username){
-        assert username != null;
         this.username = username;
     }
 
