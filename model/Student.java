@@ -112,6 +112,15 @@ public class Student extends Person{
             }
         };
     }
+    
+    public static Comparator<Student> gradeFirstComparator(Course c){
+        return new Comparator<Student>(){
+            public int compare(Student s1, Student s2){
+                int comp = Double.compare(s1.getGrade(c), s2.getGrade(c));
+                return comp;
+            }
+        };
+    }
 
 
     public void setAssignmentGrade(String course, Assignment a, double grade){
@@ -165,4 +174,3 @@ public class Student extends Person{
 	}
 	*/
 }
-
