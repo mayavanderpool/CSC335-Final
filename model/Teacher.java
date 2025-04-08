@@ -1,3 +1,4 @@
+
 package model;
 
 import java.util.HashMap;
@@ -98,14 +99,22 @@ public class Teacher extends Person {
 		return getCourse(courseName).getUngradedAssignments();  // course needs a getUngradedAssignment method
 	}
 	
+	// SORTING
+	public ArrayList<Student> getStudentByFirstName(String courseName) {
+		return getCourse(courseName).getStudents().getStudentsByFirstName();
+	}
 	
-	// edit this for sorting!!
-//	// sort students in course
-//	public StudentList sortStudentsBy(Course c, String sortBy) {
-//		StudentList slist = courseList.get(getCourse(c));
-//		return slist.sortBy(sortBy);  // slist needs sorting methods
-//	}
+	public ArrayList<Student> getStudentByLastName(String courseName) {
+		return getCourse(courseName).getStudents().getStudentsByFirstName();
+	}
 	
+	public ArrayList<Student> getStudentByUsername(String courseName) {
+		return getCourse(courseName).getStudents().getStudentsByFirstName();
+	}
+	
+	public ArrayList<Student> getStudentByCourseGrade(String courseName) {
+		return getCourse(courseName).getStudents().getStudentsByFirstName();
+	}
 	
 	
 	
