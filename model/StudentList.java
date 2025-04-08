@@ -67,6 +67,13 @@ public class StudentList implements Iterable<Student>{
 		return listCopy;
 	}
 	
+	// sort by grade in course
+	public ArrayList<Student> getStudentsByCourseGrade(Course c) {
+		ArrayList<Student> listCopy = new ArrayList<Student>(students);
+		Collections.sort(listCopy, Student.gradeFirstComparator(c));
+		return listCopy;
+	}
+	
 	
 	/*
 	 * This method returns students split into x amount of groups 
@@ -76,12 +83,6 @@ public class StudentList implements Iterable<Student>{
 	 */
 	public String makeXGroups(int x) {
 		String groupsString = "";
-		String[] groupNames = {"Intelligent Iguanas", "Clever Cats",
-				"Thinking Tarantulas", "Talented Turtles", "Wise Wolves",
-				"Brilliant Bats", "Keen Koalas", "Sharp Sharks", "Amazing Ants"
-				, "Smart Seals", "Bright Bees", "Wise Wombats", "Savvy Snakes"
-				, "Exceptional Eagles", "Knowing Narwhals"};
-		
 		if (x > 15) {return "Only 15 Groups Allowed";}
 		if (x > students.size()) {return "Not enough students for groups";}
 		
@@ -102,7 +103,7 @@ public class StudentList implements Iterable<Student>{
 		
 		// return string of groups
 		for (int i = 0; i < x; i++) {
-			groupsString += ("Group " + groupNames[i] + "\n");
+			groupsString += ("Group " + (i + 1) + ":\n");
 			for(Student s : groups.get(i)) {
 				groupsString += s.getFirstName() + " " + s.getLastName() + "\n";
 			}
@@ -122,6 +123,26 @@ public class StudentList implements Iterable<Student>{
 		if (n == 0) n = 1;
 		return makeXGroups(n);
 	}
+	
+	public double getCourseAverage(Course c) {
+		int count = 0;
+		double total = 0; 
+		for (Student s : students) {
+			count += 1;
+			total += s.getGrade(c);
+		}
+		return total / count;
+	}
+	
+	public double getCourseMedian(Course c) {
+		ArrayList<Student> slist = getStudentsByCourseGrade(c);
+		int len = slist.size();
+		
+		if (len % 2 == 1) return slist.get(len/2).getGrade(c);
+		double m1 = slist.get(len/ 2 - 1).getGrade(c);
+		double m2 = slist.get(len / 2).getGrade(c);
+		return (m1 + m2) / 2.0;
+	}
 
 	/*
 	 * This method returns a shuffled list of students 
@@ -133,6 +154,7 @@ public class StudentList implements Iterable<Student>{
 		Collections.shuffle(shuffled);
 		return shuffled;
 	}
+	
 	
 	@Override
 	public Iterator<Student> iterator() {

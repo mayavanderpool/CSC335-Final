@@ -70,17 +70,17 @@ public class Teacher extends Person {
 		return c.getStudents();  // slist needs a get copy method
 	}
 	
-//	// returns student mean of a student list for a course
-//	public double getStudentAverage(Course c) {
-//		StudentList slist = courseList.get(getCourse(c));
-//		return slist.getAverage(); // slist needs a get average method
-//	}
-//	
-//	// returns student median of a student list for a course
-//	public double getStudentMedian(String courseName) {
-//		StudentList slist = courseList.get(getCourse(courseName));
-//		return slist.getMedian(); // slist needs a get median method
-//	}
+	// returns student mean of a student list for a course
+	public double getStudentAverage(Course c) {
+		StudentList slist = getCourse(c).getStudents();
+		return slist.getCourseAverage(c);
+	}
+	
+	// returns student median of a student list for a course
+	public double getStudentMedian(Course c) {
+		StudentList slist = getCourse(c).getStudents();
+		return slist.getCourseMedian(c); 
+	}
 	
 	// group students
 	public String makeXGroups(String courseName, int num) {
