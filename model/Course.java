@@ -1,3 +1,4 @@
+
 package model;
 
 /*
@@ -8,18 +9,19 @@ package model;
 
 import java.util.ArrayList;
 
+
 public class Course {
 
 	/* INSTANCE VARIABLES */
 	private String name;
-	private ArrayList<Assignment> assignments;
+//	private ArrayList<Assignment> assignments;
 	private Boolean completed;
 	private StudentList students;
 
 	/* CONSTRUCTOR */
 	public Course(String name) {
 		this.name = name;
-		this.assignments = new ArrayList<Assignment>();
+//		this.assignments = new ArrayList<Assignment>();
 		this.completed = false;
 		this.students = new StudentList();
 	}
@@ -37,40 +39,59 @@ public class Course {
 		return name;
 	}
 
-	public Double getOverallGrade() {
-		Double sum = 0.0;
-		int assgCount = 0;
-		for (Assignment assg : assignments) {
-			if(assg.isGraded()){
-				sum += assg.getStudentGrade();
-				assgCount++;
+//	public Double getOverallGrade() {
+//		Double sum = 0.0;
+//		int assgCount = 0;
+//		for (Assignment assg : assignments) {
+//			if(assg.isGraded()){
+//				sum += assg.getStudentGrade();
+//				assgCount++;
+//			}
+//		}
+//		
+//		double overallGrade = (sum / assgCount);
+//		return overallGrade;
+//	}
+
+//	public String getLetterGrade(){
+//		Double grade = getOverallGrade();
+//
+//		if(grade >= 90.0){
+//			return "A";
+//		}
+//		else if(grade >= 80.0 && grade < 90){
+//			return "B";
+//		}
+//		else if(grade >= 70.0 && grade < 80.0){
+//			return "C";
+//		}
+//		else if(grade >= 60.0 && grade < 70.0){
+//			return "D";
+//		}
+//		else{
+//			return "F";
+//		}
+//	}
+
+	
+	public StudentList getStudents() {
+		return students;
+	}
+	
+	//
+	public void addStudents(Student stu) {
+		students.addStudent(stu);
+	}
+	
+	public void removeStudents(Student stu) {
+		for(Student s : students) {
+			if(s == stu) {
+				students.removeStudent(stu.getUserName());
 			}
 		}
-		
-		double overallGrade = (sum / assgCount);
-		return overallGrade;
 	}
-
-	public String getLetterGrade(){
-		Double grade = getOverallGrade();
-
-		if(grade >= 90.0){
-			return "A";
-		}
-		else if(grade >= 80.0 && grade < 90){
-			return "B";
-		}
-		else if(grade >= 70.0 && grade < 80.0){
-			return "C";
-		}
-		else if(grade >= 60.0 && grade < 70.0){
-			return "D";
-		}
-		else{
-			return "F";
-		}
-	}
-
+	
+// move all below methods to student
 
 	public ArrayList<Assignment> getUngradedAssignments(){
 		ArrayList<Assignment> ungraded = new ArrayList<Assignment>();
@@ -93,22 +114,7 @@ public class Course {
 		return all;
 	}
 	
-	public StudentList getStudents() {
-		return students;
-	}
-	
-	//
-	public void addStudents(Student stu) {
-		students.addStudent(stu);
-	}
-	
-	public void removeStudents(Student stu) {
-		for(Student s : students) {
-			if(s == stu) {
-				students.removeStudent(stu.getUserName());
-			}
-		}
-	}
+
 
 
 	/* addAssg(Assignment assg) - Adds an assignment to the assignment arraylist.
