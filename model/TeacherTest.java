@@ -2,6 +2,8 @@ package model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.Test;
 
 class TeacherTest {
@@ -174,9 +176,11 @@ class TeacherTest {
 		course.addStudents(s1);
 		course.addStudents(s2);
 		teach.addCourse(course);
-		assertEquals(teach.getStudentByUsername("math").get(0).getUserName(), "a");
-		assertEquals(teach.getStudentByUsername("math").get(2).getUserName(), "c");
+		ArrayList<Student> list = teach.getStudentByUsername("math");
+		assertEquals(list.get(0).getUserName(), "a");
+		assertEquals(list.get(2).getUserName(), "c");
 	}
+	
 	
 	@Test
 	void testRemoveStudent() {
@@ -190,4 +194,17 @@ class TeacherTest {
 		assertEquals(teach.getStudentList(course).getStudents().size(), 0);
 	}
 	
+	@Test
+	void getStudentgrade() {
+		Teacher teach = new Teacher("jane", "doe");
+		Student s = new Student("mary", "mess");
+		Course course = new Course("math");
+		course.addStudents(s);
+		teach.addCourse(course);
+		
+		Assignment assg1 = new Assignment("assg1", 100.0);
+		s.setAssignmentGrade("math", assg1, 90.0);
+		assertEquals(s.getGrade(course), 90);
+		assertEquals(teach.getStudentGrade(course, s), 9000000);
+	}
 }

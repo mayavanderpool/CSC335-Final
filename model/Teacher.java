@@ -105,11 +105,13 @@ public class Teacher extends Person {
 	}
 	
 	public ArrayList<Student> getStudentByLastName(String courseName) {
-		return getCourse(courseName).getStudents().getStudentsByFirstName();
+		StudentList list = getCourse(courseName).getStudents();
+		return list.getStudentsByLastName();
 	}
 	
 	public ArrayList<Student> getStudentByUsername(String courseName) {
-		return getCourse(courseName).getStudents().getStudentsByFirstName();
+		StudentList list = getCourse(courseName).getStudents();
+		return list.getStudentsByUsername();
 	}
 	
 	public ArrayList<Student> getStudentByCourseGrade(String courseName) {
