@@ -1,3 +1,4 @@
+
 package model;
 
 /*
@@ -7,6 +8,7 @@ package model;
  */
 
 import java.util.ArrayList;
+
 
 public class Course {
 
@@ -37,61 +39,6 @@ public class Course {
 		return name;
 	}
 
-	public Double getOverallGrade() {
-		Double sum = 0.0;
-		int assgCount = 0;
-		for (Assignment assg : assignments) {
-			if(assg.isGraded()){
-				sum += assg.getStudentGrade();
-				assgCount++;
-			}
-		}
-		
-		double overallGrade = (sum / assgCount);
-		return overallGrade;
-	}
-
-	public String getLetterGrade(){
-		Double grade = getOverallGrade();
-
-		if(grade >= 90.0){
-			return "A";
-		}
-		else if(grade >= 80.0 && grade < 90){
-			return "B";
-		}
-		else if(grade >= 70.0 && grade < 80.0){
-			return "C";
-		}
-		else if(grade >= 60.0 && grade < 70.0){
-			return "D";
-		}
-		else{
-			return "F";
-		}
-	}
-
-
-	public ArrayList<Assignment> getUngradedAssignments(){
-		ArrayList<Assignment> ungraded = new ArrayList<Assignment>();
-		for(Assignment assg : assignments){
-			if(assg.isGraded() == false){
-
-				ungraded.add(new Assignment(assg));
-
-			}
-		}
-		return ungraded;
-	}
-
-
-	public ArrayList<Assignment> getAssignments(){
-		ArrayList<Assignment> all = new ArrayList<Assignment>();
-		for(Assignment assg : assignments){
-			all.add(new Assignment(assg));
-		}
-		return all;
-	}
 	
 	public StudentList getStudents() {
 		return students;
@@ -111,11 +58,24 @@ public class Course {
 	}
 
 
+	public ArrayList<Assignment> getAssignments(){
+		ArrayList<Assignment> all = new ArrayList<Assignment>();
+		for(Assignment assg : assignments){
+			all.add(new Assignment(assg));
+		}
+		return all;
+	}
+	/*
+
 	/* addAssg(Assignment assg) - Adds an assignment to the assignment arraylist.
 	 * Returns: nothing
 	*/
+	
 	public void addAssg(Assignment assg) {
 		assignments.add(assg);
+		for(Student s: students.getStudents()) {
+			s.addAssignment(this, assg);
+		}
 	}
 
 	/* removeAssg(Assignment assg) - Removes an assignment from the assignment arraylist.
@@ -125,22 +85,5 @@ public class Course {
 		assignments.remove(assg);
 	}
 	
-	/* gradeNeeded(Double) - What additional grade assignment grade is needed to get desired grade in course
-	 * Returns: Double
-	*/
-	public Double gradeNeeded(Double target){
-		Double curr = this.getOverallGrade();
-
-		if(curr >= target){
-			return 0.0;
-		}
-		else{
-			Double temp = target - curr;
-			Double result = (temp * assignments.size()) + target;
-			return result;
-		}
-	}
 	
-	
-
 }

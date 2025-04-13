@@ -25,8 +25,12 @@ class StudentTest {
 	void testSet() {
 		Student s1 = new Student("Rees", "Hart");
 		Course c1 = new Course("Math");
+		Teacher t1 = new Teacher("Jane", "Smith");
 		
+		t1.addCourse(c1);
+		t1.addStudent(c1, s1);
 		s1.addCourse(c1);
+		
 		assertEquals(s1.getCurrentCourses().size(), 1);
 		
 		c1.setCompleted();
@@ -35,12 +39,15 @@ class StudentTest {
 		
 		
 		Course c2 = new Course("Art");
+		t1.addCourse(c2);
+		t1.addStudent(c2, s1);
 		s1.addCourse(c2);
 		
 		Assignment a1 = new Assignment("a1", 100.0);
+		t1.addAssignmentToCourse("Art", a1);
+		
 		assertEquals(s1.getGraded().size(), 0);
-		a1.setStudentGrade(90.0);
-		c2.addAssg(a1);
+		t1.addAssignmentGrade(s1, "Art", a1, 100);
 		
 		assertEquals(s1.getAssignments().size(), 1);
 		assertEquals(s1.getGraded().size(), 1);
@@ -49,35 +56,47 @@ class StudentTest {
 	@Test
 	void GPA() {
 		Student s1 = new Student("Rees", "Hart");
+		Teacher t1 = new Teacher("Jane", "Smith");
 		Course c1 = new Course("Math");
 		Assignment a1 = new Assignment("a1", 100.0);
 		Assignment a2 = new Assignment("a2", 100.0);
-		c1.addAssg(a1);
-		c1.addAssg(a2);
-		a1.setStudentGrade(90.0);
-		c1.setCompleted();
+		t1.addCourse(c1);
+		t1.addStudent(c1, s1);
 		s1.addCourse(c1);
+		t1.addAssignmentToCourse("Math", a1);
+		t1.addAssignmentGrade(s1, "Math", a1, 100);
+		c1.setCompleted();
+		assertEquals(s1.getGPA(), 4.0);
 		
-		s1.setAssignmentGrade("Math", a2, 90.0);
-		assertEquals(s1.getCompletedCourses().size(), 1);
-		assertEquals(s1.getGrade(c1), 90);
-		assertEquals(s1.getGPA(), 3.6);
+		
 		
 		
 	}
 	
 	@Test
-	void gradeNeeded() {
+	void testGradeNeeded() {
 		Student s1 = new Student("Rees", "Hart");
-		Student s2 = new Student("Crispin", "Carter");
+		Course c1 = new Course("Math");
+		Course c2 = new Course("Art");
+		Teacher t1 = new Teacher("Jane", "Smith");
+		Assignment a1 = new Assignment("a1", 100.0);
 		
-		ArrayList<Student> list = new ArrayList<Student>();
-		list.add(s1);
-		list.add(s2);
+		t1.addCourse(c1);
+		t1.addStudent(c1, s1);
+		s1.addCourse(c1);
+		t1.addAssignmentToCourse("Math", a1);
+		t1.addAssignmentGrade(s1, "Math", a1, 0);
+		c1.setCompleted();
+		t1.addCourse(c2);
+		t1.addStudent(c2, s1);
+		s1.addCourse(c2);
 		
-		Collections.sort(list, Student.fisrtNameFirstComparator());
-		Collections.sort(list, Student.lastNameFirstComparator());
-		Collections.sort(list, Student.userNameFirstComparator());
+		
+		assertEquals(200, s1.courseGradeNeeded(100.0, c2));
+		
+		
+		
+		
 		
 	}
 	

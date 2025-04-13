@@ -13,13 +13,6 @@ class AssignmentTest{
 		assertEquals(one.getTotalPoints(), 100.0);
 	}
 	
-	@Test
-	void testGraded() {
-		Assignment one = new Assignment("one", 100.0);
-		assertFalse(one.isGraded());
-		one.setStudentGrade(97.0);
-		assertEquals(one.getStudentGrade(), 97.0);
-	}
 	
 	@Test
 	void testGetName() {
@@ -35,7 +28,6 @@ class AssignmentTest{
 		
 		assertTrue(copy.getName().equals(one.getName()));
 		assertEquals(copy.getTotalPoints(), one.getTotalPoints());
-		assertEquals(copy.isGraded(), one.isGraded());
 		
 	}
 	
