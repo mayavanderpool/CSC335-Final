@@ -96,7 +96,7 @@ public class Teacher extends Person {
 	
 	// gets ungraded assignments
 	public ArrayList<Assignment> getUngradedAssignments(String courseName) {
-		return getCourse(courseName).getUngradedAssignments();  // course needs a getUngradedAssignment method
+		for();  // course needs a getUngradedAssignment method
 	}
 	
 	// SORTING
@@ -121,6 +121,11 @@ public class Teacher extends Person {
 	
 	
 	// INDIVIDUAL STUDENT METHODS
+	
+	public void addAssignmentToCourse(String course, Assignment a) {
+		Course c = getCourse(course);
+		c.addAssg(a);
+	}
 	
 	// add grade for student on an assignment
 	public void addAssignmentGrade(Student s, String courseName, Assignment a, double grade) {

@@ -26,11 +26,10 @@ public class Student extends Person{
         double sum = 0;
         for (Course c: this.getCompletedCourses()){
             if (c.isCompleted()){
-                sum += getGrade(c);
+                sum += getGrade(c) * 4.0;
             }
         }
-        double x = getCompletedCourses().size() * 100;
-        return (sum / x) * 4;
+        return (sum / this.getCompletedCourses().size());
     	}
     }
 
@@ -66,13 +65,15 @@ public class Student extends Person{
     }
 
     public ArrayList<Assignment> getGraded(){
-        ArrayList<Assignment> assignments = this.getAssignments();
         ArrayList<Assignment> graded = new ArrayList<Assignment>();
 
-        for(Assignment a : assignments){
-            if(a.isGraded()){
-                graded.add(a);
-            }
+        for(HashMap.Entry<Course, HashMap<Assignment, Double>> entry : this.courseList.entrySet()){
+        	HashMap<Assignment, Double> assgnentry = entry.getValue();
+        	for(HashMap.Entry<Assignment, Double> assg : assgnentry.entrySet()) {
+        		if(assg.getValue() > 0.0) {
+        			graded.add(assg.getKey());
+        		}
+        	}
         }
         return graded;
     }
@@ -99,6 +100,12 @@ public class Student extends Person{
                 return comp;
             }
         };
+    }
+    
+    public void addAssignment(Course c, Assignment a) {
+    	if(courseList.containsKey(c)) {
+    		courseList.get(c).put(a, 0.0);
+    	}
     }
 
     public static Comparator<Student> userNameFirstComparator(){
@@ -139,7 +146,7 @@ public class Student extends Person{
         double grade = 0.0;
         double total = 0;
         for (HashMap.Entry<Course, HashMap<Assignment, Double>> entry : this.courseList.entrySet()) {
-        	if (entry.getKey().getName().equals(course)) {
+        	if (entry.getKey().equals(course)) {
             	HashMap<Assignment, Double> assignentry = entry.getValue();
             	for(HashMap.Entry<Assignment, Double> entry2 : assignentry.entrySet()) {
             		total+= entry2.getKey().getTotalPoints();
@@ -173,7 +180,6 @@ public class Student extends Person{
 	/* courseGradeNeeded(Double) - What is the minimum grade needed in this course to get target GPA.
 	 * Returns: Double
 	*/
-    /*
 	public Double courseGradeNeeded(Double target, Course c){
 		ArrayList<Course> current = this.getCurrentCourses();
 		ArrayList<Course> completed = this.getCompletedCourses();
@@ -181,21 +187,37 @@ public class Student extends Person{
 
 		for(Course course: current){
 			if(course != c){
-				sum += course.getOverallGrade();
+				sum += getGrade(course);
 			}
 		}
 		for(Course course: completed){
-			sum += course.getOverallGrade();
+			sum += getGrade(course);
 		}
+		
 		int courses = current.size() + completed.size();
-		Double avg = sum/courses;
-		Double temp = (target * 25) - avg;
-
-		Double result = (temp * (courses + 1)) + avg;
+		Double avg = (target) * courses;
+		Double result = avg - sum;
 
 
 		return result;
 
 	}
+	
+	/* gradeNeeded(Double) - What additional grade assignment grade is needed to get desired grade in course
+	 * Returns: Double
 	*/
+	public Double gradeNeeded(Double target, Course c){
+		Double curr = getGrade(c);
+
+		if(curr >= target){
+			return 0.0;
+		}
+		else{
+			Double temp = target - curr;
+			Double result = (temp * c.getAssignments().size()) + target;
+			return result;
+		}
+	}
+	
+
 }
