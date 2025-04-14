@@ -147,9 +147,9 @@ public class Student extends Person{
         for (HashMap.Entry<Course, HashMap<Assignment, Double>> entry : this.courseList.entrySet()) {
         	if (entry.getKey().getName().equals(course)) {
             	HashMap<Assignment, Double> assignentry = entry.getValue();
-            	for(HashMap.Entry<Assignment, Double> entry2 : assignentry.entrySet()) {
-            		if(entry2.getKey().getName().equals(a.getName())) {
-            			entry2.setValue(grade);
+            	for (Assignment key : assignentry.keySet()) {
+            		if(key.getName().equals(a.getName())) {
+            			assignentry.put(key, grade);
             		}
             	}
         	}
@@ -172,7 +172,7 @@ public class Student extends Person{
         }
     
 	public String getLetterGrade(Course c){
-		Double grade = getGrade(c);
+		Double grade = getGrade(c)*100;
 
 		if(grade >= 90.0){
 			return "A";
@@ -232,6 +232,4 @@ public class Student extends Person{
 			return result;
 		}
 	}
-	
-
 }
