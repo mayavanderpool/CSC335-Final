@@ -85,5 +85,21 @@ public class Course {
 		assignments.remove(assg);
 	}
 	
+	public String getUngradedAssignments() {
+		String str = "";
+		for(Student s: students) {
+			str += s.toString() + ":\n";
+			ArrayList<Assignment> ungraded = s.getUngraded();
+			if(ungraded.size() == 0) str += "All Assignments Graded";
+			else {
+				for (Assignment a : ungraded) {
+					str += a.getName() + ", ";
+				}
+			}
+			str += "\n";
+		}
+		return str;
+	}
+	
 	
 }

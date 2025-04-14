@@ -74,6 +74,40 @@ class StudentListTest {
 	}
 	
 	@Test
+	void testGetStudentMedian() {
+		Teacher teach = new Teacher("jane", "doe");
+		Course c = new Course("science");
+		teach.addCourse(c);
+		Assignment a = new Assignment("a", 10.0);
+		Student s1 = new Student("Stu", "Dent");
+		Student s2 = new Student("St", "Udent");
+		Student s3 = new Student("Stud", "Ent");
+		teach.addStudent(c, s2);
+		teach.addStudent(c, s1);
+		teach.addAssignmentToCourse("science", a);
+		teach.addAssignmentGrade(s1, "science", a, 10.0);
+		teach.addAssignmentGrade(s2, "science", a, 8.0);
+		teach.addAssignmentGrade(s3, "science", a, 9.0);
+		assertEquals(teach.getStudentMedian(c), 0.9);
+	}
+	
+	@Test
+	void testGetStudentAverage() {
+		Teacher teach = new Teacher("jane", "doe");
+		Course c = new Course("science");
+		teach.addCourse(c);
+		Assignment a = new Assignment("a", 10.0);
+		Student s = new Student("Stu", "Dent");
+		Student s2 = new Student("St", "Udent");
+		teach.addStudent(c, s2);
+		teach.addStudent(c, s);
+		teach.addAssignmentToCourse("science", a);
+		teach.addAssignmentGrade(s, "science", a, 10.0);
+		teach.addAssignmentGrade(s2, "science", a, 8.0);
+		assertEquals(teach.getStudentAverage(c), 0.9);
+	}
+
+	@Test
 	void testMakeXGroups() {
 		assertEquals(students.makeXGroups(16), "Only 15 Groups Allowed");
 		students.addStudent(s1);
@@ -102,21 +136,6 @@ class StudentListTest {
 		assertEquals(students.toString(), str);
 	}
 	
-	@Test
-	// still working on
-	void testgetCourseAverage() {
-		students.addStudent(s1);
-		students.addStudent(s2);
-		c1.addStudents(s1);
-		c1.addStudents(s2);
-		s1.addCourse(c1);
-		s2.addCourse(c1);
-		c1.addAssg(a1);
-		a1.setStudentGrade(90.0);
-		s1.setAssignmentGrade("335", a1, 90.0);
-		a1.setStudentGrade(50.0);
-		s2.setAssignmentGrade("335", a1, 50.0);
-		System.out.println(students.getCourseAverage(c1));
-	}
+
 
 }

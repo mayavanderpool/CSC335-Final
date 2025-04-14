@@ -29,4 +29,9 @@ public class Person {
     public String getUserName(){
         return this.username;
     }
+    
+    @Override
+    public String toString() {
+    	return this.FIRST + " " + this.LAST;
+    }
 }

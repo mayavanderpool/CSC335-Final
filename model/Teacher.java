@@ -95,8 +95,13 @@ public class Teacher extends Person {
 	}
 	
 	// gets ungraded assignments
-	public ArrayList<Assignment> getUngradedAssignments(String courseName) {
-		for();  // course needs a getUngradedAssignment method
+	public String getUngradedAssignments() {
+		String str = "";
+		for(Course c : courseList) {
+			str += c.getName() + ":\n";
+			str += c.getUngradedAssignments();
+		}
+		return str;
 	}
 	
 	// SORTING
@@ -115,9 +120,8 @@ public class Teacher extends Person {
 	}
 	
 	public ArrayList<Student> getStudentByCourseGrade(String courseName) {
-		return getCourse(courseName).getStudents().getStudentsByFirstName();
+		return getCourse(courseName).getStudents().getStudentsByCourseGrade(getCourse(courseName));
 	}
-	
 	
 	
 	// INDIVIDUAL STUDENT METHODS
@@ -138,6 +142,7 @@ public class Teacher extends Person {
 	// adds a student to a class
 	public void addStudent(Course c, Student s) {
 		c.addStudents(s);
+		s.addCourse(c);
 	}
 	
 	// removes a student from a class
