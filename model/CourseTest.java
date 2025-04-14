@@ -35,9 +35,6 @@ class CourseTest {
 		assertEquals(0, one.getStudents().getStudents().size());
 	}
 	
-	
-	
-	
 	@Test
 	void testGetAssignments() {
 		Course one = new Course("335");
@@ -54,6 +51,29 @@ class CourseTest {
 		assertEquals(one.getAssignments().size(), 4);
 		one.removeAssg(assg4);
 		assertEquals(one.getAssignments().size(), 3);
+	}
+	
+	@Test
+	void testGetUngradedAssignments() {
+		Teacher t = new Teacher("Alice", "Anderson");
+		Course course = new Course("math");
+		
+		t.addCourse(course);
+		Student s1 = new Student("Miss", "Piggy");
+		Student s2 = new Student("Kermit", "the Frog");
+		t.addStudent(course, s1);
+		t.addStudent(course, s2);
+		
+		Assignment a1 = new Assignment("hw1", 100.0);
+		Assignment a2 = new Assignment("hw2", 100.0);
+		t.addAssignmentToCourse("math", a1);
+		t.addAssignmentToCourse("math", a2);
+		
+		t.addAssignmentGrade(s1, "math", a1, 95);
+		t.addAssignmentGrade(s1, "math", a2, 90);
+		assertEquals(course.getUngradedAssignments(), "Kermit the Frog:\n"
+				+ "hw2, hw1, \nMiss Piggy:\nAll Assignments Graded\n");
+		
 	}
 	
 	

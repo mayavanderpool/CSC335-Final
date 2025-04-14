@@ -15,7 +15,7 @@ class PersonTest {
 		assertEquals("", rees.getUserName());
 		rees.setUser("reeshart4");
 		assertEquals("reeshart4", rees.getUserName());
-
+		assertEquals("rees hart", rees.toString());
 	}
 
 }
