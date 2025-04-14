@@ -77,6 +77,20 @@ public class Student extends Person{
         }
         return graded;
     }
+    
+    public ArrayList<Assignment> getUngraded(){
+        ArrayList<Assignment> ungraded = new ArrayList<Assignment>();
+
+        for(HashMap.Entry<Course, HashMap<Assignment, Double>> entry : this.courseList.entrySet()){
+        	HashMap<Assignment, Double> assgnentry = entry.getValue();
+        	for(HashMap.Entry<Assignment, Double> assg : assgnentry.entrySet()) {
+        		if(assg.getValue().equals(0.0)) {
+        			ungraded.add(assg.getKey());
+        		}
+        	}
+        }
+        return ungraded;
+    }
 
     public static Comparator<Student> fisrtNameFirstComparator(){
         return new Comparator<Student>(){

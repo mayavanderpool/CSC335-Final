@@ -124,12 +124,26 @@ class TeacherTest {
 		Teacher teach = new Teacher("name1", "name2");
 		teach.addCourse(course);
 		Assignment a1 = new Assignment("a1", 10.0);
-		Assignment a2 = new Assignment("a2", 20.0);
-		course.addAssg(a1);
-		course.addAssg(a2);
-		assertEquals(teach.getUngradedAssignments("science").size(), 2);
-		a1.setStudentGrade(10.0);
-		assertEquals(teach.getUngradedAssignments("science").size(), 1);
+		Student stu = new Student("john", "smith");
+		teach.addStudent(course, stu);
+		assertEquals(teach.getUngradedAssignments(), "science:\njohn smith:\nAll Assignments Graded\n");
+		teach.addAssignmentToCourse("science", a1);
+		assertEquals(teach.getUngradedAssignments(), "science:\njohn smith:\na1, \n");
+	}
+	
+	@Test
+	void testAddAssignmentGrade() {
+		Teacher teach = new Teacher("jane", "doe");
+		Course c = new Course("science");
+		teach.addCourse(c);
+		Assignment a = new Assignment("a", 10.0);
+		Student s = new Student("Stu", "Dent");
+		Student s2 = new Student("St", "Udent");
+		teach.addStudent(c, s2);
+		teach.addStudent(c, s);
+		teach.addAssignmentToCourse("science", a);
+		teach.addAssignmentGrade(s, "science", a, 10.0);
+		assertEquals(teach.getStudentGrade(c, s), 1.0);
 	}
 	
 	@Test
@@ -193,6 +207,42 @@ class TeacherTest {
 		teach.removeStudent(course, s);
 		assertEquals(teach.getStudentList(course).getStudents().size(), 0);
 	}
+	
+	@Test
+	void testGetStudentAverage() {
+		Teacher teach = new Teacher("jane", "doe");
+		Course c = new Course("science");
+		teach.addCourse(c);
+		Assignment a = new Assignment("a", 10.0);
+		Student s = new Student("Stu", "Dent");
+		Student s2 = new Student("St", "Udent");
+		teach.addStudent(c, s2);
+		teach.addStudent(c, s);
+		teach.addAssignmentToCourse("science", a);
+		teach.addAssignmentGrade(s, "science", a, 10.0);
+		teach.addAssignmentGrade(s2, "science", a, 8.0);
+		assertEquals(teach.getStudentAverage(c), 0.9);
+	}
+	
+	@Test
+	void testGetStudentMedian() {
+		Teacher teach = new Teacher("jane", "doe");
+		Course c = new Course("science");
+		teach.addCourse(c);
+		Assignment a = new Assignment("a", 10.0);
+		Student s1 = new Student("Stu", "Dent");
+		Student s2 = new Student("St", "Udent");
+		Student s3 = new Student("Stud", "Ent");
+		teach.addStudent(c, s2);
+		teach.addStudent(c, s1);
+		teach.addAssignmentToCourse("science", a);
+		teach.addAssignmentGrade(s1, "science", a, 10.0);
+		teach.addAssignmentGrade(s2, "science", a, 8.0);
+		teach.addAssignmentGrade(s3, "science", a, 9.0);
+		assertEquals(teach.getStudentMedian(c), 0.9);
+	}
+	
+
 	
 	@Test
 	void getStudentgrade() {
