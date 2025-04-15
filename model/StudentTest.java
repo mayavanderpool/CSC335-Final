@@ -163,33 +163,33 @@ class StudentTest {
 		assertEquals("Alice", students.get(2).getFirstName());
 		assertEquals("Bob", students.get(1).getFirstName());
 	}
-//	
-//	@Test
-//	void testGradeFirstComparator() {
-//		Teacher t = new Teacher("fname", "lname");
-//		Course course = new Course("math");
-//		Student s1 = new Student("Bob", "Johnson");
-//		Student s2 = new Student("Alice", "Brown");
-//		Student s3 = new Student("Alice", "Smith");
-//		t.addCourse(course);
-//		Assignment a1 = new Assignment("hw1", 100.0);
-//		t.addAssignmentToCourse("math", a1);
-//		course.addStudents(s1);
-//		course.addStudents(s2);
-//		course.addStudents(s3);
-//		t.addAssignmentGrade(s1, "math", a1, 0);
-//		t.addAssignmentGrade(s2, "math", a1, 100);
-//		t.addAssignmentGrade(s3, "math", a1, 20);
-//		
-//		ArrayList<Student> students = new ArrayList<Student>();
-//		students.add(s1);
-//		students.add(s2);
-//		students.add(s3);
-//		Collections.sort(students, Student.gradeFirstComparator(course));
-//		assertEquals(100.0, students.get(0).getGrade(course));
-//		assertEquals("Brown", students.get(2).getLastName());
-//		
-//	}
+	
+	@Test
+	void testGradeFirstComparator() {
+		Teacher t = new Teacher("fname", "lname");
+		Course course = new Course("math");
+		Student s1 = new Student("Bob", "Johnson");
+		Student s2 = new Student("Alice", "Brown");
+		Student s3 = new Student("Alice", "Smith");
+		t.addCourse(course);
+		t.addStudent(course, s1);
+		t.addStudent(course, s2);
+		t.addStudent(course, s3);
+		Assignment a1 = new Assignment("hw1", 100.0);
+		t.addAssignmentToCourse("math", a1);
+		t.addAssignmentGrade(s1, "math", a1, 0);
+		t.addAssignmentGrade(s2, "math", a1, 100);
+		t.addAssignmentGrade(s3, "math", a1, 20);
+		
+		ArrayList<Student> students = new ArrayList<Student>();
+		students.add(s1);
+		students.add(s2);
+		students.add(s3);
+		Collections.sort(students, Student.gradeFirstComparator(course));
+		assertEquals(0.0, students.get(0).getGrade(course));
+		assertEquals("Brown", students.get(2).getLastName());
+		
+	}
 	
 	@Test
 	void testGetLetterGrade() {
@@ -237,18 +237,32 @@ class StudentTest {
 		t.addCourse(course);
 		Student sA = new Student("Jamie", "Lee");
         t.addStudent(course, sA);
-        
-        Assignment a1 = new Assignment("hw1", 100.0);
-        Assignment a2 = new Assignment("hw2", 100.0);
-        t.addAssignmentToCourse("math", a1);
-        t.addAssignmentToCourse("math", a2);
-        
-        t.addAssignmentGrade(sA, "math", a1, 40.0);
-        t.addAssignmentGrade(sA, "math", a2, 87.0);
+        Assignment a1 = new Assignment("hw1", 100.0);     
+        t.addAssignmentToCourse("math", a1);    
+        t.addAssignmentGrade(sA, "math", a1, 80);;
+        assertEquals(100, sA.gradeNeeded(90.0, course, 100.0));
+        assertEquals(80, sA.gradeNeeded(80.0, course, 100.0));
 	}
 	
-	
-	
-	
+	@Test
+	void testRemoveAssignment() {
+		Student s = new Student("Snuffy", "Snuffles");
+		Course course = new Course("math");
+		Assignment a1 = new Assignment("hw1", 100.0);
+		Assignment a2 = new Assignment("hw2", 100.0);
+		Assignment a3 = new Assignment("hw3", 100.0);
+		
+		s.addCourse(course);
+		s.addAssignment(course, a1);
+		s.addAssignment(course, a2);
+		s.addAssignment(course, a3);
+		
+		s.setAssignmentGrade("math", a1, 94);
+		s.setAssignmentGrade("math", a2, 96);
+
+		assertEquals(3, s.getAssignments().size());
+		s.removeAssignment(course, a3);
+		assertEquals(2, s.getAssignments().size());
+	}
 
 }

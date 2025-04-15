@@ -32,4 +32,6 @@ package model;
 	public String getName(){
 		return name;
 	}
+	
+	
  }

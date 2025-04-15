@@ -121,6 +121,13 @@ public class Student extends Person{
     		courseList.get(c).put(a, 0.0);
     	}
     }
+    
+    public void removeAssignment(Course c, Assignment a) {
+    	if (courseList.containsKey(c)) {
+    		HashMap<Assignment, Double> assignments = courseList.get(c);
+    		assignments.remove(a);
+    	}
+    }
 
     public static Comparator<Student> userNameFirstComparator(){
         return new Comparator<Student>(){
@@ -168,6 +175,7 @@ public class Student extends Person{
             		}
             	}
         	}
+        if (total == 0) return 0;
         return grade/total;
         }
     
@@ -220,16 +228,24 @@ public class Student extends Person{
 	/* gradeNeeded(Double) - What additional grade assignment grade is needed to get desired grade in course
 	 * Returns: Double
 	*/
-	public Double gradeNeeded(Double target, Course c){
-		Double curr = getGrade(c);
+	public Double gradeNeeded(Double target, Course c, double nextAssgPoints){
+		target = target/100;  // target is a percent
+		double earned = 0.0;
+		double total = 0.0;
+		
+		// get current grade and current total for assignments
+		for (Assignment a : getAssignments()) {
+			earned += this.courseList.get(c).get(a);
+			total += a.getTotalPoints();
+		}
+		
+		double requiredTotal = target*(total + nextAssgPoints);
+		double needed = requiredTotal - earned;
 
-		if(curr >= target){
-			return 0.0;
-		}
-		else{
-			Double temp = target - curr;
-			Double result = (temp * c.getAssignments().size()) + target;
-			return result;
-		}
+		if (needed < 0) return 0.0;
+		// can't score more than this. this means you won't reach the target
+		if (needed > nextAssgPoints) return nextAssgPoints;
+		
+		return needed;
 	}
 }
