@@ -83,6 +83,10 @@ public class Course {
 	*/
 	public void removeAssg(Assignment assg) {
 		assignments.remove(assg);
+		
+		for (Student s : students.getStudents()) {
+			s.removeAssignment(this, assg);
+		}
 	}
 	
 	public String getUngradedAssignments() {

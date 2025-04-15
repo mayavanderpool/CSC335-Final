@@ -6,6 +6,11 @@ import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
+import model.Assignment;
+import model.Course;
+import model.Student;
+import model.StudentList;
+
 class StudentListTest {
 
 	StudentList students = new StudentList();
@@ -74,40 +79,6 @@ class StudentListTest {
 	}
 	
 	@Test
-	void testGetStudentMedian() {
-		Teacher teach = new Teacher("jane", "doe");
-		Course c = new Course("science");
-		teach.addCourse(c);
-		Assignment a = new Assignment("a", 10.0);
-		Student s1 = new Student("Stu", "Dent");
-		Student s2 = new Student("St", "Udent");
-		Student s3 = new Student("Stud", "Ent");
-		teach.addStudent(c, s2);
-		teach.addStudent(c, s1);
-		teach.addAssignmentToCourse("science", a);
-		teach.addAssignmentGrade(s1, "science", a, 10.0);
-		teach.addAssignmentGrade(s2, "science", a, 8.0);
-		teach.addAssignmentGrade(s3, "science", a, 9.0);
-		assertEquals(teach.getStudentMedian(c), 0.9);
-	}
-	
-	@Test
-	void testGetStudentAverage() {
-		Teacher teach = new Teacher("jane", "doe");
-		Course c = new Course("science");
-		teach.addCourse(c);
-		Assignment a = new Assignment("a", 10.0);
-		Student s = new Student("Stu", "Dent");
-		Student s2 = new Student("St", "Udent");
-		teach.addStudent(c, s2);
-		teach.addStudent(c, s);
-		teach.addAssignmentToCourse("science", a);
-		teach.addAssignmentGrade(s, "science", a, 10.0);
-		teach.addAssignmentGrade(s2, "science", a, 8.0);
-		assertEquals(teach.getStudentAverage(c), 0.9);
-	}
-
-	@Test
 	void testMakeXGroups() {
 		assertEquals(students.makeXGroups(16), "Only 15 Groups Allowed");
 		students.addStudent(s1);
@@ -136,6 +107,39 @@ class StudentListTest {
 		assertEquals(students.toString(), str);
 	}
 	
+	@Test
+	void testGetCourseAverage() {
+		Teacher teach = new Teacher("jane", "doe");
+		Course c = new Course("science");
+		teach.addCourse(c);
+		Assignment a = new Assignment("a", 10.0);
+		Student s = new Student("Stu", "Dent");
+		Student s2 = new Student("St", "Udent");
+		teach.addStudent(c, s2);
+		teach.addStudent(c, s);
+		teach.addAssignmentToCourse("science", a);
+		teach.addAssignmentGrade(s, "science", a, 10.0);
+		teach.addAssignmentGrade(s2, "science", a, 8.0);
+		assertEquals(teach.getStudentAverage(c), 0.9);
+	}
+	
+	@Test
+	void testGetCourseMedian() {
+		Teacher teach = new Teacher("jane", "doe");
+		Course c = new Course("science");
+		teach.addCourse(c);
+		Assignment a = new Assignment("a", 10.0);
+		Student s1 = new Student("Stu", "Dent");
+		Student s2 = new Student("St", "Udent");
+		Student s3 = new Student("Stud", "Ent");
+		teach.addStudent(c, s2);
+		teach.addStudent(c, s1);
+		teach.addAssignmentToCourse("science", a);
 
+		teach.addAssignmentGrade(s1, "science", a, 10.0);
+		teach.addAssignmentGrade(s2, "science", a, 8.0);
+		teach.addAssignmentGrade(s3, "science", a, 9.0);
+		assertEquals(teach.getStudentMedian(c), 0.9);
+	}
 
 }

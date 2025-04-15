@@ -14,7 +14,6 @@ public class Teacher extends Person {
 	}
 	
 	// COURSE METHODS
-	// can add others like get course by course number
 	
 	// add course and studentlist
 	public void addCourse(Course course) {
@@ -131,6 +130,10 @@ public class Teacher extends Person {
 		c.addAssg(a);
 	}
 	
+	public void removeAssignmentFromCourse(String course, Assignment a) {
+		getCourse(course).removeAssg(a);
+	}
+	
 	// add grade for student on an assignment
 	public void addAssignmentGrade(Student s, String courseName, Assignment a, double grade) {
 		StudentList slist = getCourse(courseName).getStudents();
@@ -150,12 +153,13 @@ public class Teacher extends Person {
 		c.removeStudents(s);
 	}
 	
-	// returns a single student's grade
+	// returns a single student's grade in decimal form
 	public double getStudentGrade(Course c, Student s) {
 		StudentList slist = getCourse(c).getStudents();
 		for (Student stu : slist) {
-			if (stu == s) 
-				return s.getGrade(c);  // student needs method setAssignmentGrade
+			if (stu == s)
+				return s.getGrade(c);
+				
 		}
 		return 0.0;
 	}
