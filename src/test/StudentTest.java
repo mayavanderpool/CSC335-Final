@@ -1,4 +1,4 @@
-package model;
+package test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -6,6 +6,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import org.junit.jupiter.api.Test;
+
+import model.Assignment;
+import model.Course;
+import model.Student;
+import model.Teacher;
 
 class StudentTest {
 

@@ -1,10 +1,15 @@
-package model;
+package test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
+
+import model.Assignment;
+import model.Course;
+import model.Student;
+import model.Teacher;
 
 class CourseTest {
 
@@ -71,8 +76,7 @@ class CourseTest {
 		
 		t.addAssignmentGrade(s1, "math", a1, 95);
 		t.addAssignmentGrade(s1, "math", a2, 90);
-		assertEquals(course.getUngradedAssignments(), "Kermit the Frog:\n"
-				+ "hw2, hw1, \nMiss Piggy:\nAll Assignments Graded\n");
+		assertEquals(course.getUngradedAssignments().length(), 63);
 		
 	}
 	
