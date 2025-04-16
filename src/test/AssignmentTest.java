@@ -1,8 +1,10 @@
-package model;
+package test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
+
+import model.Assignment;
 
 class AssignmentTest{
 

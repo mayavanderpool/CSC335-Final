@@ -1,4 +1,4 @@
-package model;
+package test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -10,6 +10,7 @@ import model.Assignment;
 import model.Course;
 import model.Student;
 import model.StudentList;
+import model.Teacher;
 
 class StudentListTest {
 

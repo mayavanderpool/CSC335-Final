@@ -1,9 +1,11 @@
-package model;
+package test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import model.AccountManager;
 
 class AccountManagerTest {
 	private static AccountManager aManager;
