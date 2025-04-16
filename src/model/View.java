@@ -249,6 +249,7 @@ public class View {
 			panel.add(new JButton("Calculate Class Average"));
 			panel.add(new JButton("Calculate GPA"));
 		} else {
+			panel.add(new JButton("Add Course"));
 			panel.add(new JButton("View Courses"));
 			panel.add(new JButton("Add/Remove Assignments"));
 			panel.add(new JButton("Add/Remove Students"));
