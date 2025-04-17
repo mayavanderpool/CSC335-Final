@@ -47,7 +47,6 @@ public class AccountManager {
 	
 	
 	
-	
 	// read out all user data
 	private void loadOutUsers() {
 		// read out teachers
@@ -118,7 +117,7 @@ public class AccountManager {
 	
 	
 	// get users that have created a username/have data.
-	private ArrayList<Person> getUsers() {
+	public ArrayList<Person> getUsers() {
 		ArrayList<Person> users = new ArrayList<Person>();
 		for (Person p : people) {
 			if (!p.getUserName().equals("")) users.add(p);
@@ -165,6 +164,10 @@ public class AccountManager {
 	// make sure username doesn't exist yet. if it does, add to end of username
 	public String createUsername(String fname, String lname) {
 		return (fname.substring(0,1) + lname).toLowerCase();
+	}
+
+	public void addTeacher(Teacher teacher){
+		people.add(teacher);
 	}
 	
 	// a user is creating a password for their account
