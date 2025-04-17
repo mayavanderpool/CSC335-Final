@@ -21,11 +21,72 @@ public class AccountManager {
 	public AccountManager() {
 		people = new ArrayList<Person>();
 		inputPeople("people.txt");
-		writeInFile("userinfo.txt", "", false);
+		writeInFile("userinfo.txt", "", true);
+		// loadInUsers(); not done with yet!!
 	}
 	
+	
+	
+	
+	// reads in user data and instantiates courses, assignments, grades for students and teachers
+	private void loadInUsers() {
+		if (people.size() == 0) {  // first time running the program
+			inputPeople("people.txt");
+			return;
+		}
+		
+		// read in all user data
+		File userInfo = new File("data.txt");
+		try (Scanner scn = new Scanner(userInfo)) {
+			// read in file here. use scanner as parameter for methods
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		};
+	}
+	
+	
+	
+	
+	
+	// read out all user data
+	private void loadOutUsers() {
+		// read out teachers
+		String content = "";
+		content += readOutTeachers();
+		content += readOutStudents();
+		writeInFile("data.txt", content, false);  // all data stored in this file
+	}
+	
+	private String readOutTeachers() {
+		String content = "";
+		for (Person p : people) {
+			if (p instanceof Teacher) {
+				content += p.toString();
+			}
+		}
+		return content;
+	}
+	
+	private String readOutStudents() {
+		String content = "";
+		for (Person p : people) {
+			if (p instanceof Student) {
+				content += p.toString();
+			}
+		}
+		return content;	
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	// reads in teachers/students from input file
-	public void inputPeople(String file){
+	private void inputPeople(String file){
 
 		try {
 			Scanner scanner = new Scanner(new File(file));
