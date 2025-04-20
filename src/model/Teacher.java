@@ -71,16 +71,12 @@ public class Teacher extends Person {
 	}
 	
 	// returns student mean of a student list for a course
-	public double getStudentAverage(Course c) {
+	public double getClassAverage(Course c) {
 		StudentList slist = getCourse(c).getStudents();
 		return slist.getCourseAverage(c);
 	}
 	
-	// returns student median of a student list for a course
-	public double getStudentMedian(Course c) {
-		StudentList slist = getCourse(c).getStudents();
-		return slist.getCourseMedian(c); 
-	}
+
 	
 	// group students
 	public String makeXGroups(String courseName, int num) {
