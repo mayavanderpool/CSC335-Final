@@ -85,8 +85,8 @@ public class AccountManager {
 	
 	
 	// reads in teachers/students from input file
-	private void inputPeople(String file){
-
+	public void inputPeople(String file){
+		
 		try {
 			Scanner scanner = new Scanner(new File(file));
 			
@@ -98,6 +98,7 @@ public class AccountManager {
 					String last = split[0].trim();
 					String first = split[1].trim();
 					String stuOrTeach = split[2].trim();
+					
 					if ("student".equalsIgnoreCase(stuOrTeach)) {
 						Person p = new Student(first, last);
 						people.add(p);
