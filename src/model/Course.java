@@ -50,11 +50,7 @@ public class Course {
 	}
 	
 	public void removeStudents(Student stu) {
-		for(Student s : students) {
-			if(s == stu) {
-				students.removeStudent(stu.getUserName());
-			}
-		}
+		students.removeStudent(stu.getUserName());
 	}
 
 
@@ -91,7 +87,7 @@ public class Course {
 	
 	public String getUngradedAssignments() {
 		String str = "";
-		for(Student s: students) {
+		for(Student s: students.getStudents()) {
 			str += s.toString() + ":\n";
 			ArrayList<Assignment> ungraded = s.getUngraded();
 			if(ungraded.size() == 0) str += "All Assignments Graded";
