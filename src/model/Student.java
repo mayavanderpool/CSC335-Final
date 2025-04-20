@@ -178,6 +178,20 @@ public class Student extends Person{
         if (total == 0) return 0;
         return grade/total;
         }
+
+	public double getAssgGrade(Assignment a, String course){
+		for (HashMap.Entry<Course, HashMap<Assignment, Double>> entry : this.courseList.entrySet()) {
+        	if (entry.getKey().getName().equals(course)) {
+            	HashMap<Assignment, Double> assignentry = entry.getValue();
+            	for (Assignment key : assignentry.keySet()) {
+            		if(key.getName().equals(a.getName())) {
+            			return assignentry.get(key);
+            		}
+            	}
+        	}
+        }
+		return -1;
+	}
     
 	public String getLetterGrade(Course c){
 		Double grade = getGrade(c)*100;

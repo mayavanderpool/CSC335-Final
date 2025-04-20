@@ -75,6 +75,22 @@ public class Teacher extends Person {
 		StudentList slist = getCourse(c).getStudents();
 		return slist.getCourseAverage(c);
 	}
+
+	/*
+	 * getAssgClassAverage(Course c, Assignment a) - returns the average grade on an assignment
+	 */
+	public double getAssgClassAverage(Course c, Assignment a){
+		StudentList slist = getCourse(c).getStudents();
+		return slist.getAssgAverage(a, c);
+	}
+
+	/*
+	 * getAssgMedian(Course c, Assignment a) - returns the median grade on an assignment
+	 */
+	public double getAssgMedian(Course c, Assignment a){
+		StudentList slist = getCourse(c).getStudents();
+		return slist.getAssgMedian(a, c);
+	}
 	
 
 	

@@ -134,6 +134,48 @@ public class StudentList implements Iterable<Student>{
 		}
 		return total / count;
 	}
+
+	/*
+	 * getAssgAverage(Asignment a, Course c) - returns the average of the students' grades on an assignment
+	 */
+	public double getAssgAverage(Assignment a, Course c){
+		double total = 0;
+		int count = 0;
+	
+		for(Student s : students){
+			if(s.getGraded().contains(a)){
+				count += 1;
+				total += s.getAssgGrade(a, c.getName());
+			}
+		}
+		return total/count;
+	}
+
+	/*
+	 * getAssgMedian(Assignment a, Course c) - returns the median of the students' grades on an assignment
+	 */
+	public double getAssgMedian(Assignment a, Course c){
+		ArrayList<Double> grades = new ArrayList<Double>();
+
+		for(Student s : students){
+			if(s.getGraded().contains(a)){
+				grades.add(s.getAssgGrade(a, null));
+			}
+		}
+
+		Collections.sort(grades);
+		int num = grades.size();
+		int mid = num/2;
+
+		if(num % 2 == 1){
+			return grades.get(mid);
+		}
+		else{
+			return (grades.get(mid -1) + grades.get(mid)) / 2.0;
+		}
+
+		
+	}
 	
 	
 
