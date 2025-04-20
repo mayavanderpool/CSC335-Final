@@ -135,15 +135,7 @@ public class StudentList implements Iterable<Student>{
 		return total / count;
 	}
 	
-	public double getCourseMedian(Course c) {
-		ArrayList<Student> slist = getStudentsByCourseGrade(c);
-		int len = slist.size();
-		
-		if (len % 2 == 1) return slist.get(len/2).getGrade(c);
-		double m1 = slist.get(len/ 2 - 1).getGrade(c);
-		double m2 = slist.get(len / 2).getGrade(c);
-		return (m1 + m2) / 2.0;
-	}
+	
 
 	/*
 	 * This method returns a shuffled list of students 
