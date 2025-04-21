@@ -159,7 +159,7 @@ public class StudentList implements Iterable<Student>{
 
 		for(Student s : students){
 			if(s.getGraded().contains(a)){
-				grades.add(s.getAssgGrade(a, null));
+				grades.add(s.getAssgGrade(a, c.getName()));
 			}
 		}
 
