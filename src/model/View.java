@@ -292,7 +292,6 @@ public class View {
             }
 
             aManager.addPassword(fname, lname, username, password);
-            JOptionPane.showMessageDialog(frame, "Account created successfully!");
             frame.dispose();
             createStudentLoginPrompt();
         });
@@ -376,7 +375,6 @@ public class View {
             }
 
             aManager.addPassword(fname, lname, username, password);
-            JOptionPane.showMessageDialog(frame, "Account created successfully!");
             frame.dispose();
             createTeacherLoginPrompt();
         });
@@ -629,7 +627,6 @@ public class View {
             if (courseName != null && !courseName.trim().isEmpty()) {
                 Course newCourse = new Course(courseName);
                 teacher.addCourse(newCourse);
-                JOptionPane.showMessageDialog(frame, "Course '" + courseName + "' added successfully!");
             }
         });
 
@@ -716,7 +713,7 @@ public class View {
         courseTitle.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
         
         // Header bar with navigation buttons
-        JPanel headerPanel = new JPanel(new GridLayout(1, 4, 10, 0));
+        JPanel headerPanel = new JPanel(new GridLayout(1, 5, 10, 0));
         headerPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
         
         JButton gradesButton = new JButton("Grades");
@@ -724,19 +721,33 @@ public class View {
         JButton assignmentsButton = new JButton("Assignments");
         JButton groupsButton = new JButton("Groups");
         
+        // Add mark as completed button with a different color
+        JButton completeButton = new JButton("Mark as Completed");
+        if (course.isCompleted()) {
+            completeButton.setText("Course Completed");
+            completeButton.setEnabled(false);
+            completeButton.setBackground(new Color(200, 255, 200)); // Light green
+        } else {
+            completeButton.setBackground(new Color(255, 230, 230)); // Light red
+        }
+        
         headerPanel.add(gradesButton);
         headerPanel.add(classlistButton);
         headerPanel.add(assignmentsButton);
         headerPanel.add(groupsButton);
+        headerPanel.add(completeButton);
         
         // Content panel (will be populated based on selection)
         JPanel contentPanel = new JPanel(new BorderLayout());
         contentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         
-        // Add default welcome content
-        JLabel welcomeLabel = new JLabel("Select an option from the header bar above.", SwingConstants.CENTER);
-        welcomeLabel.setFont(new Font("SansSerif", Font.ITALIC, 16));
-        contentPanel.add(welcomeLabel, BorderLayout.CENTER);
+        // Add action listener for complete button
+        completeButton.addActionListener(e -> {
+            course.setCompleted();
+            completeButton.setText("Course Completed");
+            completeButton.setEnabled(false);
+            completeButton.setBackground(new Color(200, 255, 200)); // Light green
+        });
         
         // Add action listeners for header buttons
         gradesButton.addActionListener(e -> {
@@ -785,177 +796,11 @@ public class View {
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
         
         courseFrame.add(mainPanel);
+        
+        // Default to classlist view instead of showing the welcome message
+        showClasslistPanel(contentPanel, teacher, course);
+        
         courseFrame.setVisible(true);
-    }
-    
-    private static void showGradesPanel(JPanel contentPanel, Teacher teacher, Course course) {
-        // Create a panel with BorderLayout
-        JPanel gradesPanel = new JPanel(new BorderLayout(10, 10));
-        
-        // Create a label for instructions
-        JLabel instructionLabel = new JLabel("Assignment Grades Overview", SwingConstants.CENTER);
-        instructionLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
-        instructionLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
-        
-        // Create a table model for assignments with statistics
-        String[] columnNames = {"Assignment", "Average Grade", "Median Grade", "Completed/Total"};
-        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false; // Make all cells non-editable
-            }
-        };
-        
-        // Get all assignments
-        ArrayList<Assignment> assignments = course.getAssignments();
-        
-        // Populate table with assignment data
-        for (Assignment assignment : assignments) {
-            // For now, leave statistics empty as mentioned in the requirements
-            Object[] rowData = {
-                assignment.getName(),
-                "", // Average grade (placeholder)
-                "", // Median grade (placeholder)
-                "" // Completion rate (placeholder)
-            };
-            tableModel.addRow(rowData);
-        }
-        
-        // Create the table and add it to a scroll pane
-        JTable assignmentsTable = new JTable(tableModel);
-        assignmentsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        assignmentsTable.setRowHeight(25);
-        assignmentsTable.getTableHeader().setReorderingAllowed(false);
-        
-        JScrollPane tableScrollPane = new JScrollPane(assignmentsTable);
-        
-        // Create button panel
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JButton viewGradesButton = new JButton("View Student Grades");
-        
-        viewGradesButton.addActionListener(e -> {
-            int selectedRow = assignmentsTable.getSelectedRow();
-            if (selectedRow >= 0) {
-                String assignmentName = (String) tableModel.getValueAt(selectedRow, 0);
-                
-                // Find the selected assignment
-                final Assignment selectedAssignment = findAssignment(assignments, assignmentName);
-                
-                if (selectedAssignment != null) {
-                    // Create and show the student grades dialog directly
-                    JDialog dialog = new JDialog();
-                    dialog.setTitle("Student Grades for " + selectedAssignment.getName());
-                    dialog.setModal(true);
-                    dialog.setSize(500, 400);
-                    dialog.setLocationRelativeTo(SwingUtilities.getWindowAncestor(contentPanel));
-                    
-                    JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
-                    mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-                    
-                    // Create table for student grades
-                    String[] studentColumnNames = {"Student", "Grade", "Status"};
-                    DefaultTableModel studentTableModel = new DefaultTableModel(studentColumnNames, 0) {
-                        @Override
-                        public boolean isCellEditable(int row, int column) {
-                            return column == 1; // Only make the grade column editable
-                        }
-                    };
-                    
-                    // Get students enrolled in the course
-                    StudentList students = course.getStudents();
-                    ArrayList<Student> studentList = students.getStudents();
-                    
-                    // Populate table with student data
-                    for (Student student : studentList) {
-                        // Check if assignment is graded for this student
-                        boolean isGraded = student.getGraded().contains(selectedAssignment);
-                        double grade = 0;
-                        String status = isGraded ? "Graded" : "Not Graded";
-                        
-                        // If graded, get the actual grade (this part depends on your model's implementation)
-                        if (isGraded) {
-                            // We would need to implement a method to get a specific assignment's grade
-                            // For now, just use a placeholder
-                            grade = 0.0; // Placeholder
-                        }
-                        
-                        Object[] rowData = {
-                            student.getFirstName() + " " + student.getLastName(),
-                            isGraded ? grade : "",
-                            status
-                        };
-                        studentTableModel.addRow(rowData);
-                    }
-                    
-                    JTable studentTable = new JTable(studentTableModel);
-                    studentTable.setRowHeight(25);
-                    studentTable.getTableHeader().setReorderingAllowed(false);
-                    
-                    JScrollPane studentTableScrollPane = new JScrollPane(studentTable);
-                    
-                    // Create button panel
-                    JPanel dialogButtonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-                    JButton saveButton = new JButton("Save Grades");
-                    JButton closeButton = new JButton("Close");
-                    
-                    saveButton.addActionListener(event -> {
-                        // Save all grades that have been entered
-                        for (int i = 0; i < studentTableModel.getRowCount(); i++) {
-                            String studentName = (String) studentTableModel.getValueAt(i, 0);
-                            Object gradeObj = studentTableModel.getValueAt(i, 1);
-                            
-                            if (gradeObj != null && !gradeObj.toString().isEmpty()) {
-                                try {
-                                    double grade = Double.parseDouble(gradeObj.toString());
-                                    
-                                    // Find the student
-                                    String[] nameParts = studentName.split(" ");
-                                    String firstName = nameParts[0];
-                                    String lastName = nameParts[1];
-                                    
-                                    for (Student s : studentList) {
-                                        if (s.getFirstName().equals(firstName) && s.getLastName().equals(lastName)) {
-                                            // Add the grade
-                                            teacher.addAssignmentGrade(s, course.getName(), selectedAssignment, grade);
-                                            studentTableModel.setValueAt("Graded", i, 2); // Update status
-                                            break;
-                                        }
-                                    }
-                                } catch (NumberFormatException ex) {
-                                    JOptionPane.showMessageDialog(dialog, 
-                                            "Invalid grade format for " + studentName + ". Please enter a valid number.");
-                                }
-                            }
-                        }
-                        JOptionPane.showMessageDialog(dialog, "Grades saved successfully!");
-                    });
-                    
-                    closeButton.addActionListener(event -> dialog.dispose());
-                    
-                    dialogButtonPanel.add(saveButton);
-                    dialogButtonPanel.add(closeButton);
-                    
-                    // Add components to the main panel
-                    mainPanel.add(studentTableScrollPane, BorderLayout.CENTER);
-                    mainPanel.add(dialogButtonPanel, BorderLayout.SOUTH);
-                    
-                    dialog.add(mainPanel);
-                    dialog.setVisible(true);
-                }
-            } else {
-                JOptionPane.showMessageDialog(contentPanel, "Please select an assignment.");
-            }
-        });
-        
-        buttonPanel.add(viewGradesButton);
-        
-        // Add components to the grades panel
-        gradesPanel.add(instructionLabel, BorderLayout.NORTH);
-        gradesPanel.add(tableScrollPane, BorderLayout.CENTER);
-        gradesPanel.add(buttonPanel, BorderLayout.SOUTH);
-        
-        // Add the grades panel to the content panel
-        contentPanel.add(gradesPanel);
     }
     
     private static void showClasslistPanel(JPanel contentPanel, Teacher teacher, Course course) {
@@ -1026,7 +871,6 @@ public class View {
                     }
                     
                     teacher.addStudent(course, student);
-                    JOptionPane.showMessageDialog(contentPanel, "Student added successfully!");
                     
                     // Refresh the classlist panel
                     contentPanel.removeAll();
@@ -1047,20 +891,14 @@ public class View {
                 
                 for (Student s : studentList) {
                     if (s.getFirstName().equals(firstName) && s.getLastName().equals(lastName)) {
-                        int confirm = JOptionPane.showConfirmDialog(contentPanel, 
-                                "Are you sure you want to remove " + studentName + " from this course?",
-                                "Confirm Removal", JOptionPane.YES_NO_OPTION);
+                        // Removed the confirmation dialog here
+                        teacher.removeStudent(course, s);
                         
-                        if (confirm == JOptionPane.YES_OPTION) {
-                            teacher.removeStudent(course, s);
-                            JOptionPane.showMessageDialog(contentPanel, "Student removed successfully!");
-                            
-                            // Refresh the classlist panel
-                            contentPanel.removeAll();
-                            showClasslistPanel(contentPanel, teacher, course);
-                            contentPanel.revalidate();
-                            contentPanel.repaint();
-                        }
+                        // Refresh the classlist panel
+                        contentPanel.removeAll();
+                        showClasslistPanel(contentPanel, teacher, course);
+                        contentPanel.revalidate();
+                        contentPanel.repaint();
                         break;
                     }
                 }
@@ -1100,14 +938,21 @@ public class View {
         contentPanel.add(classlistPanel);
     }
     
-    private static void showAssignmentsPanel(JPanel contentPanel, Teacher teacher, Course course) {
-        // Create a panel with BorderLayout
-        JPanel assignmentsPanel = new JPanel(new BorderLayout(10, 10));
+    private static void showGradesPanel(JPanel contentPanel, Teacher teacher, Course course) {
+        // Create a panel with BorderLayout for the main grades panel
+        JPanel gradesPanel = new JPanel(new BorderLayout(10, 10));
         
         // Create a label for instructions
-        JLabel instructionLabel = new JLabel("Assignments for " + course.getName(), SwingConstants.CENTER);
+        JLabel instructionLabel = new JLabel("Assignment Grades Overview", SwingConstants.CENTER);
         instructionLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
         instructionLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+        
+        // Create a split pane with assignments on top and student grades below
+        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+        splitPane.setResizeWeight(0.4); // Assignments get 40% of the space
+        
+        // TOP PANEL - Assignments list
+        JPanel topPanel = new JPanel(new BorderLayout(5, 5));
         
         // Create a table model for assignments with statistics
         String[] columnNames = {"Assignment", "Total Points", "Average", "Median", "Completed/Total"};
@@ -1118,16 +963,17 @@ public class View {
             }
         };
         
-        // Get all assignments - make sure we get a fresh copy
+        // Get all assignments
         ArrayList<Assignment> assignments = course.getAssignments();
         
         // Populate table with assignment data
         for (Assignment assignment : assignments) {
+            // For now, leave statistics empty as mentioned in the requirements
             Object[] rowData = {
                 assignment.getName(),
                 assignment.getTotalPoints(),
-                "", // Average (placeholder)
-                "", // Median (placeholder)
+                "", // Average grade (placeholder)
+                "", // Median grade (placeholder)
                 "" // Completion rate (placeholder)
             };
             tableModel.addRow(rowData);
@@ -1135,89 +981,157 @@ public class View {
         
         // Create the table and add it to a scroll pane
         JTable assignmentsTable = new JTable(tableModel);
+        assignmentsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         assignmentsTable.setRowHeight(25);
         assignmentsTable.getTableHeader().setReorderingAllowed(false);
         
         JScrollPane tableScrollPane = new JScrollPane(assignmentsTable);
+        topPanel.add(tableScrollPane, BorderLayout.CENTER);
         
-        // Create button panel
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JButton addAssignmentButton = new JButton("Add Assignment");
-        JButton removeAssignmentButton = new JButton("Remove Assignment");
+        // BOTTOM PANEL - Student grades for selected assignment
+        JPanel bottomPanel = new JPanel(new BorderLayout(5, 5));
         
-        addAssignmentButton.addActionListener(e -> {
-            String name = JOptionPane.showInputDialog(contentPanel, "Enter assignment name:");
-            if (name != null && !name.trim().isEmpty()) {
-                String pointsStr = JOptionPane.showInputDialog(contentPanel, "Enter total points:");
-                try {
-                    double points = Double.parseDouble(pointsStr);
-                    Assignment newAssignment = new Assignment(name, points);
+        // Create a label for student grades section
+        JLabel studentGradesLabel = new JLabel("Select an assignment to view student grades", SwingConstants.CENTER);
+        studentGradesLabel.setFont(new Font("SansSerif", Font.ITALIC, 14));
+        
+        // Create table model for student grades
+        String[] studentColumnNames = {"Student", "Grade", "Status"};
+        DefaultTableModel studentTableModel = new DefaultTableModel(studentColumnNames, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return column == 1; // Only make the grade column editable
+            }
+        };
+        
+        JTable studentTable = new JTable(studentTableModel);
+        studentTable.setRowHeight(25);
+        studentTable.getTableHeader().setReorderingAllowed(false);
+        
+        JScrollPane studentTableScrollPane = new JScrollPane(studentTable);
+        bottomPanel.add(studentGradesLabel, BorderLayout.NORTH);
+        bottomPanel.add(studentTableScrollPane, BorderLayout.CENTER);
+        
+        // Add listener to assignments table to update student grades when an assignment is selected
+        assignmentsTable.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) { // Only respond to the final event in a series
+                int selectedRow = assignmentsTable.getSelectedRow();
+                if (selectedRow >= 0) {
+                    // Update student grades label
+                    String assignmentName = (String) tableModel.getValueAt(selectedRow, 0);
+                    studentGradesLabel.setText("Student Grades for: " + assignmentName);
                     
-                    // Add the assignment to the course
-                    course.addAssg(newAssignment);
+                    // Find the selected assignment
+                    final Assignment selectedAssignment = findAssignment(assignments, assignmentName);
                     
-                    // Add row to the table
-                    Object[] rowData = {
-                        name,
-                        points,
-                        "", // Average (placeholder)
-                        "", // Median (placeholder)
-                        "" // Completion rate (placeholder)
-                    };
-                    tableModel.addRow(rowData);
-                    
-                    // Add to local assignments list
-                    assignments.add(newAssignment);
-                    
-                    JOptionPane.showMessageDialog(contentPanel, "Assignment added successfully!");
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(contentPanel, "Invalid points value.");
+                    if (selectedAssignment != null) {
+                        // Clear the student grades table
+                        studentTableModel.setRowCount(0);
+                        
+                        // Get students enrolled in the course
+                        StudentList students = course.getStudents();
+                        ArrayList<Student> studentList = students.getStudents();
+                        
+                        // Populate table with student data
+                        for (Student student : studentList) {
+                            // First get the actual grade from the student for this assignment
+                            double grade = student.getAssgGrade(selectedAssignment, course.getName());
+                            
+                            // Check if assignment is graded - if grade is > 0, it's graded
+                            boolean isGraded = grade > 0;
+                            String status = isGraded ? "Graded" : "Not Graded";
+                            
+                            Object[] rowData = {
+                                student.getFirstName() + " " + student.getLastName(),
+                                isGraded ? grade : "",  // Show grade value if graded
+                                status
+                            };
+                            studentTableModel.addRow(rowData);
+                        }
+                        
+                        // Add TableModelListener to handle grade entries in real-time
+                        // First remove any existing listeners to prevent duplicates
+                        for (javax.swing.event.TableModelListener l : studentTableModel.getTableModelListeners()) {
+                            if (l instanceof GradeEntryListener) {
+                                studentTableModel.removeTableModelListener(l);
+                            }
+                        }
+                        
+                        // Add new listener for auto-saving grades
+                        studentTableModel.addTableModelListener(new GradeEntryListener(teacher, course.getName(), selectedAssignment, studentTableModel, studentList));
+                    }
+                } else {
+                    // No assignment selected, clear student grades
+                    studentTableModel.setRowCount(0);
+                    studentGradesLabel.setText("Select an assignment to view student grades");
                 }
             }
         });
         
-        removeAssignmentButton.addActionListener(e -> {
-            int selectedRow = assignmentsTable.getSelectedRow();
-            if (selectedRow >= 0) {
-                String assignmentName = (String) tableModel.getValueAt(selectedRow, 0);
+        // Add panels to split pane
+        splitPane.setTopComponent(topPanel);
+        splitPane.setBottomComponent(bottomPanel);
+        
+        // Add components to the grades panel
+        gradesPanel.add(instructionLabel, BorderLayout.NORTH);
+        gradesPanel.add(splitPane, BorderLayout.CENTER);
+        
+        // Add the grades panel to the content panel
+        contentPanel.add(gradesPanel);
+    }
+    
+    // Custom TableModelListener for handling grade entry and saving
+    private static class GradeEntryListener implements javax.swing.event.TableModelListener {
+        private Teacher teacher;
+        private String courseName;
+        private Assignment assignment;
+        private DefaultTableModel tableModel;
+        private ArrayList<Student> studentList;
+        
+        public GradeEntryListener(Teacher teacher, String courseName, Assignment assignment, 
+                                  DefaultTableModel tableModel, ArrayList<Student> studentList) {
+            this.teacher = teacher;
+            this.courseName = courseName;
+            this.assignment = assignment;
+            this.tableModel = tableModel;
+            this.studentList = studentList;
+        }
+        
+        @Override
+        public void tableChanged(javax.swing.event.TableModelEvent e) {
+            if (e.getType() == javax.swing.event.TableModelEvent.UPDATE && e.getColumn() == 1) {
+                int row = e.getFirstRow();
+                Object gradeObj = tableModel.getValueAt(row, 1);
+                String studentName = (String) tableModel.getValueAt(row, 0);
                 
-                // Find the selected assignment
-                final Assignment selectedAssignment = findAssignment(assignments, assignmentName);
-                
-                if (selectedAssignment != null) {
-                    int confirm = JOptionPane.showConfirmDialog(contentPanel, 
-                            "Are you sure you want to remove assignment '" + assignmentName + "'?",
-                            "Confirm Removal", JOptionPane.YES_NO_OPTION);
-                    
-                    if (confirm == JOptionPane.YES_OPTION) {
-                        // First, remove from the course - this will update the model
-                        course.removeAssg(selectedAssignment);
+                if (gradeObj != null && !gradeObj.toString().isEmpty()) {
+                    try {
+                        double grade = Double.parseDouble(gradeObj.toString());
                         
-                        // Remove the row from the table model - this updates the UI
-                        tableModel.removeRow(selectedRow);
+                        // Update status immediately
+                        tableModel.setValueAt("Graded", row, 2);
                         
-                        // Explicitly remove the assignment from our local assignments list
-                        // This ensures our in-memory copy stays in sync
-                        assignments.remove(selectedAssignment);
-                        
-                        JOptionPane.showMessageDialog(contentPanel, "Assignment removed successfully!");
+                        // Save the grade to the model
+                        String[] nameParts = studentName.split(" ");
+                        if (nameParts.length >= 2) {
+                            String firstName = nameParts[0];
+                            String lastName = nameParts[1];
+                            
+                            // Find student and save grade
+                            for (Student s : studentList) {
+                                if (s.getFirstName().equals(firstName) && s.getLastName().equals(lastName)) {
+                                    // Add grade with direct call to setAssignmentGrade
+                                    s.setAssignmentGrade(courseName, assignment, grade);
+                                    break;
+                                }
+                            }
+                        }
+                    } catch (NumberFormatException ex) {
+                        // Invalid number format - do nothing
                     }
                 }
-            } else {
-                JOptionPane.showMessageDialog(contentPanel, "Please select an assignment to remove.");
             }
-        });
-        
-        buttonPanel.add(addAssignmentButton);
-        buttonPanel.add(removeAssignmentButton);
-        
-        // Add components to the assignments panel
-        assignmentsPanel.add(instructionLabel, BorderLayout.NORTH);
-        assignmentsPanel.add(tableScrollPane, BorderLayout.CENTER);
-        assignmentsPanel.add(buttonPanel, BorderLayout.SOUTH);
-        
-        // Add the assignments panel to the content panel
-        contentPanel.add(assignmentsPanel);
+        }
     }
     
     private static void showGroupsPanel(JPanel contentPanel, Teacher teacher, Course course) {
@@ -1328,7 +1242,7 @@ public class View {
                 }
             }
             
-            JOptionPane.showMessageDialog(null, count + " students imported successfully.");
+            JOptionPane.showMessageDialog(null, count + " students imported.");
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Error reading file: " + e.getMessage());
         }
@@ -1380,5 +1294,116 @@ public class View {
         
         dialog.add(panel);
         dialog.setVisible(true);
+    }
+    
+    private static void showAssignmentsPanel(JPanel contentPanel, Teacher teacher, Course course) {
+        // Create a panel with BorderLayout
+        JPanel assignmentsPanel = new JPanel(new BorderLayout(10, 10));
+        
+        // Create a label for instructions
+        JLabel instructionLabel = new JLabel("Assignments for " + course.getName(), SwingConstants.CENTER);
+        instructionLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
+        instructionLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+        
+        // Create a table model for assignments with statistics
+        String[] columnNames = {"Assignment", "Total Points", "Average", "Median", "Completed/Total"};
+        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Make all cells non-editable
+            }
+        };
+        
+        // Get all assignments - make sure we get a fresh copy
+        ArrayList<Assignment> assignments = course.getAssignments();
+        
+        // Populate table with assignment data
+        for (Assignment assignment : assignments) {
+            Object[] rowData = {
+                assignment.getName(),
+                assignment.getTotalPoints(),
+                "", // Average (placeholder)
+                "", // Median (placeholder)
+                "" // Completion rate (placeholder)
+            };
+            tableModel.addRow(rowData);
+        }
+        
+        // Create the table and add it to a scroll pane
+        JTable assignmentsTable = new JTable(tableModel);
+        assignmentsTable.setRowHeight(25);
+        assignmentsTable.getTableHeader().setReorderingAllowed(false);
+        
+        JScrollPane tableScrollPane = new JScrollPane(assignmentsTable);
+        
+        // Create button panel
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JButton addAssignmentButton = new JButton("Add Assignment");
+        JButton removeAssignmentButton = new JButton("Remove Assignment");
+        
+        addAssignmentButton.addActionListener(e -> {
+            String name = JOptionPane.showInputDialog(contentPanel, "Enter assignment name:");
+            if (name != null && !name.trim().isEmpty()) {
+                String pointsStr = JOptionPane.showInputDialog(contentPanel, "Enter total points:");
+                try {
+                    double points = Double.parseDouble(pointsStr);
+                    Assignment newAssignment = new Assignment(name, points);
+                    
+                    // Add the assignment to the course
+                    course.addAssg(newAssignment);
+                    
+                    // Add row to the table
+                    Object[] rowData = {
+                        name,
+                        points,
+                        "", // Average (placeholder)
+                        "", // Median (placeholder)
+                        "" // Completion rate (placeholder)
+                    };
+                    tableModel.addRow(rowData);
+                    
+                    // Add to local assignments list
+                    assignments.add(newAssignment);
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(contentPanel, "Invalid points value.");
+                }
+            }
+        });
+        
+        removeAssignmentButton.addActionListener(e -> {
+            int selectedRow = assignmentsTable.getSelectedRow();
+            if (selectedRow >= 0) {
+                String assignmentName = (String) tableModel.getValueAt(selectedRow, 0);
+                
+                // Find the selected assignment
+                final Assignment selectedAssignment = findAssignment(assignments, assignmentName);
+                
+                if (selectedAssignment != null) {
+                    // Removed the confirmation dialog here
+                    // First, remove from the course - this will update the model
+                    course.removeAssg(selectedAssignment);
+                    
+                    // Remove the row from the table model - this updates the UI
+                    tableModel.removeRow(selectedRow);
+                    
+                    // Explicitly remove the assignment from our local assignments list
+                    // This ensures our in-memory copy stays in sync
+                    assignments.remove(selectedAssignment);
+                }
+            } else {
+                JOptionPane.showMessageDialog(contentPanel, "Please select an assignment to remove.");
+            }
+        });
+        
+        buttonPanel.add(addAssignmentButton);
+        buttonPanel.add(removeAssignmentButton);
+        
+        // Add components to the assignments panel
+        assignmentsPanel.add(instructionLabel, BorderLayout.NORTH);
+        assignmentsPanel.add(tableScrollPane, BorderLayout.CENTER);
+        assignmentsPanel.add(buttonPanel, BorderLayout.SOUTH);
+        
+        // Add the assignments panel to the content panel
+        contentPanel.add(assignmentsPanel);
     }
 }
