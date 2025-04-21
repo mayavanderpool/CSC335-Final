@@ -109,7 +109,7 @@ class StudentListTest {
 	}
 	
 	@Test
-	void testGetCourseAverage() {
+	void testGetClassAverage() {
 		Teacher teach = new Teacher("jane", "doe");
 		Course c = new Course("science");
 		teach.addCourse(c);
@@ -121,11 +121,27 @@ class StudentListTest {
 		teach.addAssignmentToCourse("science", a);
 		teach.addAssignmentGrade(s, "science", a, 10.0);
 		teach.addAssignmentGrade(s2, "science", a, 8.0);
-		assertEquals(teach.getStudentAverage(c), 0.9);
+		assertEquals(teach.getClassAverage(c), 0.9);
 	}
 	
 	@Test
-	void testGetCourseMedian() {
+	void testgetAssgClassAverage(){
+		Teacher teach = new Teacher("jane", "doe");
+		Course c = new Course("science");
+		teach.addCourse(c);
+		Assignment a = new Assignment("a", 10.0);
+		Student s = new Student("Stu", "Dent");
+		Student s2 = new Student("St", "Udent");
+		teach.addStudent(c, s2);
+		teach.addStudent(c, s);
+		teach.addAssignmentToCourse("science", a);
+		teach.addAssignmentGrade(s, "science", a, 10.0);
+		teach.addAssignmentGrade(s2, "science", a, 8.0);
+		assertEquals(teach.getAssgClassAverage(c, a), 9.0);
+	}
+	
+	@Test
+	void testGetStudentMedian() {
 		Teacher teach = new Teacher("jane", "doe");
 		Course c = new Course("science");
 		teach.addCourse(c);
@@ -133,6 +149,7 @@ class StudentListTest {
 		Student s1 = new Student("Stu", "Dent");
 		Student s2 = new Student("St", "Udent");
 		Student s3 = new Student("Stud", "Ent");
+		teach.addStudent(c, s3);
 		teach.addStudent(c, s2);
 		teach.addStudent(c, s1);
 		teach.addAssignmentToCourse("science", a);
@@ -140,7 +157,7 @@ class StudentListTest {
 		teach.addAssignmentGrade(s1, "science", a, 10.0);
 		teach.addAssignmentGrade(s2, "science", a, 8.0);
 		teach.addAssignmentGrade(s3, "science", a, 9.0);
-		assertEquals(teach.getStudentMedian(c), 0.9);
+		assertEquals(teach.getAssgMedian(c, a), 9.0);
 	}
 
 }
