@@ -258,12 +258,20 @@ public class CourseView {
 			@Override public boolean isCellEditable(int r, int c) { return false; }
 		};
 		for (Assignment a : course.getAssignments()) {
+			// Use the controller methods consistently
+			double avgGrade = controller.getAssignmentClassAverage(course, a);
+			String avgDisplay = String.format("%.1f", avgGrade);
+			
+			String medianDisplay = controller.getAssignmentMedian(course, a);
+			
+			String completedData = controller.getCompletedData(course, a);
+			
 			assignModel.addRow(new Object[]{
 				a.getName(),
 				a.getTotalPoints(),
-				controller.getAssignmentClassAverage(course, a),
-				controller.getAssignmentMedian(course, a),
-				controller.getCompletedData(course, a)
+				avgDisplay,
+				medianDisplay,
+				completedData
 			});
 		}
 		JTable assignTable = new JTable(assignModel);
@@ -286,7 +294,7 @@ public class CourseView {
 		studentTable.getTableHeader().setReorderingAllowed(false);
 		bottomPanel.add(new JScrollPane(studentTable), BorderLayout.CENTER);
 	
-		// When an assignment is selected, populate the student table **and** attach the listener
+		// When an assignment is selected, populate the student table
 		assignTable.getSelectionModel().addListSelectionListener(e -> {
 			if (!e.getValueIsAdjusting()) {
 				int selRow = assignTable.getSelectedRow();
@@ -298,45 +306,64 @@ public class CourseView {
 	
 				// Find the Assignment object
 				Assignment selAssignment = findAssignment(course.getAssignments(), assnName);
+				if (selAssignment == null) return;
 	
 				// Clear and repopulate
 				studentModel.setRowCount(0);
 				for (Student s : course.getStudents().getStudents()) {
 					double g = s.getAssgGrade(selAssignment, course.getName());
-					boolean graded = g > 0;
 					studentModel.addRow(new Object[]{
 						s.getFirstName() + " " + s.getLastName(),
-						graded ? g : "",
-						graded ? "Graded" : "Not Graded"
+						g > 0 ? g : "",
+						g > 0 ? "Graded" : "Not Graded"
 					});
 				}
 	
 				// Remove any existing listeners to avoid duplicates
-				for (TableModelListener l : studentModel.getTableModelListeners()) {
-					if (l instanceof TableModelListener) {
-						studentModel.removeTableModelListener(l);
-					}
+				TableModelListener[] listeners = studentModel.getTableModelListeners();
+				for (TableModelListener l : listeners) {
+					studentModel.removeTableModelListener(l);
 				}
 	
-				// Attach a fresh listener that only updates the model in place
-				studentModel.addTableModelListener(new TableModelListener() {
-					@Override
-					public void tableChanged(TableModelEvent evt) {
-						if (evt.getType() == TableModelEvent.UPDATE && evt.getColumn() == 1) {
-							int row = evt.getFirstRow();
-							Object val = studentModel.getValueAt(row, 1);
-							if (val == null || val.toString().isEmpty()) return;
-							try {
-								double newGrade = Double.parseDouble(val.toString());
-								// Update status cell
-								studentModel.setValueAt("Graded", row, 2);
-								// Persist via controller
-								String fullName = (String) studentModel.getValueAt(row, 0);
-								String[] parts = fullName.split(" ");
-								controller.addAssignmentGrade(parts[0], parts[1], course.getName(), selAssignment, newGrade);
-							} catch (NumberFormatException ex) {
-								// invalid input—ignore or show error
+				// Create and attach a new listener
+				studentModel.addTableModelListener(evt -> {
+					if (evt.getType() == TableModelEvent.UPDATE && evt.getColumn() == 1) {
+						int row = evt.getFirstRow();
+						Object val = studentModel.getValueAt(row, 1);
+						if (val == null || val.toString().isEmpty()) return;
+						
+						try {
+							double newGrade = Double.parseDouble(val.toString());
+							// Update status cell
+							studentModel.setValueAt("Graded", row, 2);
+							
+							// Get student info
+							String fullName = (String) studentModel.getValueAt(row, 0);
+							String[] parts = fullName.split(" ");
+							String firstName = parts[0];
+							String lastName = parts.length > 1 ? parts[1] : "";
+							
+							// Persist via controller
+							controller.addAssignmentGrade(firstName, lastName, course.getName(), selAssignment, newGrade);
+							
+							// Update the assignment table with new statistics
+							int assignmentRow = assignTable.getSelectedRow();
+							if (assignmentRow >= 0) {
+								// Recalculate statistics with the controller methods
+								double newAvg = controller.getAssignmentClassAverage(course, selAssignment);
+								String newAvgDisplay = String.format("%.1f", newAvg);
+								
+								String newMedian = controller.getAssignmentMedian(course, selAssignment);
+								
+								String newCompleted = controller.getCompletedData(course, selAssignment);
+								
+								// Update the table
+								assignModel.setValueAt(newAvgDisplay, assignmentRow, 2);
+								assignModel.setValueAt(newMedian, assignmentRow, 3);
+								assignModel.setValueAt(newCompleted, assignmentRow, 4);
 							}
+						} catch (NumberFormatException ex) {
+							JOptionPane.showMessageDialog(contentPanel, "Please enter a valid number for the grade.");
 						}
 					}
 				});
@@ -349,13 +376,19 @@ public class CourseView {
 		gradesPanel.add(instructionLabel, BorderLayout.NORTH);
 		gradesPanel.add(splitPane, BorderLayout.CENTER);
 	
+		// Add a refresh button to manually refresh the view
+		JButton refreshButton = new JButton("Refresh Grades");
+		refreshButton.addActionListener(e -> showGradesPanel());
+		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		buttonPanel.add(refreshButton);
+		gradesPanel.add(buttonPanel, BorderLayout.SOUTH);
+	
 		// Swap into view
 		contentPanel.removeAll();
 		contentPanel.add(gradesPanel, BorderLayout.CENTER);
 		contentPanel.revalidate();
 		contentPanel.repaint();
 	}
-	
 
 	private void showGroupsPanel() {
 		// Create a panel with BorderLayout
@@ -472,32 +505,20 @@ public class CourseView {
 
 		// Populate table with assignment data
 		for (Assignment assignment : assignments) {
-			// Calculate statistics using controller methods
-			String avgDisplay = "0.0";
-			String medianDisplay = "";
-
-			try {
-				// Get average grade using controller method
-				double avgGrade = controller.getAssignmentClassAverage(course, assignment);
-				if (!Double.isNaN(avgGrade)) {
-					avgDisplay = String.format("%.1f", avgGrade);
-				}
-
-				// Get median grade using controller method
-				String medianGrade = controller.getAssignmentMedian(course, assignment);
-				if (!medianGrade.equals("-1")) {
-					medianDisplay = medianGrade;
-				}
-			} catch (Exception ex) {
-				// Handle any exceptions during calculation
-			}
-
+			// Use the controller methods consistently
+			double avgGrade = controller.getAssignmentClassAverage(course, assignment);
+			String avgDisplay = String.format("%.1f", avgGrade);
+			
+			String medianDisplay = controller.getAssignmentMedian(course, assignment);
+			
+			String completedData = controller.getCompletedData(course, assignment);
+			
 			Object[] rowData = {
-					assignment.getName(),
-					assignment.getTotalPoints(),
-					avgDisplay,
-					medianDisplay,
-					controller.getCompletedData(course, assignment)
+				assignment.getName(),
+				assignment.getTotalPoints(),
+				avgDisplay,
+				medianDisplay,
+				completedData
 			};
 			tableModel.addRow(rowData);
 		}

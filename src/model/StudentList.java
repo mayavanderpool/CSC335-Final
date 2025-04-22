@@ -146,7 +146,7 @@ public class StudentList implements Iterable<Student>{
 		double total = 0;
 		int count = 0;
 	
-		for(Student s : students){
+		for(Student s : c.getStudents().getStudents()){
 			if(s.getGraded().contains(a)){
 				count += 1;
 				total += s.getAssgGrade(a, c.getName());
