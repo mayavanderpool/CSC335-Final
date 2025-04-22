@@ -1,5 +1,4 @@
 package model;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 /*File: Student.java
@@ -13,8 +12,8 @@ public class Student extends Person{
 
     private HashMap<Course, HashMap<Assignment, Double>> courseList;
 
-    public Student(String first, String last){
-        super(first,last);
+    public Student(String first, String last, String username){
+        super(first,last,username,"student");
         courseList = new HashMap<Course, HashMap<Assignment, Double>>();
     }
 
@@ -162,6 +161,8 @@ public class Student extends Person{
         	}
         }
     }
+
+
 
     public double getGrade(Course course){
         double grade = 0.0;

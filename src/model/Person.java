@@ -3,14 +3,16 @@ public class Person {
     private final String FIRST;
     private final String LAST;
     private String username;
+	private String role;
 
     /*
      * @pre first != null && last != null;
      */
-    public Person(String first, String last){
+    public Person(String first, String last, String username, String role){
         this.FIRST = first;
         this.LAST = last;
-        this.username = "";
+        this.username = username;
+		this.role = role;
     }
 
     public String getFirstName(){

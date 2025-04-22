@@ -1,20 +1,20 @@
-Hart, Rees, teacher
-Carter, Crispin, student
-Lizama, Grace, student
-Kushlan, Alyssa, student
-Tucker, Ava, student
-Crossen, Maddie, student
-Digiovani, Caroline, student
-Smith, Sam, student
-Doe, Jane, student
-Smith, Audrey, student 
-Hart, Cate, student 
-Gibson, Sarah, student 
-Anderson, Joe, student
-Davis, Abby, student
-Glazer, Ilana, student
-Jacobson, Abbi, student
-Brown, Zoe, student
-Jones, Jesse, student
-Dylan, Bob, student
-White, Walter, student
+student,Rees,Hart,rhart
+student,Crispin,Carter,ccarter
+student,Grace,Lizama,glizama
+student,Alyssa,Kushlan,akushlan
+student,Ava,Tucker,atucker
+student,Maddie,Crossen,mcrossen
+student,Caroline,Digiovani,cdigiovani
+student,Sam,Smith,ssmith
+student,Jane,Doe,jdoe
+student,Audrey,Smith,asmith
+student,Cate,Hart,chart
+student,Sarah,Gibson,sgibson
+student,Joe,Anderson,janderson
+student,Abby,Davis,adavis
+student,Ilana,Glazer,iglazer
+student,Abbi,Jacobson,ajacobson
+student,Zoe,Brown,zbrown
+student,Jesse,Jones,jjones
+student,Bob,Dylan,bdylan
+student,Walter,White,wwhite
