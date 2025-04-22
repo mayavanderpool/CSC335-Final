@@ -1,4 +1,4 @@
-package test;
+package model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,9 +15,9 @@ import model.Teacher;
 class StudentListTest {
 
 	StudentList students = new StudentList();
-	Student s1 = new Student("Alyssa", "Abe");
-	Student s2 = new Student("Bob", "Brown");
-	Student s3 = new Student("Carl", "Clyde");
+	Student s1 = new Student("Alyssa", "Abe", "aabe");
+	Student s2 = new Student("Bob", "Brown", "bbrown");
+	Student s3 = new Student("Carl", "Clyde", "cclyde");
 	Course c1 = new Course("335");
 	Assignment a1 = new Assignment("assg1", 100.0);
 	Assignment a2 = new Assignment("assg2", 100.0);
@@ -110,12 +110,12 @@ class StudentListTest {
 	
 	@Test
 	void testGetClassAverage() {
-		Teacher teach = new Teacher("jane", "doe");
+		Teacher teach = new Teacher("jane", "doe", "jdoe");
 		Course c = new Course("science");
 		teach.addCourse(c);
 		Assignment a = new Assignment("a", 10.0);
-		Student s = new Student("Stu", "Dent");
-		Student s2 = new Student("St", "Udent");
+		Student s = new Student("Stu", "Dent", "sdent");
+		Student s2 = new Student("St", "Udent", "sudent");
 		teach.addStudent(c, s2);
 		teach.addStudent(c, s);
 		teach.addAssignmentToCourse("science", a);
@@ -126,12 +126,12 @@ class StudentListTest {
 	
 	@Test
 	void testgetAssgClassAverage(){
-		Teacher teach = new Teacher("jane", "doe");
+		Teacher teach = new Teacher("jane", "doe", "jdoe");
 		Course c = new Course("science");
 		teach.addCourse(c);
 		Assignment a = new Assignment("a", 10.0);
-		Student s = new Student("Stu", "Dent");
-		Student s2 = new Student("St", "Udent");
+		Student s = new Student("Stu", "Dent", "sdent");
+		Student s2 = new Student("St", "Udent", "sdent");
 		teach.addStudent(c, s2);
 		teach.addStudent(c, s);
 		teach.addAssignmentToCourse("science", a);
@@ -142,13 +142,13 @@ class StudentListTest {
 	
 	@Test
 	void testGetStudentMedian() {
-		Teacher teach = new Teacher("jane", "doe");
+		Teacher teach = new Teacher("jane", "doe", "jdoe");
 		Course c = new Course("science");
 		teach.addCourse(c);
 		Assignment a = new Assignment("a", 10.0);
-		Student s1 = new Student("Stu", "Dent");
-		Student s2 = new Student("St", "Udent");
-		Student s3 = new Student("Stud", "Ent");
+		Student s1 = new Student("Stu", "Dent", "sdent");
+		Student s2 = new Student("St", "Udent", "s");
+		Student s3 = new Student("Stud", "Ent", "e");
 		teach.addStudent(c, s3);
 		teach.addStudent(c, s2);
 		teach.addStudent(c, s1);
@@ -158,17 +158,26 @@ class StudentListTest {
 		teach.addAssignmentGrade(s2, "science", a, 8.0);
 		teach.addAssignmentGrade(s3, "science", a, 9.0);
 		assertEquals(teach.getAssgMedian(c, a), "9.0");
+		
+		Assignment b = new Assignment("b", 10.0);
+		assertEquals(teach.getAssgMedian(c, b), "");
+		
+		teach.addAssignmentToCourse("science", b);
+		teach.addAssignmentGrade(s1, "science", b, 10.0);
+		teach.addAssignmentGrade(s2, "science", b, 8.0);
+		assertEquals(teach.getAssgMedian(c, a), "9.0");
+		
 	}
 	
 	@Test
 	void testGetStudentsByAssgGrade() {
-		Teacher teach = new Teacher("jane", "doe");
+		Teacher teach = new Teacher("jane", "doe", "je");
 		Course c = new Course("science");
 		teach.addCourse(c);
 		Assignment a = new Assignment("a", 10.0);
-		Student s1 = new Student("Stu", "Dent");
-		Student s2 = new Student("St", "Udent");
-		Student s3 = new Student("S", "Tudent");
+		Student s1 = new Student("Stu", "Dent", "a");
+		Student s2 = new Student("St", "Udent", "b");
+		Student s3 = new Student("S", "Tudent", "c");
 		teach.addStudent(c, s1);
 		teach.addStudent(c, s2);
 		teach.addStudent(c, s3);

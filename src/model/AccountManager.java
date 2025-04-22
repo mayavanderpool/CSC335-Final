@@ -110,6 +110,15 @@ public class AccountManager {
 		}
 	}
 
+	public void addTeacher(Teacher teacher){
+		people.add(teacher);
+	}
+
+	public void addStudent(String firstName, String lastName, String username){
+		registerStudent(firstName, lastName, username);
+		inputPeople("people.txt");
+	}
+
 	public void importStudents(String file, Course course) {
 		System.out.println("IMPORT STARTED on: " + file);
 	
@@ -183,9 +192,7 @@ public class AccountManager {
 			if (p.getFirstName().equalsIgnoreCase(fname) && p.getLastName().equalsIgnoreCase(lname)
 					&& !p.getUserName().isEmpty()) {
 				return true;
-			} else {
-				return false;
-			}
+			} 
 		}
 		return false;
 	}
@@ -200,10 +207,7 @@ public class AccountManager {
 		}
 
 	}
-
-	public void addTeacher(Teacher teacher) {
-		people.add(teacher);
-	}
+	
 
 	// a user is creating a password for their account
 	public void addPassword(String fname, String lname, String username, String password) {
@@ -216,6 +220,18 @@ public class AccountManager {
 			}
 		}
 		writeInFile("userinfo.txt", username + "," + salt + "," + saltedHashed + "\n", true);
+	}
+
+	public void registerStudent(String firstName, String lastName, String user){
+		if(!personExists(firstName, lastName)){
+			try (FileWriter writer = new FileWriter("people.txt", true)) {  
+				writer.write("student" + "," + firstName + "," + lastName + "," + user +"\n");
+			} catch (IOException e) {
+				System.out.println("Error writing to people.txt");
+				e.printStackTrace();
+			}
+		}
+	
 	}
 
 	private String getSalt() {

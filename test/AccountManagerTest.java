@@ -1,14 +1,12 @@
-package test;
+package model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import model.AccountManager;
-
-class AccountManagerTest {
-	private static AccountManager aManager;
+class TesTTest {
+private static AccountManager aManager;
 	
 	@BeforeEach
 	void setup() {
@@ -18,7 +16,7 @@ class AccountManagerTest {
 
 	@Test
 	void testPersonExists() {
-	    assertTrue(aManager.personExists("John", "Smith"));
+	    assertTrue(aManager.personExists("Rees", "Hart"));
 	    assertFalse(aManager.personExists("Snuffy", "Snuffleupagus"));
 	}
 	
@@ -45,5 +43,4 @@ class AccountManagerTest {
 	    assertFalse(aManager.checkCredentials("JSmith", "wrongpassword"));
 	    assertFalse(aManager.checkCredentials("wrongusername", "password123"));
 	}
-
 }

@@ -115,6 +115,7 @@ public class Student extends Person{
             }
         };
     }
+
     
     public void addAssignment(Course c, Assignment a) {
     	if(courseList.containsKey(c)) {

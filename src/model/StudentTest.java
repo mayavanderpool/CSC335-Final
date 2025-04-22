@@ -1,4 +1,4 @@
-package test;
+package model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,7 +17,7 @@ class StudentTest {
 
 	@Test
 	void testGetters() {
-		Student s1 = new Student("Rees", "Hart");
+		Student s1 = new Student("Rees", "Hart", "rhart");
 		assertEquals(s1.getFirstName(), "Rees");
 		assertEquals(s1.getLastName(), "Hart");
 		assertEquals(s1.getGPA(), 0.0);
@@ -29,9 +29,9 @@ class StudentTest {
 	
 	@Test
 	void testSet() {
-		Student s1 = new Student("Rees", "Hart");
+		Student s1 = new Student("Rees", "Hart", "rhart");
 		Course c1 = new Course("Math");
-		Teacher t1 = new Teacher("Jane", "Smith");
+		Teacher t1 = new Teacher("Jane", "Smith", "jsmith");
 		
 		t1.addCourse(c1);
 		t1.addStudent(c1, s1);
@@ -61,8 +61,8 @@ class StudentTest {
 	
 	@Test
 	void GPA() {
-		Student s1 = new Student("Rees", "Hart");
-		Teacher t1 = new Teacher("Jane", "Smith");
+		Student s1 = new Student("Rees", "Hart", "rhart");
+		Teacher t1 = new Teacher("Jane", "Smith", "jsmith");
 		Course c1 = new Course("Math");
 		Assignment a1 = new Assignment("a1", 100.0);
 		Assignment a2 = new Assignment("a2", 100.0);
@@ -81,10 +81,10 @@ class StudentTest {
 	
 	@Test
 	void testCourseGradeNeeded() {
-		Student s1 = new Student("Rees", "Hart");
+		Student s1 = new Student("Rees", "Hart", "rhart");
 		Course c1 = new Course("Math");
 		Course c2 = new Course("Art");
-		Teacher t1 = new Teacher("Jane", "Smith");
+		Teacher t1 = new Teacher("Jane", "Smith", "jsmith");
 		Assignment a1 = new Assignment("a1", 100.0);
 		
 		t1.addCourse(c1);
@@ -103,7 +103,7 @@ class StudentTest {
 	
 	@Test
 	void testGetUngraded() {
-		Student s = new Student("Snuffy", "Snuffles");
+		Student s = new Student("Rees", "Hart", "rhart");
 		Course course = new Course("math");
 		Assignment a1 = new Assignment("hw1", 100.0);
 		Assignment a2 = new Assignment("hw2", 100.0);
@@ -122,9 +122,9 @@ class StudentTest {
 	
 	@Test
 	void testFisrtNameFirstComparator() {
-		Student s1 = new Student("Alice", "Adams");
-		Student s2 = new Student("Bob", "Benson");
-		Student s3 = new Student("Alice", "Smith");
+		Student s1 = new Student("Alice", "Adams", "aadams");
+		Student s2 = new Student("Bob", "Benson", "bbenson");
+		Student s3 = new Student("Alice", "Smith", "asmith");
 		
 		ArrayList<Student> students = new ArrayList<Student>();
 		students.add(s1);
@@ -138,9 +138,9 @@ class StudentTest {
 	
 	@Test
 	void testLastNameFirstComparator() {
-		Student s1 = new Student("Alice", "Adams");
-		Student s2 = new Student("Bob", "Adams");
-		Student s3 = new Student("Alice", "Smith");
+		Student s1 = new Student("Alice", "Adams", "aadams");
+		Student s2 = new Student("Bob", "Adams", "badams");
+		Student s3 = new Student("Alice", "Smith", "asmith");
 		
 		ArrayList<Student> students = new ArrayList<Student>();
 		students.add(s1);
@@ -154,11 +154,11 @@ class StudentTest {
 	
 	@Test
 	void testUserNameFirstComparator() {
-		Student s1 = new Student("Alice", "Adams");
+		Student s1 = new Student("Alice", "Adams", "aadams");
 		s1.setUser("c");
-		Student s2 = new Student("Bob", "Benson");
+		Student s2 = new Student("Bob", "Benson", "bbenson");
 		s2.setUser("b");
-		Student s3 = new Student("Charles", "Smith");
+		Student s3 = new Student("Charles", "Smith", "csmith");
 		s3.setUser("a");
 		
 		ArrayList<Student> students = new ArrayList<Student>();
@@ -172,11 +172,11 @@ class StudentTest {
 	
 	@Test
 	void testGradeFirstComparator() {
-		Teacher t = new Teacher("fname", "lname");
+		Teacher t = new Teacher("fname", "lname", "user");
 		Course course = new Course("math");
-		Student s1 = new Student("Bob", "Johnson");
-		Student s2 = new Student("Alice", "Brown");
-		Student s3 = new Student("Alice", "Smith");
+		Student s1 = new Student("Bob", "Benson", "bbenson");
+		Student s2 = new Student("Alice", "Adams", "aadams");
+		Student s3 = new Student("Charles", "Smith", "csmith");
 		t.addCourse(course);
 		t.addStudent(course, s1);
 		t.addStudent(course, s2);
@@ -193,20 +193,20 @@ class StudentTest {
 		students.add(s3);
 		Collections.sort(students, Student.gradeFirstComparator(course));
 		assertEquals(0.0, students.get(0).getGrade(course));
-		assertEquals("Brown", students.get(2).getLastName());
+		assertEquals("Adams", students.get(2).getLastName());
 		
 	}
 	
 	@Test
 	void testGetLetterGrade() {
-		Teacher t = new Teacher("Snoopy", "Lastname");
+		Teacher t = new Teacher("Snoopy", "Lastname", "user");
 		Course course = new Course("math");
 		t.addCourse(course);
-		Student sA = new Student("Jamie", "Lee");
-		Student sB = new Student("Lindsay", "Lohan");
-		Student sC = new Student("Lindsay", "Lohan");
-		Student sD = new Student("Lindsay", "Lohan");
-		Student sF = new Student("Lindsay", "Lohan");
+		Student sA = new Student("Alice", "Adams", "aadams");
+		Student sB = new Student("Lindsay", "Lohan", "llohan");
+		Student sC = new Student("Lindsay", "Lohan", "llohan");
+		Student sD = new Student("Lindsay", "Lohan", "llohan");
+		Student sF = new Student("Lindsay", "Lohan", "llohan");
         t.addStudent(course, sA);
         t.addStudent(course, sB);
         t.addStudent(course, sC);
@@ -239,10 +239,10 @@ class StudentTest {
 
 	@Test
 	void testGradeNeeded() {
-		Teacher t = new Teacher("Snoopy", "Lastname");
+		Teacher t = new Teacher("Snoopy", "Lastname", "user");
 		Course course = new Course("math");
 		t.addCourse(course);
-		Student sA = new Student("Jamie", "Lee");
+		Student sA = new Student("Jamie", "Lee", "jl");
         t.addStudent(course, sA);
         Assignment a1 = new Assignment("hw1", 100.0);     
         t.addAssignmentToCourse("math", a1);    
@@ -253,7 +253,7 @@ class StudentTest {
 	
 	@Test
 	void testRemoveAssignment() {
-		Student s = new Student("Snuffy", "Snuffles");
+		Student s = new Student("Rees", "Hart", "rhart");
 		Course course = new Course("math");
 		Assignment a1 = new Assignment("hw1", 100.0);
 		Assignment a2 = new Assignment("hw2", 100.0);
@@ -274,10 +274,10 @@ class StudentTest {
 	
 	@Test
 	void testGetAssgGrade() {
-		Teacher teach = new Teacher("jane", "doe");
+		Teacher teach = new Teacher("jane", "doe", "j");
 		Course course = new Course("math");
 		teach.addCourse(course);
-		Student s = new Student("mary", "mess");
+		Student s = new Student("mary", "mess", "mm");
 		teach.addStudent(course, s);
 		Assignment a = new Assignment("a", 10.0);
 		course.addAssg(a);
@@ -287,10 +287,10 @@ class StudentTest {
 	
 	@Test
 	void testGetAssgGradeStr() {
-		Teacher teach = new Teacher("jane", "doe");
+		Teacher teach = new Teacher("jane", "doe", "j");
 		Course course = new Course("math");
 		teach.addCourse(course);
-		Student s = new Student("mary", "mess");
+		Student s = new Student("mary", "mess", "mm");
 		teach.addStudent(course, s);
 		Assignment a = new Assignment("a", 10.0);
 		course.addAssg(a);

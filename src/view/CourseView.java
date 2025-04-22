@@ -193,6 +193,8 @@ public class CourseView {
 			}
 		});
 
+		
+
 		removeStudentButton.addActionListener(e -> {
 			int selectedRow = studentsTable.getSelectedRow();
 			if (selectedRow >= 0) {
@@ -326,50 +328,48 @@ public class CourseView {
 				}
 	
 				// Create and attach a new listener
-				// This code should replace the TableModelListener section in showGradesPanel()
-
-// Create and attach a new listener
-studentModel.addTableModelListener(evt -> {
-    if (evt.getType() == TableModelEvent.UPDATE && evt.getColumn() == 1) {
-        int row = evt.getFirstRow();
-        Object val = studentModel.getValueAt(row, 1);
-        if (val == null || val.toString().isEmpty()) return;
-        
-        try {
-            double newGrade = Double.parseDouble(val.toString());
-            // Update status cell
-            studentModel.setValueAt("Graded", row, 2);
-            
-            // Get student info
-            String fullName = (String) studentModel.getValueAt(row, 0);
-            String[] parts = fullName.split(" ");
-            String firstName = parts[0];
-            String lastName = parts.length > 1 ? parts[1] : "";
-            
-            // Persist via controller
-            controller.addAssignmentGrade(firstName, lastName, course.getName(), selAssignment, newGrade);
-            
-            // FORCE A COMPLETE REFRESH OF THE PANEL INSTEAD OF JUST UPDATING THE VALUES
-            // This will ensure all data is recalculated from the model
-            SwingUtilities.invokeLater(() -> {
-                // Preserve the selected assignment row
-                int currentSelectedRow = assignTable.getSelectedRow();
-                
-                // Refresh the entire panel
-                showGradesPanel();
-                
-                // Restore the selection and view
-                if (currentSelectedRow >= 0 && currentSelectedRow < assignTable.getRowCount()) {
-                    assignTable.setRowSelectionInterval(currentSelectedRow, currentSelectedRow);
-                    // Trigger the selection listener
-                    assignTable.getSelectionModel().setSelectionInterval(currentSelectedRow, currentSelectedRow);
-                }
-            });
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(contentPanel, "Please enter a valid number for the grade.");
-        }
-    }
-});
+				studentModel.addTableModelListener(evt -> {
+					if (evt.getType() == TableModelEvent.UPDATE && evt.getColumn() == 1) {
+						int row = evt.getFirstRow();
+						Object val = studentModel.getValueAt(row, 1);
+						if (val == null || val.toString().isEmpty()) return;
+						
+						try {
+							double newGrade = Double.parseDouble(val.toString());
+							// Update status cell
+							studentModel.setValueAt("Graded", row, 2);
+							
+							// Get student info
+							String fullName = (String) studentModel.getValueAt(row, 0);
+							String[] parts = fullName.split(" ");
+							String firstName = parts[0];
+							String lastName = parts.length > 1 ? parts[1] : "";
+							
+							// Persist via controller
+							controller.addAssignmentGrade(firstName, lastName, course.getName(), selAssignment, newGrade);
+							
+							// Get updated statistics from the controller
+							double newAvg = controller.getAssignmentClassAverage(course, selAssignment);
+							String newAvgDisplay = String.format("%.1f", newAvg);
+							
+							String newMedian = controller.getAssignmentMedian(course, selAssignment);
+							
+							String newCompleted = controller.getCompletedData(course, selAssignment);
+							
+							// Update the assignment table with new statistics
+							int assignmentRow = assignTable.getSelectedRow();
+							if (assignmentRow >= 0) {
+								assignModel.setValueAt(newAvgDisplay, assignmentRow, 2);
+								assignModel.setValueAt(newMedian, assignmentRow, 3);
+								assignModel.setValueAt(newCompleted, assignmentRow, 4);
+							}
+						} catch (NumberFormatException ex) {
+							JOptionPane.showMessageDialog(contentPanel, "Please enter a valid number for the grade.");
+						}
+					}
+				});
+			}
+		});
 	
 		// Assemble panels
 		splitPane.setTopComponent(topPanel);
@@ -509,17 +509,17 @@ studentModel.addTableModelListener(evt -> {
 			// Use the controller methods consistently
 			double avgGrade = controller.getAssignmentClassAverage(course, assignment);
 			String avgDisplay = String.format("%.1f", avgGrade);
-
+			
 			String medianDisplay = controller.getAssignmentMedian(course, assignment);
-
+			
 			String completedData = controller.getCompletedData(course, assignment);
-
+			
 			Object[] rowData = {
-					assignment.getName(),
-					assignment.getTotalPoints(),
-					avgDisplay,
-					medianDisplay,
-					completedData
+				assignment.getName(),
+				assignment.getTotalPoints(),
+				avgDisplay,
+				medianDisplay,
+				completedData
 			};
 			tableModel.addRow(rowData);
 		}
@@ -678,4 +678,5 @@ studentModel.addTableModelListener(evt -> {
 		}
 
 	}
+	
 }
