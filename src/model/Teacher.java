@@ -7,8 +7,8 @@ import java.util.Map;
 public class Teacher extends Person {
 	private ArrayList<Course> courseList;
 
-	public Teacher(String fName, String lName) {
-		super(fName, lName);
+	public Teacher(String fName, String lName, String user) {
+		super(fName, lName, user, "teacher");
 		this.courseList = new ArrayList<Course>();
 	}
 	

@@ -13,8 +13,8 @@ public class Student extends Person{
 
     private HashMap<Course, HashMap<Assignment, Double>> courseList;
 
-    public Student(String first, String last){
-        super(first,last);
+    public Student(String first, String last, String user){
+        super(first,last,user, "teacher" );
         courseList = new HashMap<Course, HashMap<Assignment, Double>>();
     }
 
