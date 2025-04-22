@@ -26,7 +26,7 @@ public class Student extends Person{
         double sum = 0;
         for (Course c: this.getCompletedCourses()){
             if (c.isCompleted()){
-                sum += getGrade(c) * 4.0;
+                sum += getGrade(c) / 25;
             }
         }
         return (sum / this.getCompletedCourses().size());
@@ -176,7 +176,7 @@ public class Student extends Person{
             	}
         	}
         if (total == 0) return 0;
-        return grade/total;
+        return grade/total * 100;
         }
 
 	public double getAssgGrade(Assignment a, String course){

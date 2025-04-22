@@ -170,12 +170,18 @@ public class StudentList implements Iterable<Student>{
 		if(num % 2 == 1){
 			return grades.get(mid);
 		}
-		else{
+		else if(num % 2 == 0){
 			return (grades.get(mid -1) + grades.get(mid)) / 2.0;
 		}
+		else{
+			return -1;
+		}
+
 
 		
 	}
+
+	
 	
 	
 

@@ -75,8 +75,7 @@ public class AccountManager {
 		}
 		return content;	
 	}
-	
-	
+
 	
 	
 	
@@ -149,6 +148,7 @@ public class AccountManager {
 		}
 		return false;
 	}
+
 	
 	
 	// check that user doesn't already have an account (based on their first and last name)
@@ -237,6 +237,33 @@ public class AccountManager {
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+	public Student getStudentByUsername(String username){
+		for(Person p :getUsers()){
+			if(p instanceof Student && p.getUserName().equals(username)){
+				return (Student)p;
+			}
+		}
+		return null;
+	}
+
+	public Student getStudentByName(String fName, String lName){
+		for(Person p :getUsers()){
+			if(p instanceof Student && p.getFirstName().equals(fName) && p instanceof Student && p.getLastName().equals(lName)){
+				return (Student)p;
+			}
+		}
+		return null;
+	}
+
+	public Teacher getTeacherByUsername(String username){
+		for(Person p :getUsers()){
+			if(p instanceof Teacher && p.getUserName().equals(username)){
+				return (Teacher)p;
+			}
+		}
+		return null;
 	}
 
 }

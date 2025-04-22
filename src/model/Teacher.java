@@ -52,15 +52,7 @@ public class Teacher extends Person {
 		return null;
 	}
 	
-	// get a course from hashmap by course name
-	public Course getCourse(Course courseName) {
-		for(Course c: courseList) {
-			if(c == courseName){
-				return c;
-			}
-		}
-		return null;
-	}
+
 
 	
 	// STUDENTLIST METHODS
@@ -72,7 +64,7 @@ public class Teacher extends Person {
 	
 	// returns student mean of a student list for a course
 	public double getClassAverage(Course c) {
-		StudentList slist = getCourse(c).getStudents();
+		StudentList slist = c.getStudents();
 		return slist.getCourseAverage(c);
 	}
 
@@ -80,7 +72,7 @@ public class Teacher extends Person {
 	 * getAssgClassAverage(Course c, Assignment a) - returns the average grade on an assignment
 	 */
 	public double getAssgClassAverage(Course c, Assignment a){
-		StudentList slist = getCourse(c).getStudents();
+		StudentList slist = c.getStudents();
 		return slist.getAssgAverage(a, c);
 	}
 
@@ -88,8 +80,25 @@ public class Teacher extends Person {
 	 * getAssgMedian(Course c, Assignment a) - returns the median grade on an assignment
 	 */
 	public double getAssgMedian(Course c, Assignment a){
-		StudentList slist = getCourse(c).getStudents();
+		StudentList slist = c.getStudents();
 		return slist.getAssgMedian(a, c);
+	}
+
+	public String getCompletedData(Course c, Assignment a){
+		int total = 0;
+		int graded = 0;
+
+		StudentList list = c.getStudents();
+		for(Student s: list){
+			if(s.getGraded().contains(a)){
+				total++;
+				graded++;
+			}
+			else{
+				total++;
+			}
+		}
+		return graded + "/" + total;
 	}
 	
 
@@ -130,8 +139,8 @@ public class Teacher extends Person {
 		return list.getStudentsByUsername();
 	}
 	
-	public ArrayList<Student> getStudentByCourseGrade(String courseName) {
-		return getCourse(courseName).getStudents().getStudentsByCourseGrade(getCourse(courseName));
+	public ArrayList<Student> getStudentByAssgGrade(String assgName) {
+		
 	}
 	
 	
@@ -167,7 +176,7 @@ public class Teacher extends Person {
 	
 	// returns a single student's grade in decimal form
 	public double getStudentGrade(Course c, Student s) {
-		StudentList slist = getCourse(c).getStudents();
+		StudentList slist = c.getStudents();
 		for (Student stu : slist) {
 			if (stu == s)
 				return s.getGrade(c);
