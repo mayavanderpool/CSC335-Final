@@ -75,6 +75,10 @@ public class StudentList implements Iterable<Student>{
 		return listCopy;
 	}
 	
+	public void setStudents(ArrayList<Student> sortedList) {
+		this.students = sortedList;
+	}
+	
 	
 	/*
 	 * This method returns students split into x amount of groups 

@@ -120,11 +120,11 @@ public class AccountManager {
 	
 				String[] split = line.split(",");
 				if (split.length == 3) {
-					String first = split[0].trim();
-					String last = split[1].trim();
+					String last = split[0].trim();
+					String first = split[1].trim();
 					String user = split[2].trim();
 	
-					Student student = getStudentByName(last, first);
+					Student student = getStudentByName(first, last);
 					System.out.println("Trying to match: " + first + " " + last + " → " + student);
 	
 					if (student != null && !course.getStudents().getStudents().contains(student)) {
@@ -285,8 +285,7 @@ public class AccountManager {
 
 	public Student getStudentByName(String fName, String lName) {
 		for (Person p : getUsers()) {
-			if (p instanceof Student && p.getFirstName().equals(fName) && p instanceof Student
-					&& p.getLastName().equals(lName)) {
+			if (p instanceof Student && p.getFirstName().equals(fName) && p.getLastName().equals(lName)) {
 				return (Student) p;
 			}
 		}

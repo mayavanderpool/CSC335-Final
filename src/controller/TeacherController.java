@@ -79,6 +79,7 @@ public class TeacherController {
 		if (student != null) {
 			teacher.addAssignmentGrade(student, courseName, assignment, grade);
 		}
+
 	}
 
 	public String generateGroups(Course course, int number, boolean byCount) {
@@ -108,4 +109,34 @@ public class TeacherController {
 	public String makeGroupsOfXStudents(String course, int number) {
 		return teacher.makeGroupsOfXStudents(course, number);
 	}
+
+	public void sortByFirst(String courseName) {
+		Course c = teacher.getCourse(courseName);
+		if (c != null) {
+			StudentList sList = c.getStudents();
+			ArrayList<Student> sorted = teacher.getStudentByFirstName(courseName);
+			sList.setStudents(sorted); // this must exist in StudentList
+		}
+	}
+	
+	public void sortByLast(String courseName) {
+		Course c = teacher.getCourse(courseName);
+		if (c != null) {
+			StudentList sList = c.getStudents();
+			ArrayList<Student> sorted = teacher.getStudentByLastName(courseName);
+			sList.setStudents(sorted);
+		}
+	}
+	
+	public void sortByUser(String courseName) {
+		Course c = teacher.getCourse(courseName);
+		if (c != null) {
+			StudentList sList = c.getStudents();
+			ArrayList<Student> sorted = teacher.getStudentByUsername(courseName);
+			sList.setStudents(sorted);
+		}
+	}
+	
+
+
 }

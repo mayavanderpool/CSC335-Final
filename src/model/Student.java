@@ -162,7 +162,11 @@ public class Student extends Person{
     	
         for (HashMap.Entry<Course, HashMap<Assignment, Double>> entry : this.courseList.entrySet()) {
         	if (entry.getKey().getName().equals(course)) {
-            	HashMap<Assignment, Double> assignentry = entry.getValue();
+				HashMap<Assignment, Double> assignentry = entry.getValue();
+				if(assignentry.containsKey(a)){
+					assignentry.put(a, grade);
+					break;
+				}
             	for (Assignment key : assignentry.keySet()) {
             		if(key.getName().equals(a.getName())) {
             			assignentry.put(key, grade);
