@@ -1064,59 +1064,60 @@ public class View {
     }
     
     // Custom TableModelListener for handling grade entry and saving
-    private static class GradeEntryListener implements javax.swing.event.TableModelListener {
-        private Teacher teacher;
-        private String courseName;
-        private Assignment assignment;
-        private DefaultTableModel tableModel;
-        private ArrayList<Student> studentList;
-        
-        public GradeEntryListener(Teacher teacher, String courseName, Assignment assignment, 
-                                  DefaultTableModel tableModel, ArrayList<Student> studentList) {
-            this.teacher = teacher;
-            this.courseName = courseName;
-            this.assignment = assignment;
-            this.tableModel = tableModel;
-            this.studentList = studentList;
-        }
-        
-        @Override
-        public void tableChanged(javax.swing.event.TableModelEvent e) {
-            if (e.getType() == javax.swing.event.TableModelEvent.UPDATE && e.getColumn() == 1) {
-                int row = e.getFirstRow();
-                Object gradeObj = tableModel.getValueAt(row, 1);
-                String studentName = (String) tableModel.getValueAt(row, 0);
-                
-                if (gradeObj != null && !gradeObj.toString().isEmpty()) {
-                    try {
-                        double grade = Double.parseDouble(gradeObj.toString());
+    // Custom TableModelListener for handling grade entry and saving
+private static class GradeEntryListener implements javax.swing.event.TableModelListener {
+    private Teacher teacher;
+    private String courseName;
+    private Assignment assignment;
+    private DefaultTableModel tableModel;
+    private ArrayList<Student> studentList;
+    
+    public GradeEntryListener(Teacher teacher, String courseName, Assignment assignment, 
+                              DefaultTableModel tableModel, ArrayList<Student> studentList) {
+        this.teacher = teacher;
+        this.courseName = courseName;
+        this.assignment = assignment;
+        this.tableModel = tableModel;
+        this.studentList = studentList;
+    }
+    
+    @Override
+    public void tableChanged(javax.swing.event.TableModelEvent e) {
+        if (e.getType() == javax.swing.event.TableModelEvent.UPDATE && e.getColumn() == 1) {
+            int row = e.getFirstRow();
+            Object gradeObj = tableModel.getValueAt(row, 1);
+            String studentName = (String) tableModel.getValueAt(row, 0);
+            
+            if (gradeObj != null && !gradeObj.toString().isEmpty()) {
+                try {
+                    double grade = Double.parseDouble(gradeObj.toString());
+                    
+                    // Update status immediately
+                    tableModel.setValueAt("Graded", row, 2);
+                    
+                    // Save the grade to the model
+                    String[] nameParts = studentName.split(" ");
+                    if (nameParts.length >= 2) {
+                        String firstName = nameParts[0];
+                        String lastName = nameParts[1];
                         
-                        // Update status immediately
-                        tableModel.setValueAt("Graded", row, 2);
-                        
-                        // Save the grade to the model
-                        String[] nameParts = studentName.split(" ");
-                        if (nameParts.length >= 2) {
-                            String firstName = nameParts[0];
-                            String lastName = nameParts[1];
-                            
-                            // Find student and save grade
-                            for (Student s : studentList) {
-                                if (s.getFirstName().equals(firstName) && s.getLastName().equals(lastName)) {
-                                    // Add grade with direct call to setAssignmentGrade
-                                    s.setAssignmentGrade(courseName, assignment, grade);
-                                    break;
-                                }
+                        // Find student and save grade
+                        for (Student s : studentList) {
+                            if (s.getFirstName().equals(firstName) && s.getLastName().equals(lastName)) {
+                                // The critical fix: use courseName instead of lastName
+                                // This properly calls the teacher's method with the correct parameters
+                                teacher.addAssignmentGrade(s, courseName, assignment, grade);
+                                break;
                             }
                         }
-                    } catch (NumberFormatException ex) {
-                        // Invalid number format - do nothing
                     }
+                } catch (NumberFormatException ex) {
+                    // Invalid number format - do nothing
                 }
             }
         }
     }
-    
+}
     private static void showGroupsPanel(JPanel contentPanel, Teacher teacher, Course course) {
         // Create a panel with BorderLayout
         JPanel groupsPanel = new JPanel(new BorderLayout(10, 10));
@@ -1298,16 +1299,58 @@ public class View {
         ArrayList<Assignment> assignments = course.getAssignments();
         
         // Populate table with assignment data
-        for (Assignment assignment : assignments) {
-            Object[] rowData = {
-                assignment.getName(),
-                assignment.getTotalPoints(),
-                teacher.getAssgClassAverage(course, assignment),
-                teacher.getAssgMedian(course, assignment), // Median (placeholder)
-                teacher.getCompletedData(course, assignment) // Completion rate (placeholder)
-            };
-            tableModel.addRow(rowData);
+        // Populate table with assignment data
+for (Assignment assignment : assignments) {
+    // Calculate statistics using teacher methods
+    double avgGrade = 0;
+    String medianGrade = "0.0";
+    String avgDisplay = "0.0";
+    String medianDisplay = "0.0";
+    String completionRate = "0/0";
+    
+    try {
+        // Get average grade using teacher method
+        avgGrade = teacher.getAssgClassAverage(course, assignment);
+        if (!Double.isNaN(avgGrade)) {
+            avgDisplay = String.format("%.1f", avgGrade);
         }
+        
+        // Get median grade using teacher method
+        medianGrade = teacher.getAssgMedian(course, assignment);
+        if (!medianGrade.equals("-1")) {
+            medianDisplay = String.format("%.1f", medianGrade);
+        }
+		else{
+			medianDisplay = "";
+		}
+        
+        // Calculate completion rate (count of graded vs total students)
+        int gradedCount = 0;
+        int totalCount = 0;
+        StudentList students = course.getStudents();
+        for (Student s : students.getStudents()) {
+            totalCount++;
+            if (s.getGraded().contains(assignment)) {
+                gradedCount++;
+            }
+        }
+        
+        if (totalCount > 0) {
+            completionRate = gradedCount + "/" + totalCount;
+        }
+    } catch (Exception e) {
+        // Ignore exceptions during statistics calculation
+    }
+    
+    Object[] rowData = {
+        assignment.getName(),
+        assignment.getTotalPoints(),
+        avgDisplay,
+        medianDisplay,
+        completionRate
+    };
+    tableModel.addRow(rowData);
+}
         
         // Create the table and add it to a scroll pane
         JTable assignmentsTable = new JTable(tableModel);
@@ -1386,4 +1429,7 @@ public class View {
         // Add the assignments panel to the content panel
         contentPanel.add(assignmentsPanel);
     }
+
+	
+	
 }

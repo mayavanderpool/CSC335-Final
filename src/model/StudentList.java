@@ -163,6 +163,10 @@ public class StudentList implements Iterable<Student>{
 			}
 		}
 
+		if(grades.isEmpty()){
+			return -1.0;
+		}
+
 		Collections.sort(grades);
 		int num = grades.size();
 		int mid = num/2;
@@ -173,11 +177,9 @@ public class StudentList implements Iterable<Student>{
 		else if(num % 2 == 0){
 			return (grades.get(mid -1) + grades.get(mid)) / 2.0;
 		}
-		else{
-			return -1;
-		}
 
-
+		return -1.0;
+	
 		
 	}
 

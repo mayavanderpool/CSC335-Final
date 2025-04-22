@@ -79,9 +79,14 @@ public class Teacher extends Person {
 	/*
 	 * getAssgMedian(Course c, Assignment a) - returns the median grade on an assignment
 	 */
-	public double getAssgMedian(Course c, Assignment a){
+	public String getAssgMedian(Course c, Assignment a){
 		StudentList slist = c.getStudents();
-		return slist.getAssgMedian(a, c);
+		if(slist.getAssgMedian(a, c) == -1){
+			return "";
+		}
+		else{
+			return "" + slist.getAssgMedian(a, c);
+		}
 	}
 
 	public String getCompletedData(Course c, Assignment a){
