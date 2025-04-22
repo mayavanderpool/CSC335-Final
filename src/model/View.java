@@ -132,13 +132,7 @@ public class View {
 
             if (aManager.checkCredentials(username, password)) {
                 // Find the student object
-                Student student = null;
-                for (Person p : aManager.getUsers()) {
-                    if (p instanceof Student && p.getUserName().equals(username)) {
-                        student = (Student) p;
-                        break;
-                    }
-                }
+                Student student = aManager.getStudentByUsername(username);
 
                 if (student != null) {
                     frame.dispose();
@@ -197,13 +191,7 @@ public class View {
 
             if (aManager.checkCredentials(username, password)) {
                 // Find the teacher object
-                Teacher teacher = null;
-                for (Person p : aManager.getUsers()) {
-                    if (p instanceof Teacher && p.getUserName().equals(username)) {
-                        teacher = (Teacher) p;
-                        break;
-                    }
-                }
+                Teacher teacher = aManager.getTeacherByUsername(username);
 
                 if (teacher != null) {
                     frame.dispose();
@@ -580,7 +568,7 @@ public class View {
             }
 
             if (course != null) {
-                double grade = student.getGrade(course) * 100; // Convert to percentage
+                double grade = student.getGrade(course); 
                 String letterGrade = student.getLetterGrade(course);
                 JOptionPane.showMessageDialog(parentFrame,
                         "Your current grade in " + course.getName() + " is: " +
@@ -827,7 +815,7 @@ public class View {
         
         // Populate table with student data
         for (Student student : studentList) {
-            double grade = student.getGrade(course) * 100; // Convert to percentage
+            double grade = student.getGrade(course); // Convert to percentage
             
             Object[] rowData = {
                 student.getFirstName() + " " + student.getLastName(),
@@ -855,15 +843,10 @@ public class View {
                 String lastName = JOptionPane.showInputDialog(contentPanel, "Enter student's last name:");
                 if (lastName != null && !lastName.trim().isEmpty()) {
                     // Check if student exists
-                    Student student = null;
-                    for (Person p : aManager.getUsers()) {
-                        if (p instanceof Student && 
-                            p.getFirstName().equalsIgnoreCase(firstName) && 
-                            p.getLastName().equalsIgnoreCase(lastName)) {
-                            student = (Student) p;
-                            break;
-                        }
-                    }
+				Student student = null;
+                   if(aManager.personExists(lastName, firstName)){
+						student = aManager.getStudentByName(lastName, firstName);
+				   }
                     
                     if (student == null) {
                         // Create new student
@@ -972,9 +955,9 @@ public class View {
             Object[] rowData = {
                 assignment.getName(),
                 assignment.getTotalPoints(),
-                "", // Average grade (placeholder)
-                "", // Median grade (placeholder)
-                "" // Completion rate (placeholder)
+                teacher.getAssgClassAverage(course, assignment),
+                teacher.getAssgMedian(course, assignment),
+                teacher.getCompletedData(course, assignment)
             };
             tableModel.addRow(rowData);
         }
@@ -1222,15 +1205,12 @@ public class View {
                     String firstName = parts[1].trim();
                     
                     // Check if student exists
-                    Student student = null;
-                    for (Person p : aManager.getUsers()) {
-                        if (p instanceof Student && 
-                            p.getFirstName().equalsIgnoreCase(firstName) && 
-                            p.getLastName().equalsIgnoreCase(lastName)) {
-                            student = (Student) p;
-                            break;
-                        }
-                    }
+                   
+					Student student = null;
+
+                    if(aManager.personExists(lastName, firstName)){
+						student = aManager.getStudentByName(firstName, lastName);
+					}
                     
                     if (student == null) {
                         // Create new student
@@ -1322,9 +1302,9 @@ public class View {
             Object[] rowData = {
                 assignment.getName(),
                 assignment.getTotalPoints(),
-                "", // Average (placeholder)
-                "", // Median (placeholder)
-                "" // Completion rate (placeholder)
+                teacher.getAssgClassAverage(course, assignment),
+                teacher.getAssgMedian(course, assignment), // Median (placeholder)
+                teacher.getCompletedData(course, assignment) // Completion rate (placeholder)
             };
             tableModel.addRow(rowData);
         }
