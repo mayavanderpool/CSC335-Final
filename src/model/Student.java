@@ -160,20 +160,27 @@ public class Student extends Person{
 
 
     public void setAssignmentGrade(String course, Assignment a, double grade){
-    	
+    	boolean set = false;
         for (HashMap.Entry<Course, HashMap<Assignment, Double>> entry : this.courseList.entrySet()) {
         	if (entry.getKey().getName().equals(course)) {
 				HashMap<Assignment, Double> assignentry = entry.getValue();
 				if(assignentry.containsKey(a)){
 					assignentry.put(a, grade);
+					set = true;
 					break;
 				}
             	for (Assignment key : assignentry.keySet()) {
             		if(key.getName().equals(a.getName())) {
             			assignentry.put(key, grade);
+						set = true;
+						break;
             		}
             	}
+				if(set){
+					break;
+				}
         	}
+
         }
     }
 
