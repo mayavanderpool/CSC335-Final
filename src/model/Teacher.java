@@ -158,10 +158,7 @@ public class Teacher extends Person {
 	
 	// add grade for student on an assignment
 	public void addAssignmentGrade(Student s, String courseName, Assignment a, double grade) {
-		StudentList slist = getCourse(courseName).getStudents();
-		for (Student stu : slist) {
-			if (stu == s) stu.setAssignmentGrade(courseName, a, grade);  // student needs method setAssignmentGrade
-		}
+		s.setAssignmentGrade(courseName, a, grade);
 	}
 	
 	// adds a student to a class
