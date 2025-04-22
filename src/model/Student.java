@@ -1,4 +1,5 @@
 package model;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 /*File: Student.java
@@ -12,8 +13,8 @@ public class Student extends Person{
 
     private HashMap<Course, HashMap<Assignment, Double>> courseList;
 
-    public Student(String first, String last, String username){
-        super(first,last,username,"student");
+    public Student(String first, String last){
+        super(first,last);
         courseList = new HashMap<Course, HashMap<Assignment, Double>>();
     }
 
@@ -146,6 +147,15 @@ public class Student extends Person{
             }
         };
     }
+    
+    public static Comparator<Student> assgFirstComparator(String course, String a) {
+    	return new Comparator<Student>() {
+    		public int compare(Student s1, Student s2) {
+    			int comp = Double.compare(s1.getAssgGrade(a, course), s2.getAssgGrade(a, course));
+    			return comp;
+    		}
+    	};
+    }
 
 
     public void setAssignmentGrade(String course, Assignment a, double grade){
@@ -161,8 +171,6 @@ public class Student extends Person{
         	}
         }
     }
-
-
 
     public double getGrade(Course course){
         double grade = 0.0;
@@ -193,9 +201,24 @@ public class Student extends Person{
         }
 		return -1;
 	}
+	
+	// overloaded getAssgGrade
+	public double getAssgGrade(String a, String course) {
+		for (HashMap.Entry<Course, HashMap<Assignment, Double>> entry : this.courseList.entrySet()) {
+        	if (entry.getKey().getName().equals(course)) {
+            	HashMap<Assignment, Double> assignentry = entry.getValue();
+            	for (Assignment key : assignentry.keySet()) {
+            		if(key.getName().equals(a)) {
+            			return assignentry.get(key);
+            		}
+            	}
+        	}
+        }
+		return -1;
+	}
     
 	public String getLetterGrade(Course c){
-		Double grade = getGrade(c)*100;
+		Double grade = getGrade(c);
 
 		if(grade >= 90.0){
 			return "A";
