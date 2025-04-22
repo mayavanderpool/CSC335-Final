@@ -2,8 +2,11 @@ package controller;
 
 import java.io.File;
 import java.util.ArrayList;
-import model.*;
 
+import javax.swing.JOptionPane;
+
+import model.*;
+import view.CourseView;
 import view.TeacherView;
 
 public class TeacherController {
@@ -48,7 +51,13 @@ public class TeacherController {
 		Student student = aManager.getStudentByName(fName, lName);
 		if (student != null) {
 			teacher.addStudent(course, student);
+		}else{
+			JOptionPane.showMessageDialog(null, 
+            "Student " + fName + " " + lName + " does not exist in the database.", 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE);
 		}
+		
 
 	}
 

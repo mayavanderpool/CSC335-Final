@@ -21,26 +21,31 @@ public class LoginController {
     }
     
 	public void createAccount(String firstName, String lastName, String username, String password) {
+
+		if (accountManager == null) {
+			System.out.println("Creating new AccountManager because it was null!");
+			accountManager = new AccountManager();
+		}
+		
 		if (isStudent) {
-			if (!accountManager.personExists(firstName, lastName)) {
-				loginView.showError("Person not found in the system.");
-				return;
-			}
-	
 			if (accountManager.accountExists(firstName, lastName)) {
 				loginView.showError("Account already exists for this person.");
 				return;
 			}
+			if (!accountManager.personExists(firstName, lastName)) {
+				accountManager.addStudent(firstName, lastName, username);
+			}
 		} else {
+			if (accountManager.accountExists(firstName, lastName)) {
+				loginView.showError("Account already exists for this person.");
+				return;
+			}
 			if (!accountManager.personExists(firstName, lastName)) {
 				Teacher newTeacher = new Teacher(firstName, lastName, username);
 				accountManager.addTeacher(newTeacher);
 			}
-	
-			if (accountManager.accountExists(firstName, lastName)) {
-				loginView.showError("Account already exists for this person.");
-				return;
-			}
+			
+			
 		}
 	
 		accountManager.addPassword(firstName, lastName, username, password);
@@ -50,12 +55,16 @@ public class LoginController {
 	
     
     public void login(String username, String password) {
+		if (accountManager == null) {
+			System.out.println("Creating new AccountManager because it was null in login!");
+			accountManager = new AccountManager();
+		}
         if (accountManager.checkCredentials(username, password)) {
             if (isStudent) {
                 Student student = accountManager.getStudentByUsername(username);
                 if (student != null) {
                     loginView.close();
-                    StudentController studentController = new StudentController(student);
+                    StudentController studentController = new StudentController(student, accountManager);
                     studentController.start();
                 }
             } else {

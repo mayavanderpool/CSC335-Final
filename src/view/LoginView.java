@@ -2,6 +2,7 @@ package view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 import controller.LoginController;
 
@@ -17,6 +18,8 @@ public class LoginView {
         this.isStudent = isStudent;
         initialize();
     }
+
+
     
     private void initialize() {
         frame = new JFrame(isStudent ? "Student Access" : "Teacher Access");

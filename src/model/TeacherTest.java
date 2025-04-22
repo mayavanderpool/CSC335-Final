@@ -1,4 +1,4 @@
-package test;
+package model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,7 +16,7 @@ class TeacherTest {
 
 	@Test
 	void testAddCourse() {
-		Teacher first = new Teacher("jane", "doe");
+		Teacher first = new Teacher("jane", "doe", "jdoe");
 		Course science = new Course("science");
 		
 		assertEquals(first.getCourses().size(), 0);
@@ -26,7 +26,7 @@ class TeacherTest {
 	
 	@Test
 	void testGetCurrentOrCompletedCourses() {
-		Teacher first = new Teacher("jane", "doe");
+		Teacher first = new Teacher("jane", "doe", "jdoe");
 		Course science = new Course("science");
 		first.addCourse(science);
 		
@@ -40,7 +40,7 @@ class TeacherTest {
 	
 	@Test
 	void testGetCourse() {
-		Teacher first = new Teacher("jane", "doe");
+		Teacher first = new Teacher("jane", "doe", "jdoe");
 		Course science = new Course("science");		
 		assertEquals(first.getCourse("science"), null);
 		first.addCourse(science);
@@ -50,10 +50,10 @@ class TeacherTest {
 	
 	@Test
 	void testGetStudentList() {
-		Teacher first = new Teacher("jane", "doe");
+		Teacher first = new Teacher("jane", "doe", "jdoe");
 		Course science = new Course("science");
 		first.addCourse(science);
-		Student stu = new Student("john", "smith");
+		Student stu = new Student("john", "smith", "j");
 		
 		StudentList list = first.getStudentList(science);
 		assertEquals(list.getStudents().size(), 0);
@@ -65,11 +65,11 @@ class TeacherTest {
 	
 	@Test
 	void testMakeXGroups() {
-		Teacher teach = new Teacher("jane", "doe");
-		Student s = new Student("mary", "mess");
-		Student s1 = new Student("abby", "zczepkowski");
-		Student s2 = new Student("zeke", "almond");
-		Student s3 = new Student("zeke1", "almond1");
+		Teacher teach = new Teacher("jane", "doe", "jdoe");
+		Student s = new Student("mary", "mess", "a");
+		Student s1 = new Student("abby", "zczepkowski", "b");
+		Student s2 = new Student("zeke", "almond", "c");
+		Student s3 = new Student("zeke1", "almond1", "d");
 		Course course = new Course("math");
 		course.addStudents(s);
 		course.addStudents(s1);
@@ -82,11 +82,11 @@ class TeacherTest {
 	
 	@Test
 	void testMakeGroupsOfXStudents() {
-		Teacher teach = new Teacher("jane", "doe");
-		Student s = new Student("mary", "mess");
-		Student s1 = new Student("abby", "zczepkowski");
-		Student s2 = new Student("zeke", "almond");
-		Student s3 = new Student("zeke1", "almond1");
+		Teacher teach = new Teacher("jane", "doe", "jdoe");
+		Student s = new Student("mary", "mess", "d");
+		Student s1 = new Student("abby", "zczepkowski", "c");
+		Student s2 = new Student("zeke", "almond", "b");
+		Student s3 = new Student("zeke1", "almond1", "a");
 		Course course = new Course("math");
 		course.addStudents(s);
 		course.addStudents(s1);
@@ -100,10 +100,10 @@ class TeacherTest {
 	@Test
 	void testGetUngradedAssignments() {
 		Course course = new Course("science");
-		Teacher teach = new Teacher("name1", "name2");
+		Teacher teach = new Teacher("jane", "doe", "jdoe");
 		teach.addCourse(course);
 		Assignment a1 = new Assignment("a1", 10.0);
-		Student stu = new Student("john", "smith");
+		Student stu = new Student("john", "smith", "k");
 		teach.addStudent(course, stu);
 		assertEquals(teach.getUngradedAssignments(), "science:\njohn smith:\nAll Assignments Graded\n");
 		teach.addAssignmentToCourse("science", a1);
@@ -112,12 +112,12 @@ class TeacherTest {
 	
 	@Test
 	void testAddAssignmentGrade() {
-		Teacher teach = new Teacher("jane", "doe");
+		Teacher teach = new Teacher("jane", "doe", "jdoe");
 		Course c = new Course("science");
 		teach.addCourse(c);
 		Assignment a = new Assignment("a", 10.0);
-		Student s = new Student("Stu", "Dent");
-		Student s2 = new Student("St", "Udent");
+		Student s = new Student("Stu", "Dent", "b");
+		Student s2 = new Student("St", "Udent", "a");
 		teach.addStudent(c, s2);
 		teach.addStudent(c, s);
 		teach.addAssignmentToCourse("science", a);
@@ -127,10 +127,10 @@ class TeacherTest {
 	
 	@Test
 	void testGetStudentsByFirstName() {
-		Teacher teach = new Teacher("jane", "doe");
-		Student s = new Student("mary", "mess");
-		Student s1 = new Student("abby", "zczepkowski");
-		Student s2 = new Student("zeke", "almond");
+		Teacher teach = new Teacher("jane", "doe", "jdoe");
+		Student s = new Student("mary", "mess", "c");
+		Student s1 = new Student("abby", "zczepkowski", "b");
+		Student s2 = new Student("zeke", "almond", "a");
 		Course course = new Course("math");
 		course.addStudents(s);
 		course.addStudents(s1);
@@ -142,10 +142,10 @@ class TeacherTest {
 	
 	@Test
 	void testGetStudentsByLastName() {
-		Teacher teach = new Teacher("jane", "doe");
-		Student s = new Student("mary", "mess");
-		Student s1 = new Student("abby", "zczepkowski");
-		Student s2 = new Student("zeke", "almond");
+		Teacher teach = new Teacher("jane", "doe", "jdoe");
+		Student s = new Student("mary", "mess", "c");
+		Student s1 = new Student("abby", "zczepkowski", "a");
+		Student s2 = new Student("zeke", "almond", "b");
 		Course course = new Course("math");
 		course.addStudents(s);
 		course.addStudents(s1);
@@ -157,12 +157,12 @@ class TeacherTest {
 	
 	@Test
 	void testGetStudentsByUsername() {
-		Teacher teach = new Teacher("jane", "doe");
-		Student s = new Student("mary", "mess");
+		Teacher teach = new Teacher("jane", "doe", "jdoe");
+		Student s = new Student("mary", "mess", "v");
 		s.setUser("a");
-		Student s1 = new Student("abby", "zczepkowski");
+		Student s1 = new Student("abby", "zczepkowski", "b");
 		s1.setUser("b");
-		Student s2 = new Student("zeke", "almond");
+		Student s2 = new Student("zeke", "almond", "a");
 		s2.setUser("c");
 		Course course = new Course("math");
 		course.addStudents(s);
@@ -176,13 +176,13 @@ class TeacherTest {
 	
 	@Test
 	void testGetStudentsByAssgGrade() {
-		Teacher teach = new Teacher("jane", "doe");
+		Teacher teach = new Teacher("jane", "doe", "jdoe");
 		Course c = new Course("science");
 		teach.addCourse(c);
 		Assignment a = new Assignment("a", 10.0);
-		Student s1 = new Student("Stu", "Dent");
-		Student s2 = new Student("St", "Udent");
-		Student s3 = new Student("S", "Tudent");
+		Student s1 = new Student("Stu", "Dent", "a");
+		Student s2 = new Student("St", "Udent", "b");
+		Student s3 = new Student("S", "Tudent", "c");
 		teach.addStudent(c, s1);
 		teach.addStudent(c, s2);
 		teach.addStudent(c, s3);
@@ -199,8 +199,8 @@ class TeacherTest {
 	
 	@Test
 	void testRemoveStudent() {
-		Teacher teach = new Teacher("jane", "doe");
-		Student s = new Student("mary", "mess");
+		Teacher teach = new Teacher("jane", "doe", "jdoe");
+		Student s = new Student("mary", "mess", "m");
 		Course course = new Course("math");
 		course.addStudents(s);
 		teach.addCourse(course);
@@ -211,12 +211,12 @@ class TeacherTest {
 	
 	@Test
 	void testGetClassAverage() {
-		Teacher teach = new Teacher("jane", "doe");
+		Teacher teach = new Teacher("jane", "doe", "jdoe");
 		Course c = new Course("science");
 		teach.addCourse(c);
 		Assignment a = new Assignment("a", 10.0);
-		Student s = new Student("Stu", "Dent");
-		Student s2 = new Student("St", "Udent");
+		Student s = new Student("Stu", "Dent", "d");
+		Student s2 = new Student("St", "Udent", "p");
 		teach.addStudent(c, s2);
 		teach.addStudent(c, s);
 		teach.addAssignmentToCourse("science", a);
@@ -227,12 +227,12 @@ class TeacherTest {
 	
 	@Test
 	void testgetAssgClassAverage(){
-		Teacher teach = new Teacher("jane", "doe");
+		Teacher teach = new Teacher("jane", "doe", "jdoe");
 		Course c = new Course("science");
 		teach.addCourse(c);
 		Assignment a = new Assignment("a", 10.0);
-		Student s = new Student("Stu", "Dent");
-		Student s2 = new Student("St", "Udent");
+		Student s = new Student("Stu", "Dent", "s");
+		Student s2 = new Student("St", "Udent", "d");
 		teach.addStudent(c, s2);
 		teach.addStudent(c, s);
 		teach.addAssignmentToCourse("science", a);
@@ -243,13 +243,13 @@ class TeacherTest {
 	
 	@Test
 	void testGetStudentMedian() {
-		Teacher teach = new Teacher("jane", "doe");
+		Teacher teach = new Teacher("jane", "doe", "jdoe");
 		Course c = new Course("science");
 		teach.addCourse(c);
 		Assignment a = new Assignment("a", 10.0);
-		Student s1 = new Student("Stu", "Dent");
-		Student s2 = new Student("St", "Udent");
-		Student s3 = new Student("Stud", "Ent");
+		Student s1 = new Student("Stu", "Dent", "l");
+		Student s2 = new Student("St", "Udent", "q");
+		Student s3 = new Student("Stud", "Ent", "p");
 		teach.addStudent(c, s3);
 		teach.addStudent(c, s2);
 		teach.addStudent(c, s1);
@@ -262,11 +262,11 @@ class TeacherTest {
 	
 	@Test
 	void testGetStudentgrade() {
-		Teacher teach = new Teacher("jane", "doe");
+		Teacher teach = new Teacher("jane", "doe", "jdoe");
 		Course course = new Course("math");
 		teach.addCourse(course);
-		Student s = new Student("mary", "mess");
-		Student s1 = new Student("minnie", "mouse");
+		Student s = new Student("mary", "mess", "m");
+		Student s1 = new Student("minnie", "mouse", "a");
 		teach.addStudent(course, s);
 		teach.addStudent(course, s1);
 		Assignment assg1 = new Assignment("assg1", 100.0);
@@ -281,13 +281,13 @@ class TeacherTest {
 	
 	@Test
 	void testRemoveAssignment() {
-		Teacher teach = new Teacher("jane", "doe");
+		Teacher teach = new Teacher("jane", "doe", "jdoe");
 		Course c = new Course("science");
 		teach.addCourse(c);
 		Assignment a = new Assignment("a", 10.0);
 		Assignment b = new Assignment("b", 10.0);
-		Student s = new Student("Stu", "Dent");
-		Student s2 = new Student("Stu", "Pid");
+		Student s = new Student("Stu", "Dent", "s");
+		Student s2 = new Student("Stu", "Pid", "d");
 		teach.addStudent(c, s);
 		teach.addStudent(c, s2);
 		teach.addAssignmentToCourse("science", a);
@@ -301,12 +301,12 @@ class TeacherTest {
 	
 	@Test
 	void testGetCompletedData() {
-		Teacher teach = new Teacher("jane", "doe");
+		Teacher teach = new Teacher("jane", "doe", "jdoe");
 		Course c = new Course("science");
 		teach.addCourse(c);
 		Assignment a = new Assignment("a", 10.0);
-		Student s = new Student("Stu", "Dent");
-		Student s2 = new Student("Stu", "Pid");
+		Student s = new Student("Stu", "Dent", "s");
+		Student s2 = new Student("Stu", "Pid", "d");
 		teach.addStudent(c, s);
 		teach.addStudent(c, s2);
 		assertEquals(teach.getCompletedData(c, a), "0/2");
