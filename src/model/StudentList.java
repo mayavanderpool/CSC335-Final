@@ -68,10 +68,10 @@ public class StudentList implements Iterable<Student>{
 		return listCopy;
 	}
 	
-	// sort by grade in course
-	public ArrayList<Student> getStudentsByCourseGrade(Course c) {
+	
+	public ArrayList<Student> getStudentsByAssgGrade(String course, String assg) {
 		ArrayList<Student> listCopy = new ArrayList<Student>(students);
-		Collections.sort(listCopy, Student.gradeFirstComparator(c));
+		Collections.sort(listCopy, Student.assgFirstComparator(course, assg));
 		return listCopy;
 	}
 	

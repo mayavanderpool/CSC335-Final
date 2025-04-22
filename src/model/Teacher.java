@@ -1,4 +1,3 @@
-
 package model;
 
 import java.util.HashMap;
@@ -8,8 +7,8 @@ import java.util.Map;
 public class Teacher extends Person {
 	private ArrayList<Course> courseList;
 
-	public Teacher(String fName, String lName, String username) {
-		super(fName, lName, username, "teacher");
+	public Teacher(String fName, String lName) {
+		super(fName, lName);
 		this.courseList = new ArrayList<Course>();
 	}
 	
@@ -142,6 +141,11 @@ public class Teacher extends Person {
 	public ArrayList<Student> getStudentByUsername(String courseName) {
 		StudentList list = getCourse(courseName).getStudents();
 		return list.getStudentsByUsername();
+	}
+	
+	public ArrayList<Student> getStudentByAssgGrade(String courseName, String assgName) {
+		StudentList list = getCourse(courseName).getStudents();
+		return list.getStudentsByAssgGrade(courseName, assgName);
 	}
 	
 	
