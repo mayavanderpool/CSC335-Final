@@ -2,28 +2,36 @@ package view;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableModel;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Font;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 
 import controller.StudentController;
 import model.Student;
+import model.Assignment;
 import model.Course;
 
 public class StudentView {
     private StudentController controller;
     private Student student;
     private JFrame frame;
+    private JPanel contentPanel;
     
     public StudentView(StudentController controller, Student student) {
         this.controller = controller;
@@ -39,180 +47,368 @@ public class StudentView {
 
         JPanel mainPanel = new JPanel(new BorderLayout());
 
-        // Welcome message
+        // Welcome message at the top
         JLabel welcomeLabel = new JLabel("Welcome, " + student.getFirstName() + "!", SwingConstants.CENTER);
         welcomeLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
         welcomeLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 
-        // Create buttons for student functions
-        JPanel buttonPanel = new JPanel(new GridLayout(0, 1, 10, 10));
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
+        // Header bar with navigation buttons similar to CourseView
+        JPanel headerPanel = new JPanel(new GridLayout(1, 4, 10, 0));
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
 
-        JButton viewCurrentCoursesButton = new JButton("View Current Courses");
-        JButton viewCompletedCoursesButton = new JButton("View Completed Courses");
-        JButton viewAssignmentsButton = new JButton("View Assignments");
-        JButton calculateClassAverageButton = new JButton("Calculate Class Average");
-        JButton calculateGPAButton = new JButton("Calculate GPA");
-        JButton logoutButton = new JButton("Logout");
+        JButton gradesButton = new JButton("Grades");
+        JButton courselistButton = new JButton("Courselist");
+        JButton assignmentsButton = new JButton("Assignments");
+        JButton gpaButton = new JButton("GPA Calculator");
 
-        // Add action listeners
-        viewCurrentCoursesButton.addActionListener(e -> {
-            ArrayList<Course> courses = controller.getCurrentCourses();
-            showCoursesDialog(courses, "Current Courses");
-        });
-        
-        viewCompletedCoursesButton.addActionListener(e -> {
-            ArrayList<Course> courses = controller.getCompletedCourses();
-            showCoursesDialog(courses, "Completed Courses");
-        });
+        headerPanel.add(gradesButton);
+        headerPanel.add(courselistButton);
+        headerPanel.add(assignmentsButton);
+        headerPanel.add(gpaButton);
 
-        viewAssignmentsButton.addActionListener(e -> {
-            showCourseSelectionForAssignments();
-        });
+        // Content panel (will be populated based on selection)
+        contentPanel = new JPanel(new BorderLayout());
+        contentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        calculateClassAverageButton.addActionListener(e -> {
-            showCourseSelectionForAverage();
-        });
-
-        calculateGPAButton.addActionListener(e -> {
-            double gpa = controller.getGPA();
-            JOptionPane.showMessageDialog(frame, "Your current GPA is: " + String.format("%.2f", gpa));
-        });
-
-        logoutButton.addActionListener(e -> controller.logout());
-
-        // Add buttons to panel
-        buttonPanel.add(viewCurrentCoursesButton);
-        buttonPanel.add(viewCompletedCoursesButton);
-        buttonPanel.add(viewAssignmentsButton);
-        buttonPanel.add(calculateClassAverageButton);
-        buttonPanel.add(calculateGPAButton);
-        buttonPanel.add(logoutButton);
+        // Add action listeners for header buttons
+        gradesButton.addActionListener(e -> showGradesPanel());
+        courselistButton.addActionListener(e -> showCourselistPanel());
+        assignmentsButton.addActionListener(e -> showAssignmentsPanel());
+        gpaButton.addActionListener(e -> showGPAPanel());
 
         // Add components to main panel
-        mainPanel.add(welcomeLabel, BorderLayout.NORTH);
-        mainPanel.add(buttonPanel, BorderLayout.CENTER);
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.add(welcomeLabel, BorderLayout.NORTH);
+        topPanel.add(headerPanel, BorderLayout.SOUTH);
+
+        mainPanel.add(topPanel, BorderLayout.NORTH);
+        mainPanel.add(contentPanel, BorderLayout.CENTER);
+
+        // Add logout button at the bottom
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JButton logoutButton = new JButton("Logout");
+        logoutButton.addActionListener(e -> controller.logout());
+        bottomPanel.add(logoutButton);
+        mainPanel.add(bottomPanel, BorderLayout.SOUTH);
 
         frame.add(mainPanel);
     }
     
-    private void showCoursesDialog(ArrayList<Course> courses, String title) {
-        if (courses.isEmpty()) {
-            JOptionPane.showMessageDialog(frame, "No courses to display.");
-            return;
+    private void showGradesPanel() {
+        // Create a panel for viewing grades
+        JPanel gradesPanel = new JPanel(new BorderLayout(10, 10));
+
+        // Create a label for instructions
+        JLabel instructionLabel = new JLabel("Your Grades", SwingConstants.CENTER);
+        instructionLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
+        instructionLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+
+        // Create a panel for the course selection
+        JPanel selectionPanel = new JPanel(new BorderLayout(10, 10));
+        JLabel selectLabel = new JLabel("Select a course to view grades:");
+        
+        ArrayList<Course> courses = controller.getCurrentCourses();
+        String[] courseNames = new String[courses.size()];
+        for (int i = 0; i < courses.size(); i++) {
+            courseNames[i] = courses.get(i).getName();
         }
         
-        JDialog dialog = new JDialog(frame, title, true);
-        dialog.setSize(400, 300);
-        dialog.setLocationRelativeTo(frame);
+        JComboBox<String> courseComboBox = new JComboBox<>(courseNames);
+        JButton viewButton = new JButton("View Grades");
         
-        JPanel panel = new JPanel(new BorderLayout(10, 10));
-        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        JPanel comboPanel = new JPanel(new BorderLayout(5, 0));
+        comboPanel.add(courseComboBox, BorderLayout.CENTER);
+        comboPanel.add(viewButton, BorderLayout.EAST);
         
-        JTextArea textArea = new JTextArea();
-        textArea.setEditable(false);
+        selectionPanel.add(selectLabel, BorderLayout.NORTH);
+        selectionPanel.add(comboPanel, BorderLayout.CENTER);
         
-        StringBuilder sb = new StringBuilder();
+        // Create a text area for displaying grades
+        JTextArea gradesTextArea = new JTextArea();
+        gradesTextArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(gradesTextArea);
+        
+        // Add action listener for view button
+        viewButton.addActionListener(e -> {
+            String selectedCourse = (String) courseComboBox.getSelectedItem();
+            if (selectedCourse != null) {
+                Course course = findCourse(courses, selectedCourse);
+                if (course != null) {
+                    double grade = controller.getGradeForCourse(course);
+                    String letterGrade = controller.getLetterGradeForCourse(course);
+                    
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("Course: ").append(course.getName()).append("\n");
+                    sb.append("Grade: ").append(String.format("%.2f%%", grade)).append("\n");
+                    sb.append("Letter Grade: ").append(letterGrade).append("\n\n");
+                    
+                    // Here you would add individual assignment grades if available
+                    
+                    gradesTextArea.setText(sb.toString());
+                }
+            }
+        });
+        
+        // Add components to the grades panel
+        gradesPanel.add(instructionLabel, BorderLayout.NORTH);
+        gradesPanel.add(selectionPanel, BorderLayout.BEFORE_FIRST_LINE);
+        gradesPanel.add(scrollPane, BorderLayout.CENTER);
+        
+        // Update the content panel
+        contentPanel.removeAll();
+        contentPanel.add(gradesPanel, BorderLayout.CENTER);
+        contentPanel.revalidate();
+        contentPanel.repaint();
+    }
+    
+    private void showCourselistPanel() {
+        // Create a panel for viewing courses
+        JPanel courselistPanel = new JPanel(new BorderLayout(10, 10));
+
+        // Create a label for instructions
+        JLabel instructionLabel = new JLabel("Your Courses", SwingConstants.CENTER);
+        instructionLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
+        instructionLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+
+        // Create tabs for current and completed courses
+        JTabbedPane tabbedPane = new JTabbedPane();
+        
+        // Current courses panel
+        JPanel currentCoursesPanel = new JPanel(new BorderLayout(10, 10));
+        ArrayList<Course> currentCourses = controller.getCurrentCourses();
+        JTextArea currentCoursesTextArea = new JTextArea();
+        currentCoursesTextArea.setEditable(false);
+        
+        StringBuilder currentSb = new StringBuilder();
+        for (Course c : currentCourses) {
+            currentSb.append(c.getName()).append("\n");
+        }
+        currentCoursesTextArea.setText(currentSb.toString());
+        
+        currentCoursesPanel.add(new JScrollPane(currentCoursesTextArea), BorderLayout.CENTER);
+        
+        // Completed courses panel
+        JPanel completedCoursesPanel = new JPanel(new BorderLayout(10, 10));
+        ArrayList<Course> completedCourses = controller.getCompletedCourses();
+        JTextArea completedCoursesTextArea = new JTextArea();
+        completedCoursesTextArea.setEditable(false);
+        
+        StringBuilder completedSb = new StringBuilder();
+        for (Course c : completedCourses) {
+            completedSb.append(c.getName()).append("\n");
+        }
+        completedCoursesTextArea.setText(completedSb.toString());
+        
+        completedCoursesPanel.add(new JScrollPane(completedCoursesTextArea), BorderLayout.CENTER);
+        
+        // Add panels to tabs
+        tabbedPane.addTab("Current Courses", currentCoursesPanel);
+        tabbedPane.addTab("Completed Courses", completedCoursesPanel);
+        
+        // Add components to the courselist panel
+        courselistPanel.add(instructionLabel, BorderLayout.NORTH);
+        courselistPanel.add(tabbedPane, BorderLayout.CENTER);
+        
+        // Update the content panel
+        contentPanel.removeAll();
+        contentPanel.add(courselistPanel, BorderLayout.CENTER);
+        contentPanel.revalidate();
+        contentPanel.repaint();
+    }
+    
+    private void showAssignmentsPanel() {
+        // Create a panel for viewing assignments
+        JPanel assignmentsPanel = new JPanel(new BorderLayout(10, 10));
+
+        // Create a label for instructions
+        JLabel instructionLabel = new JLabel("Your Assignments", SwingConstants.CENTER);
+        instructionLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
+        instructionLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+
+        // Create a panel for the course selection
+        JPanel selectionPanel = new JPanel(new BorderLayout(10, 10));
+        JLabel selectLabel = new JLabel("Select a course to view assignments:");
+        
+        ArrayList<Course> courses = controller.getCurrentCourses();
+        String[] courseNames = new String[courses.size()];
+        for (int i = 0; i < courses.size(); i++) {
+            courseNames[i] = courses.get(i).getName();
+        }
+        
+        JComboBox<String> courseComboBox = new JComboBox<>(courseNames);
+        JButton viewButton = new JButton("View Assignments");
+        
+        JPanel comboPanel = new JPanel(new BorderLayout(5, 0));
+        comboPanel.add(courseComboBox, BorderLayout.CENTER);
+        comboPanel.add(viewButton, BorderLayout.EAST);
+        
+        selectionPanel.add(selectLabel, BorderLayout.NORTH);
+        selectionPanel.add(comboPanel, BorderLayout.CENTER);
+        
+        // Create a table for displaying assignments
+        String[] columnNames = {"Assignment", "Total Points", "Your Grade", "Status"};
+        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Make all cells non-editable
+            }
+        };
+        JTable assignmentsTable = new JTable(tableModel);
+        assignmentsTable.setRowHeight(25);
+        assignmentsTable.getTableHeader().setReorderingAllowed(false);
+        JScrollPane tableScrollPane = new JScrollPane(assignmentsTable);
+        
+        // Add action listener for view button
+        viewButton.addActionListener(e -> {
+            String selectedCourse = (String) courseComboBox.getSelectedItem();
+            if (selectedCourse != null) {
+                Course course = findCourse(courses, selectedCourse);
+                if (course != null) {
+                    // Clear previous entries
+                    tableModel.setRowCount(0);
+                    
+                    // For each assignment in the course, add a row
+                    for (Assignment a : course.getAssignments()) {
+                        double grade = student.getAssgGrade(a, course.getName());
+                        String status = grade > 0 ? "Graded" : "Not Graded";
+                        
+                        Object[] rowData = {
+                            a.getName(),
+                            a.getTotalPoints(),
+                            grade > 0 ? String.format("%.2f", grade) : "-",
+                            status
+                        };
+                        tableModel.addRow(rowData);
+                    }
+                }
+            }
+        });
+        
+        // Add components to the assignments panel
+        assignmentsPanel.add(instructionLabel, BorderLayout.NORTH);
+        assignmentsPanel.add(selectionPanel, BorderLayout.BEFORE_FIRST_LINE);
+        assignmentsPanel.add(tableScrollPane, BorderLayout.CENTER);
+        
+        // Update the content panel
+        contentPanel.removeAll();
+        contentPanel.add(assignmentsPanel, BorderLayout.CENTER);
+        contentPanel.revalidate();
+        contentPanel.repaint();
+    }
+    
+    private void showGPAPanel() {
+        // Create a panel for calculating GPA
+        JPanel gpaPanel = new JPanel(new BorderLayout(10, 10));
+
+        // Create a label for instructions
+        JLabel instructionLabel = new JLabel("GPA Calculator", SwingConstants.CENTER);
+        instructionLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
+        instructionLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+
+        // Create a panel for displaying the GPA
+        JPanel displayPanel = new JPanel(new BorderLayout(10, 10));
+        
+        double gpa = controller.getGPA();
+        
+        JLabel gpaLabel = new JLabel("Your current GPA is: " + String.format("%.2f", gpa), SwingConstants.CENTER);
+        gpaLabel.setFont(new Font("SansSerif", Font.BOLD, 18));
+        
+        // Add some color coding based on GPA
+        if (gpa >= 3.5) {
+            gpaLabel.setForeground(new Color(0, 150, 0)); // Green for high GPA
+        } else if (gpa >= 2.0) {
+            gpaLabel.setForeground(new Color(150, 150, 0)); // Yellow for medium GPA
+        } else {
+            gpaLabel.setForeground(new Color(150, 0, 0)); // Red for low GPA
+        }
+        
+        displayPanel.add(gpaLabel, BorderLayout.CENTER);
+        
+        // Add a button to recalculate GPA
+        JButton recalculateButton = new JButton("Recalculate GPA");
+        recalculateButton.addActionListener(e -> {
+            double updatedGpa = controller.getGPA();
+            gpaLabel.setText("Your current GPA is: " + String.format("%.2f", updatedGpa));
+            
+            // Update color
+            if (updatedGpa >= 3.5) {
+                gpaLabel.setForeground(new Color(0, 150, 0));
+            } else if (updatedGpa >= 2.0) {
+                gpaLabel.setForeground(new Color(150, 150, 0));
+            } else {
+                gpaLabel.setForeground(new Color(150, 0, 0));
+            }
+        });
+        
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.add(recalculateButton);
+        
+        // Show both current and completed courses that contribute to GPA
+        JPanel coursesPanel = new JPanel(new BorderLayout(10, 10));
+        JLabel coursesLabel = new JLabel("Courses included in GPA calculation:", SwingConstants.LEFT);
+        coursesPanel.add(coursesLabel, BorderLayout.NORTH);
+        
+        StringBuilder coursesSb = new StringBuilder();
+        
+        // Add completed courses
+        ArrayList<Course> completedCourses = controller.getCompletedCourses();
+        if (!completedCourses.isEmpty()) {
+            coursesSb.append("Completed Courses:\n");
+            for (Course c : completedCourses) {
+                double grade = controller.getGradeForCourse(c);
+                String letterGrade = controller.getLetterGradeForCourse(c);
+                coursesSb.append("- ").append(c.getName()).append(": ")
+                          .append(String.format("%.2f%%", grade))
+                          .append(" (").append(letterGrade).append(")\n");
+            }
+            coursesSb.append("\n");
+        }
+        
+        // Add current courses
+        ArrayList<Course> currentCourses = controller.getCurrentCourses();
+        if (!currentCourses.isEmpty()) {
+            coursesSb.append("Current Courses:\n");
+            for (Course c : currentCourses) {
+                double grade = controller.getGradeForCourse(c);
+                String letterGrade = controller.getLetterGradeForCourse(c);
+                coursesSb.append("- ").append(c.getName()).append(": ")
+                          .append(String.format("%.2f%%", grade))
+                          .append(" (").append(letterGrade).append(")\n");
+            }
+        }
+        
+        JTextArea coursesTextArea = new JTextArea(coursesSb.toString());
+        coursesTextArea.setEditable(false);
+        coursesPanel.add(new JScrollPane(coursesTextArea), BorderLayout.CENTER);
+        
+        // Add components to the GPA panel
+        gpaPanel.add(instructionLabel, BorderLayout.NORTH);
+        gpaPanel.add(displayPanel, BorderLayout.BEFORE_FIRST_LINE);
+        gpaPanel.add(buttonPanel, BorderLayout.CENTER);
+        gpaPanel.add(coursesPanel, BorderLayout.SOUTH);
+        
+        // Update the content panel
+        contentPanel.removeAll();
+        contentPanel.add(gpaPanel, BorderLayout.CENTER);
+        contentPanel.revalidate();
+        contentPanel.repaint();
+    }
+    
+    /**
+     * Helper method to find a course by name
+     */
+    private Course findCourse(ArrayList<Course> courses, String name) {
         for (Course c : courses) {
-            sb.append(c.getName()).append("\n");
-        }
-        
-        textArea.setText(sb.toString());
-        
-        panel.add(new JScrollPane(textArea), BorderLayout.CENTER);
-        
-        JButton closeButton = new JButton("Close");
-        closeButton.addActionListener(e -> dialog.dispose());
-        
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.add(closeButton);
-        panel.add(buttonPanel, BorderLayout.SOUTH);
-        
-        dialog.add(panel);
-        dialog.setVisible(true);
-    }
-    
-    private void showCourseSelectionForAssignments() {
-        ArrayList<Course> courses = controller.getCurrentCourses();
-        if (courses.isEmpty()) {
-            JOptionPane.showMessageDialog(frame, "You are not enrolled in any courses.");
-            return;
-        }
-
-        String[] courseNames = new String[courses.size()];
-        for (int i = 0; i < courses.size(); i++) {
-            courseNames[i] = courses.get(i).getName();
-        }
-
-        String selectedCourse = (String) JOptionPane.showInputDialog(
-                frame,
-                "Select a course:",
-                "Course Selection",
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                courseNames,
-                courseNames[0]);
-
-        if (selectedCourse != null) {
-            // Find the selected course object
-            Course course = null;
-            for (Course c : courses) {
-                if (c.getName().equals(selectedCourse)) {
-                    course = c;
-                    break;
-                }
-            }
-
-            if (course != null) {
-                // Here you would show the assignments dialog
-                // This is simplified to show you the pattern
-                JOptionPane.showMessageDialog(frame, "Assignments for " + course.getName());
+            if (c.getName().equals(name)) {
+                return c;
             }
         }
-    }
-    
-    private void showCourseSelectionForAverage() {
-        ArrayList<Course> courses = controller.getCurrentCourses();
-        if (courses.isEmpty()) {
-            JOptionPane.showMessageDialog(frame, "You are not enrolled in any courses.");
-            return;
-        }
-
-        String[] courseNames = new String[courses.size()];
-        for (int i = 0; i < courses.size(); i++) {
-            courseNames[i] = courses.get(i).getName();
-        }
-
-        String selectedCourse = (String) JOptionPane.showInputDialog(
-                frame,
-                "Select a course:",
-                "Course Selection",
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                courseNames,
-                courseNames[0]);
-
-        if (selectedCourse != null) {
-            // Find the selected course object
-            Course course = null;
-            for (Course c : courses) {
-                if (c.getName().equals(selectedCourse)) {
-                    course = c;
-                    break;
-                }
-            }
-
-            if (course != null) {
-                double grade = controller.getGradeForCourse(course); 
-                String letterGrade = controller.getLetterGradeForCourse(course);
-                JOptionPane.showMessageDialog(frame,
-                        "Your current grade in " + course.getName() + " is: " +
-                                String.format("%.2f%%", grade) + " (" + letterGrade + ")");
-            }
-        }
+        return null;
     }
 
     public void display() {
+        // Default to courselist view
+        showCourselistPanel();
         frame.setVisible(true);
     }
     

@@ -47,6 +47,7 @@ public class Course {
 	//
 	public void addStudents(Student stu) {
 		students.addStudent(stu);
+		stu.addCourse(this);
 	}
 	
 	public void removeStudents(Student stu) {

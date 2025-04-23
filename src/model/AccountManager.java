@@ -25,52 +25,8 @@ public class AccountManager {
 		// loadInUsers(); not done with yet!!
 	}
 
-	// reads in user data and instantiates courses, assignments, grades for students
-	// and teachers
-	private void loadInUsers() {
-		if (people.size() == 0) { // first time running the program
-			inputPeople("people.txt");
-			return;
-		}
 
-		// read in all user data
-		File userInfo = new File("data.txt");
-		try (Scanner scn = new Scanner(userInfo)) {
-			// read in file here. use scanner as parameter for methods
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		;
-	}
 
-	// read out all user data
-	private void loadOutUsers() {
-		// read out teachers
-		String content = "";
-		content += readOutTeachers();
-		content += readOutStudents();
-		writeInFile("data.txt", content, false); // all data stored in this file
-	}
-
-	private String readOutTeachers() {
-		String content = "";
-		for (Person p : people) {
-			if (p instanceof Teacher) {
-				content += p.toString();
-			}
-		}
-		return content;
-	}
-
-	private String readOutStudents() {
-		String content = "";
-		for (Person p : people) {
-			if (p instanceof Student) {
-				content += p.toString();
-			}
-		}
-		return content;
-	}
 
 	// reads in teachers/students from input file
 	public void inputPeople(String file) {
@@ -134,17 +90,14 @@ public class AccountManager {
 					String user = split[2].trim();
 	
 					Student student = getStudentByName(first, last);
-					System.out.println("Trying to match: " + first + " " + last + " → " + student);
 	
 					if (student != null && !course.getStudents().getStudents().contains(student)) {
 						course.addStudents(student);
-						System.out.println("Added " + student.getUserName() + " to " + course.getName());
+						
 					} else {
-						System.out.println("Skipped or not found: " + first + " " + last);
+						
 					}
-				} else {
-					System.out.println("Invalid line in import file: " + line);
-				}
+				} 
 			}
 		} catch (FileNotFoundException e) {
 			System.out.println("File does not exist: " + file);
@@ -157,8 +110,9 @@ public class AccountManager {
 	public ArrayList<Person> getUsers() {
 		ArrayList<Person> users = new ArrayList<Person>();
 		for (Person p : people) {
-			if (!p.getUserName().equals(""))
+			if (!p.getUserName().equals("")){
 				users.add(p);
+			}
 		}
 		return users;
 	}
@@ -300,8 +254,8 @@ public class AccountManager {
 	}
 
 	public Student getStudentByName(String fName, String lName) {
-		for (Person p : getUsers()) {
-			if (p instanceof Student && p.getFirstName().equals(fName) && p.getLastName().equals(lName)) {
+		for (Person p : people) {
+			if (p instanceof Student && p.getFirstName().equalsIgnoreCase(fName) && p.getLastName().equalsIgnoreCase(lName)) {
 				return (Student) p;
 			}
 		}

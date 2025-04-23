@@ -78,7 +78,7 @@ public class StudentList implements Iterable<Student>{
 	public void setStudents(ArrayList<Student> sortedList) {
 		this.students = sortedList;
 	}
-	
+
 	
 	/*
 	 * This method returns students split into x amount of groups 
@@ -147,12 +147,12 @@ public class StudentList implements Iterable<Student>{
 		int count = 0;
 	
 		for(Student s : c.getStudents().getStudents()){
-			if(s.getGraded().contains(a)){
+			if(s.getGraded(a, c.getName())){
 				count += 1;
 				total += s.getAssgGrade(a, c.getName());
 			}
 		}
-		return total/count;
+		return count > 0 ? total/count : 0.0;
 	}
 
 	/*
@@ -161,8 +161,8 @@ public class StudentList implements Iterable<Student>{
 	public double getAssgMedian(Assignment a, Course c){
 		ArrayList<Double> grades = new ArrayList<Double>();
 
-		for(Student s : students){
-			if(s.getGraded().contains(a)){
+		for(Student s : c.getStudents().getStudents()){
+			if(s.getGraded(a, c.getName())){
 				grades.add(s.getAssgGrade(a, c.getName()));
 			}
 		}

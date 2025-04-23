@@ -65,6 +65,7 @@ public class TeacherController {
 		if (file != null) {
 			aManager.importStudents(file.getAbsolutePath(), course);
 		}
+		
 	}
 
 	public void removeStudentFromCourse(Course course, String fName, String lName) {
@@ -144,6 +145,10 @@ public class TeacherController {
 			ArrayList<Student> sorted = teacher.getStudentByUsername(courseName);
 			sList.setStudents(sorted);
 		}
+	}
+
+	public Student getStudentByName(String firstName, String lastName){
+		return aManager.getStudentByName(firstName, lastName);
 	}
 	
 
