@@ -49,9 +49,7 @@ public class AccountManager {
 					} else {
 						people.add(new Teacher(first, last, user));
 					}
-				} else {
-					System.out.println("Invalid line");
-				}
+				} 
 				System.out.println("Loaded users from " + file + ":");
 				for (Person p : people) {
 					System.out.println(p.getFirstName() + " " + p.getLastName() + " → " + p.getUserName());
@@ -93,10 +91,7 @@ public class AccountManager {
 	
 					if (student != null && !course.getStudents().getStudents().contains(student)) {
 						course.addStudents(student);
-						
-					} else {
-						
-					}
+					} 
 				} 
 			}
 		} catch (FileNotFoundException e) {
@@ -181,7 +176,6 @@ public class AccountManager {
 			try (FileWriter writer = new FileWriter("people.txt", true)) {  
 				writer.write("student" + "," + firstName + "," + lastName + "," + user +"\n");
 			} catch (IOException e) {
-				System.out.println("Error writing to people.txt");
 				e.printStackTrace();
 			}
 		}
