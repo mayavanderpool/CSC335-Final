@@ -94,7 +94,7 @@ public class Teacher extends Person {
 
 		StudentList list = c.getStudents();
 		for(Student s: list){
-			if(s.getGraded().contains(a)){
+			if(s.getGraded(a, c.getName())){
 				total++;
 				graded++;
 			}
