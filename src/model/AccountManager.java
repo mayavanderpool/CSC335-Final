@@ -22,11 +22,7 @@ public class AccountManager {
 		people = new ArrayList<Person>();
 		inputPeople("people.txt");
 		writeInFile("userinfo.txt", "", true);
-		// loadInUsers(); not done with yet!!
 	}
-
-
-
 
 	// reads in teachers/students from input file
 	public void inputPeople(String file) {
@@ -85,7 +81,6 @@ public class AccountManager {
 				if (split.length == 3) {
 					String last = split[0].trim();
 					String first = split[1].trim();
-					String user = split[2].trim();
 	
 					Student student = getStudentByName(first, last);
 	
@@ -144,17 +139,6 @@ public class AccountManager {
 			} 
 		}
 		return false;
-	}
-
-	// make sure username doesn't exist yet. if it does, add to end of username
-	public String createUsername(String fname, String lname) {
-		Person p = getStudentByName(fname, lname);
-		if (p.getUserName().isEmpty()) {
-			return (fname.substring(0, 1) + lname).toLowerCase();
-		} else {
-			return (fname.substring(0, 1) + lname + 1).toLowerCase();
-		}
-
 	}
 	
 
