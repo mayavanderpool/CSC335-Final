@@ -81,7 +81,7 @@ public class Teacher extends Person {
 	public String getAssgMedian(Course c, Assignment a){
 		StudentList slist = c.getStudents();
 		if(slist.getAssgMedian(a, c) == -1){
-			return "";
+			return "0.0";
 		}
 		else{
 			return "" + slist.getAssgMedian(a, c);
