@@ -554,25 +554,43 @@ public class CourseView {
 			}
 		});
 
-		removeAssignmentButton.addActionListener(e -> {
-			int selectedRow = assignmentsTable.getSelectedRow();
-			if (selectedRow >= 0) {
-				String assignmentName = (String) tableModel.getValueAt(selectedRow, 0);
+		// Find this code in CourseView.java and replace the removeAssignmentButton action listener:
 
-				// Find the selected assignment
-				final Assignment selectedAssignment = findAssignment(assignments, assignmentName);
+removeAssignmentButton.addActionListener(e -> {
+    int selectedRow = assignmentsTable.getSelectedRow();
+    if (selectedRow >= 0) {
+        String assignmentName = (String) tableModel.getValueAt(selectedRow, 0);
+        
+        // Debug output
+        System.out.println("Attempting to remove assignment: " + assignmentName);
+        
+        // Find the selected assignment
+        Assignment selectedAssignment = null;
+        for (Assignment a : assignments) {
+            if (a.getName().equals(assignmentName)) {
+                selectedAssignment = a;
+                System.out.println("Found matching assignment object");
+                break;
+            }
+        }
 
-				if (selectedAssignment != null) {
-					// Use controller to remove the assignment
-					controller.removeAssignment(course, selectedAssignment);
-
-					// Refresh the assignments panel
-					showAssignmentsPanel();
-				}
-			} else {
-				JOptionPane.showMessageDialog(contentPanel, "Please select an assignment to remove.");
-			}
-		});
+        if (selectedAssignment != null) {
+            System.out.println("Calling controller.removeAssignment");
+            // Use controller to remove the assignment
+            controller.removeAssignment(course, selectedAssignment);
+            
+            // Refresh the assignments panel
+            System.out.println("Refreshing assignments panel");
+            showAssignmentsPanel();
+        } else {
+            System.out.println("ERROR: Could not find matching assignment object");
+            JOptionPane.showMessageDialog(contentPanel, 
+                "Error: Could not find the selected assignment in the course.");
+        }
+    } else {
+        JOptionPane.showMessageDialog(contentPanel, "Please select an assignment to remove.");
+    }
+});
 
 		buttonPanel.add(addAssignmentButton);
 		buttonPanel.add(removeAssignmentButton);
