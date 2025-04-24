@@ -13,7 +13,7 @@ public class Student extends Person {
 	private HashMap<Course, HashMap<Assignment, Double>> courseList;
 
 	public Student(String first, String last, String user) {
-		super(first, last, user, "teacher");
+		super(first, last, user, "student");
 		courseList = new HashMap<Course, HashMap<Assignment, Double>>();
 	}
 
@@ -191,8 +191,10 @@ public class Student extends Person {
 			if (entry.getKey().equals(course)) {
 				HashMap<Assignment, Double> assignentry = entry.getValue();
 				for (HashMap.Entry<Assignment, Double> entry2 : assignentry.entrySet()) {
-					total += entry2.getKey().getTotalPoints();
-					grade += entry2.getValue();
+					if (entry2.getKey().getDropped() == false) {
+						total += entry2.getKey().getTotalPoints();
+						grade += entry2.getValue();
+					}
 				}
 			}
 		}

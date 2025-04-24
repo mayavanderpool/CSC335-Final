@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
+import model.AssgType;
 import model.Assignment;
 import model.Course;
 import model.Student;
@@ -15,12 +16,12 @@ import model.Teacher;
 class StudentListTest {
 
 	StudentList students = new StudentList();
-	Student s1 = new Student("Alyssa", "Abe");
-	Student s2 = new Student("Bob", "Brown");
-	Student s3 = new Student("Carl", "Clyde");
+	Student s1 = new Student("Alyssa", "Abe", "aabe");
+	Student s2 = new Student("Bob", "Brown", "bbrown");
+	Student s3 = new Student("Carl", "Clyde", "cc");
 	Course c1 = new Course("335");
-	Assignment a1 = new Assignment("assg1", 100.0);
-	Assignment a2 = new Assignment("assg2", 100.0);
+	Assignment a1 = new Assignment("assg1", 100.0, AssgType.HOMEWORK);
+	Assignment a2 = new Assignment("assg2", 100.0, AssgType.HOMEWORK);
 			
 	
 	@Test
@@ -110,28 +111,28 @@ class StudentListTest {
 	
 	@Test
 	void testGetClassAverage() {
-		Teacher teach = new Teacher("jane", "doe");
+		Teacher teach = new Teacher("jane", "doe", "jd");
 		Course c = new Course("science");
 		teach.addCourse(c);
-		Assignment a = new Assignment("a", 10.0);
-		Student s = new Student("Stu", "Dent");
-		Student s2 = new Student("St", "Udent");
+		Assignment a = new Assignment("a", 10.0, AssgType.HOMEWORK);
+		Student s = new Student("Stu", "Dent", "st");
+		Student s2 = new Student("St", "Udent", "stu");
 		teach.addStudent(c, s2);
 		teach.addStudent(c, s);
 		teach.addAssignmentToCourse("science", a);
 		teach.addAssignmentGrade(s, "science", a, 10.0);
 		teach.addAssignmentGrade(s2, "science", a, 8.0);
-		assertEquals(teach.getClassAverage(c), 0.9);
+		assertEquals(teach.getClassAverage(c), 90.0);
 	}
 	
 	@Test
 	void testgetAssgClassAverage(){
-		Teacher teach = new Teacher("jane", "doe");
+		Teacher teach = new Teacher("jane", "doe", "jd");
 		Course c = new Course("science");
 		teach.addCourse(c);
-		Assignment a = new Assignment("a", 10.0);
-		Student s = new Student("Stu", "Dent");
-		Student s2 = new Student("St", "Udent");
+		Assignment a = new Assignment("a", 10.0, AssgType.HOMEWORK);
+		Student s = new Student("Stu", "Dent", "stu");
+		Student s2 = new Student("St", "Udent", "st");
 		teach.addStudent(c, s2);
 		teach.addStudent(c, s);
 		teach.addAssignmentToCourse("science", a);
@@ -142,13 +143,13 @@ class StudentListTest {
 	
 	@Test
 	void testGetStudentMedian() {
-		Teacher teach = new Teacher("jane", "doe");
+		Teacher teach = new Teacher("jane", "doe", "jd");
 		Course c = new Course("science");
 		teach.addCourse(c);
-		Assignment a = new Assignment("a", 10.0);
-		Student s1 = new Student("Stu", "Dent");
-		Student s2 = new Student("St", "Udent");
-		Student s3 = new Student("Stud", "Ent");
+		Assignment a = new Assignment("a", 10.0, AssgType.HOMEWORK);
+		Student s1 = new Student("Stu", "Dent", "stu");
+		Student s2 = new Student("St", "Udent", "st");
+		Student s3 = new Student("Stud", "Ent", "stud");
 		teach.addStudent(c, s3);
 		teach.addStudent(c, s2);
 		teach.addStudent(c, s1);
@@ -157,7 +158,29 @@ class StudentListTest {
 		teach.addAssignmentGrade(s1, "science", a, 10.0);
 		teach.addAssignmentGrade(s2, "science", a, 8.0);
 		teach.addAssignmentGrade(s3, "science", a, 9.0);
-		assertEquals(teach.getAssgMedian(c, a), 9.0);
+		assertEquals(teach.getAssgMedian(c, a), "9.0");
+	}
+	
+	@Test
+	void testGetStudentsByAssgGrade() {
+		Teacher teach = new Teacher("jane", "doe", "jd");
+		Course c = new Course("science");
+		teach.addCourse(c);
+		Assignment a = new Assignment("a", 10.0, AssgType.HOMEWORK);
+		Student s1 = new Student("Stu", "Dent", "o");
+		Student s2 = new Student("St", "Udent", "t");
+		Student s3 = new Student("S", "Tudent", "e");
+		teach.addStudent(c, s1);
+		teach.addStudent(c, s2);
+		teach.addStudent(c, s3);
+		teach.addAssignmentToCourse("science", a);
+		teach.addAssignmentGrade(s3, "science", a, 10.0);
+		teach.addAssignmentGrade(s2, "science", a, 8.0);
+		teach.addAssignmentGrade(s1, "science", a, 5.0);
+		ArrayList<Student> list = teach.getStudentByAssgGrade("science", "a");
+		assertEquals(list.get(0), s1);
+		assertEquals(list.get(1), s2);
+		assertEquals(list.get(2), s3);
 	}
 
 }

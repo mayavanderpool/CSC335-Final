@@ -3,6 +3,7 @@ package model;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Arrays;
 
 public class Teacher extends Person {
 	private ArrayList<Course> courseList;
@@ -35,10 +36,7 @@ public class Teacher extends Person {
 			if (c.isCompleted() == isComplete) courses.add(c);  // c needs method isComplete and getCopy
 		}
 		return courses;
-	}
-	
-	//NOTE: DO WE NEED TO HAVE THOSE TWO METHODS?? WHY NOT KEEP BY STRING AND THEN IF WE NEED CALL C.GETNAME()?
-	
+	}	
 	
 	
 	// get a course from hashmap by course name
@@ -51,8 +49,6 @@ public class Teacher extends Person {
 		return null;
 	}
 	
-
-
 	
 	// STUDENTLIST METHODS
 	
@@ -104,6 +100,26 @@ public class Teacher extends Person {
 		}
 		return graded + "/" + total;
 	}
+	
+	// drops n amount of assignments with lowest average from category t
+	public void dropAssg(String c, String t, int n ) {
+		Course course = getCourse(c);
+		ArrayList<Assignment> types = course.getAssgType(t);
+		double[] numbers = new double[types.size()];
+		for (int i = 0; i < types.size(); i++) {
+			numbers[i] = getAssgClassAverage(course, types.get(i));
+		}
+		Arrays.sort(numbers);
+		for (int i = 0; i < n; i++) {
+			for (Assignment a: types) {
+				if (a.getDropped() == false && getAssgClassAverage(course, a) == numbers[i]) {
+					a.dropAssg();
+					break;
+				}
+			}
+		}
+	}
+
 	
 
 	

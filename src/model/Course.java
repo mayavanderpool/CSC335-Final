@@ -62,8 +62,19 @@ public class Course {
 		}
 		return all;
 	}
-	/*
-
+	
+	// get ass assignments in a category
+	public ArrayList<Assignment> getAssgType(String t) {
+		AssgType type = stringToAssgType(t);
+		ArrayList<Assignment> alist = new ArrayList<Assignment>();
+		if (type != null) {
+			for(Assignment a : assignments) {
+				if (a.getType().equals(type)) alist.add(a);
+			}
+		}
+		return alist;	
+	}
+	
 	/* addAssg(Assignment assg) - Adds an assignment to the assignment arraylist.
 	 * Returns: nothing
 	*/
@@ -100,6 +111,24 @@ public class Course {
 			str += "\n";
 		}
 		return str;
+	}
+	
+	private AssgType stringToAssgType(String t) {
+		AssgType type;
+		switch(t.toLowerCase()) {
+		case "homework" :
+			type = AssgType.HOMEWORK;
+			break;
+		case "quiz" :
+			type = AssgType.QUIZ;
+			break;
+		case "exam" :
+			type = AssgType.EXAM;
+			break;
+		default :
+			type = null;
+		}
+		return type;
 	}
 	
 	
