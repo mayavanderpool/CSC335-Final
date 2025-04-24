@@ -20,7 +20,6 @@ package model;
 		
 	}
 
-	/*COPY CONSTRUCTOR */
 	public Assignment(Assignment assg){
 		this.name = assg.getName();
 		this.points = assg.getTotalPoints();

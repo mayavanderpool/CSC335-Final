@@ -16,10 +16,11 @@ import java.util.Scanner;
 
 public class AccountManager {
 
+	/*INSTANCE VARIABLES*/
 	private ArrayList<Person> people;
-	
 	private final ArrayList<Observer> observers = new ArrayList<>();
 
+	/*OBSERVER METHODS */
 	public void addObserver(Observer o) {
 	    observers.add(o);
 	}
@@ -34,14 +35,18 @@ public class AccountManager {
 	    }
 	}
 
-	// CONSTRUCTOR
-	public AccountManager(String filename) {
+
+	/*CONSTRUCTOR */
+	public AccountManager() {
 		people = new ArrayList<Person>();
-		inputPeople(filename);
+		inputPeople("people.txt");
 		writeInFile("userinfo.txt", "", true);
 	}
 
-	// reads in teachers/students from input file
+	/*
+	 * inputPeople(String file) - reads in teachers/students from input file
+	 * Return: none
+	 */
 	public void inputPeople(String file) {
 
 		try {
@@ -77,22 +82,29 @@ public class AccountManager {
 		}
 	}
 
-	// add teacher to class
+	/*
+	 * addTeacher(Teacher) - adds teacher to account manager
+	 * Return: none
+	 */
 	public void addTeacher(Teacher teacher){
 		people.add(teacher);
 		notifyObservers();
 	}
 
-	// add student to class
+	/*
+	 * addStudent(String, String, String) - adds student to account manager
+	 * Return: none
+	 */
 	public void addStudent(String firstName, String lastName, String username){
-		if (!personExists(firstName, lastName)) {
-			people.add(new Student(firstName, lastName, username));
-			registerStudent(firstName, lastName, username);
-		}
+		registerStudent(firstName, lastName, username);
+		inputPeople("people.txt");
 		notifyObservers();
 	}
 
-	// import students from given txt list to course. done through teacher account
+	/*
+	 * importStudents(String, Course) - import students from text file, adds to course
+	 * Return: none
+	 */
 	public void importStudents(String file, Course course) {
 		System.out.println("IMPORT STARTED on: " + file);
 	
@@ -121,7 +133,10 @@ public class AccountManager {
 	}
 	
 
-	// get users that have created a username/have data.
+	/*
+	 * getUsers() - get users that have created a username/have data.
+	 * Return: ArrayList of People with accounts
+	 */
 	public ArrayList<Person> getUsers() {
 		ArrayList<Person> users = new ArrayList<Person>();
 		for (Person p : people) {
@@ -132,9 +147,12 @@ public class AccountManager {
 		return users;
 	}
 
-	// start up
+	/*START UP*/
 
-	// writes in a file
+	/*
+	 * writeInFile(String, String, boolean) - writes in a file
+	 * Return: none
+	 */
 	private void writeInFile(String filename, String content, boolean dontOverwrite) {
 		try (FileWriter writer = new FileWriter(filename, dontOverwrite)) {
 			writer.write(content);
@@ -143,9 +161,12 @@ public class AccountManager {
 		}
 	}
 
-	// creating an account
+	/*CREATING ACCOUNT*/
 
-	// check that user's name is in system
+	/*
+	 * personExists(String, String) - check that user's name is in system
+	 * Return: boolean representing if user name already used
+	 */
 	public boolean personExists(String fname, String lname) {
 		for (Person p : people) {
 			if (p.getFirstName().equalsIgnoreCase(fname) && p.getLastName().equalsIgnoreCase(lname))
@@ -154,8 +175,11 @@ public class AccountManager {
 		return false;
 	}
 
-	// check that user doesn't already have an account (based on their first and
-	// last name)
+	/*
+	 * accountExists(String, String)check that user doesn't already have
+	 *  an account (based on their first and last name)
+	 *  Return: boolean representing if account already exists
+	 */
 	public boolean accountExists(String fname, String lname) {
 		for (Person p : people) {
 			if (p.getFirstName().equalsIgnoreCase(fname) && p.getLastName().equalsIgnoreCase(lname)
@@ -167,7 +191,10 @@ public class AccountManager {
 	}
 	
 
-	// a user is creating a password for their account
+	/*
+	 * addPassword(String, String, String, String) - a user is creating a password for their account
+	 * Return: none
+	 */
 	public void addPassword(String fname, String lname, String username, String password) {
 		String salt = getSalt();
 		String saltedHashed = hashPassword(password + salt);
@@ -181,7 +208,10 @@ public class AccountManager {
 		notifyObservers();
 	}
 
-	// adds a student to the test file. now they can be added to a course
+	/*
+	 * registerStudent(String, String, String) - add new student to file
+	 * Return: none
+	 */
 	public void registerStudent(String firstName, String lastName, String user){
 		if(!personExists(firstName, lastName)){
 			try (FileWriter writer = new FileWriter("people.txt", true)) {  
@@ -193,6 +223,10 @@ public class AccountManager {
 	
 	}
 
+	/*
+	 * getSalt() - salts password
+	 * Return : String of Salted password
+	 */
 	private String getSalt() {
 		// salt password
 		byte[] salt = new byte[16];
@@ -200,6 +234,10 @@ public class AccountManager {
 		return Base64.getEncoder().encodeToString(salt);
 	}
 
+	/*
+	 * hashPassword(Sting password) - use hash to secure password
+	 * Return: String of hashed password
+	 */
 	private String hashPassword(String password) {
 		MessageDigest md;
 		String hashedPassword = "";
@@ -213,15 +251,20 @@ public class AccountManager {
 		return hashedPassword;
 	}
 
-	// checks user's credentials when they log in
-
+	/*
+	 * checkCredentials(String, String) - checks user's credentials when they log in
+	 * Return: boolean of if credentials are correct
+	 */
 	public boolean checkCredentials(String username, String password) {
 		if (!usernameExists(username))
 			return false;
 		return checkPassword(username, password);
 	}
 
-	// confirms there is a username
+	/*
+	 * usernameExisits(String) - confirms there is a username
+	 * Return: boolean representing in username in database
+	 */
 	private boolean usernameExists(String username) {
 		for (Person p : getUsers()) {
 			if (p.getUserName().equalsIgnoreCase(username)) {
@@ -231,7 +274,10 @@ public class AccountManager {
 		return false;
 	}
 
-	// compare inputted password with password in text file
+	/*
+	 * checkPassword(String, String) - compare inputted password with password in text file
+	 * Return: boolean based on if password is correct
+	 */
 	private boolean checkPassword(String username, String password) {
 		try (BufferedReader reader = new BufferedReader(new FileReader("userinfo.txt"))) {
 			String line;
@@ -249,6 +295,10 @@ public class AccountManager {
 		return false;
 	}
 
+	/*
+	 * getStudentsByUsername(String) - gets student from username
+	 * Return: Student that matches username
+	 */
 	public Student getStudentByUsername(String username) {
 		for (Person p : getUsers()) {
 			if (p instanceof Student && p.getUserName().equals(username)) {
@@ -258,6 +308,10 @@ public class AccountManager {
 		return null;
 	}
 
+	/*
+	 * getStudentByName(String, String) - gets student from first and last name
+	 * Return: Student that matches names
+	 */
 	public Student getStudentByName(String fName, String lName) {
 		for (Person p : people) {
 			if (p instanceof Student && p.getFirstName().equalsIgnoreCase(fName) && p.getLastName().equalsIgnoreCase(lName)) {
@@ -267,7 +321,10 @@ public class AccountManager {
 		return null;
 	}
 
-	
+	/*
+	 * getTeacherByUsername(String) - gets teacher from username
+	 * Return" Teacher that matches username
+	 */
 	public Teacher getTeacherByUsername(String username) {
 		for (Person p : getUsers()) {
 			if (p instanceof Teacher && p.getUserName().equals(username)) {

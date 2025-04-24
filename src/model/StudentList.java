@@ -22,16 +22,9 @@ public class StudentList implements Iterable<Student>{
 		this.students = new ArrayList<Student>();
 	}
 
-	/*COPY CONSTRUCTOR */
-	public StudentList(StudentList sList){
-		this.students = sList.getStudents();
-	}
-
 	/*SETTERS AND GETTERS */
 	
 	public void	addStudent(Student s) {
-		// can add check to make sure username is not used
-		// not sure if there is somewhere else that would be better to check
 		students.add(s);
 	}
 	
@@ -46,27 +39,39 @@ public class StudentList implements Iterable<Student>{
 		return "Student " + username + " not found";
 	}
 	
+	/*
+	 * getStudents() - returns ArrayList of all students
+	 * Returns: none
+	 */
 	public ArrayList<Student> getStudents() {
-		// can make deep copy if needed
 		ArrayList<Student> listCopy = new ArrayList<Student>(students);
 		return listCopy;
 	}
 	
-	// use strategy design pattern to sort by first name
+	/*
+	 * getStudentsByFirstName()- use strategy design pattern to sort by first name
+	 * Returns: ArrayList of students, sorted by first name
+	 */
 	public ArrayList<Student> getStudentsByFirstName() {
 		ArrayList<Student> listCopy = new ArrayList<Student>(students);
 		Collections.sort(listCopy, Student.fisrtNameFirstComparator());
 		return listCopy;
 	}
 	
-	// sort by last name
+	/*
+	 * getStudentsByFirstName()- use strategy design pattern to sort by last name
+	 * Returns: ArrayList of students, sorted by last name
+	 */
 	public ArrayList<Student> getStudentsByLastName() {
 		ArrayList<Student> listCopy = new ArrayList<Student>(students);
 		Collections.sort(listCopy, Student.lastNameFirstComparator());
 		return listCopy;
 	}
 	
-	// sort by username
+	/*
+	 * getStudentsByFirstName()- use strategy design pattern to sort by username
+	 * Returns: ArrayList of students, sorted by username
+	 */
 	public ArrayList<Student> getStudentsByUsername() {
 		ArrayList<Student> listCopy = new ArrayList<Student>(students);
 		Collections.sort(listCopy, Student.userNameFirstComparator());
@@ -74,11 +79,16 @@ public class StudentList implements Iterable<Student>{
 	}
 	
 	
+	/*
+	 * getStudentsByFirstName(Course, Sting)- use strategy design pattern to sort by assignment grade
+	 * Returns: ArrayList of students, sorted by assignment grade
+	 */
 	public ArrayList<Student> getStudentsByAssgGrade(String course, String assg) {
 		ArrayList<Student> listCopy = new ArrayList<Student>(students);
 		Collections.sort(listCopy, Student.assgFirstComparator(course, assg));
 		return listCopy;
 	}
+	
 	
 	public void setStudents(ArrayList<Student> sortedList) {
 		this.students = sortedList;
@@ -86,10 +96,8 @@ public class StudentList implements Iterable<Student>{
 
 	
 	/*
-	 * This method returns students split into x amount of groups 
-	 * parameters: x is an integer representing the amount of groups to
-	 * split students into 
-	 * return: returns a string with each group
+	 * makeXGroups(int)- returns students split into x amount of groups 
+	 * Return: returns a string with each group
 	 */
 	public String makeXGroups(int x) {
 		String groupsString = "";
@@ -123,10 +131,9 @@ public class StudentList implements Iterable<Student>{
 	}
 	
 	/*
-	 * This method splits students into groups based where each group will
+	 * makeGroupsOfXStudents(int) splits students into groups where each group will
 	 * have about x members
-	 * parameters: x is an integer representing the number of students per group 
-	 * return: returns a string with each group
+	 * Return: returns a string with each group
 	 */
 	public String makeGroupsOfXStudents(int x) {
 		int n = students.size() / x;
@@ -134,6 +141,10 @@ public class StudentList implements Iterable<Student>{
 		return makeXGroups(n);
 	}
 	
+	/*
+	 * getCourseAverage(Course) - calculates average for a course
+	 * Return: double of average
+	 */
 	public double getCourseAverage(Course c) {
 		int count = 0;
 		double total = 0; 
@@ -145,7 +156,8 @@ public class StudentList implements Iterable<Student>{
 	}
 
 	/*
-	 * getAssgAverage(Asignment a, Course c) - returns the average of the students' grades on an assignment
+	 * getAssgAverage(Assignment, Course) - calculates the average of the students' grades on an assignment
+	 * Returns: double of average
 	 */
 	public double getAssgAverage(Assignment a, Course c){
 		double total = 0;
@@ -161,7 +173,8 @@ public class StudentList implements Iterable<Student>{
 	}
 
 	/*
-	 * getAssgMedian(Assignment a, Course c) - returns the median of the students' grades on an assignment
+	 * getAssgMedian(Assignment, Course) - returns the median of the students' grades on an assignment
+	 * Returns: double of median
 	 */
 	public double getAssgMedian(Assignment a, Course c){
 		ArrayList<Double> grades = new ArrayList<Double>();
@@ -192,14 +205,10 @@ public class StudentList implements Iterable<Student>{
 		
 	}
 
-	
-	
-	
 
 	/*
-	 * This method returns a shuffled list of students 
-	 * parameters: none 
-	 * return: returns a shuffled ArrayList of students
+	 * shuffleStudents() shuffles students
+	 * Return: shuffled ArrayList of students
 	 */
 	private ArrayList<Student> shuffleStudents() {
 		ArrayList<Student> shuffled = new ArrayList<>(students);
