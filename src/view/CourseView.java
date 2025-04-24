@@ -14,8 +14,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import model.Observer;
 
-public class CourseView {
+public class CourseView  implements Observer{
 	private TeacherController controller;
 	private Teacher teacher;
 	private Course course;
@@ -695,6 +696,13 @@ removeAssignmentButton.addActionListener(e -> {
 			}
 		}
 
+	}
+
+	@Override
+	public void update() {
+		showAssignmentsPanel();
+		
+		
 	}
 	
 }

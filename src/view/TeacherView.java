@@ -7,8 +7,9 @@ import model.Teacher;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import model.Observer;
 
-public class TeacherView {
+public class TeacherView implements Observer {
     private TeacherController controller;
     private Teacher teacher;
     private JFrame frame;
@@ -96,7 +97,10 @@ public class TeacherView {
 			for (Course course : courses) {
 				if (course.getName().equals(selected)) {
 					try {
-						new CourseView(controller, teacher, course).display();
+						CourseView courseView = new CourseView(controller, teacher, course);
+						controller.getAccountManager().addObserver(courseView); 
+						courseView.display();
+
 					} catch (Exception ex) {
 						ex.printStackTrace();
 						JOptionPane.showMessageDialog(frame, "Failed to open course: " + ex.getMessage());
@@ -107,4 +111,10 @@ public class TeacherView {
 		}
 		
     }
+
+	@Override
+	public void update() {
+		showCourseSelection(false);
+		
+	}
 }
