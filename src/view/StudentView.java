@@ -53,16 +53,14 @@ public class StudentView implements Observer {
         welcomeLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
         welcomeLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 
-        // Header bar with navigation buttons similar to CourseView
-        JPanel headerPanel = new JPanel(new GridLayout(1, 4, 10, 0));
+        // Header bar with navigation buttons (removed Grades button)
+        JPanel headerPanel = new JPanel(new GridLayout(1, 3, 10, 0));
         headerPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
 
-        JButton gradesButton = new JButton("Grades");
         JButton courselistButton = new JButton("Courselist");
         JButton assignmentsButton = new JButton("Assignments");
         JButton gpaButton = new JButton("GPA Calculator");
 
-        headerPanel.add(gradesButton);
         headerPanel.add(courselistButton);
         headerPanel.add(assignmentsButton);
         headerPanel.add(gpaButton);
@@ -71,8 +69,7 @@ public class StudentView implements Observer {
         contentPanel = new JPanel(new BorderLayout());
         contentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        // Add action listeners for header buttons
-        gradesButton.addActionListener(e -> showGradesPanel());
+        // Add action listeners for header buttons (removed grades button listener)
         courselistButton.addActionListener(e -> showCourselistPanel());
         assignmentsButton.addActionListener(e -> showAssignmentsPanel());
         gpaButton.addActionListener(e -> showGPAPanel());
@@ -95,75 +92,8 @@ public class StudentView implements Observer {
         frame.add(mainPanel);
     }
     
-    private void showGradesPanel() {
-        // Create a panel for viewing grades
-        JPanel gradesPanel = new JPanel(new BorderLayout(10, 10));
-
-        // Create a label for instructions
-        JLabel instructionLabel = new JLabel("Your Grades", SwingConstants.CENTER);
-        instructionLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
-        instructionLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
-
-        // Create a panel for the course selection
-        JPanel selectionPanel = new JPanel(new BorderLayout(10, 10));
-        JLabel selectLabel = new JLabel("Select a course to view grades:");
-        
-        ArrayList<Course> courses = controller.getAllCourses();
-        String[] courseNames = new String[courses.size()];
-        for (int i = 0; i < courses.size(); i++) {
-            courseNames[i] = courses.get(i).getName();
-        }
-        
-        JComboBox<String> courseComboBox = new JComboBox<>(courseNames);
-        JButton viewButton = new JButton("View Grades");
-        
-        JPanel comboPanel = new JPanel(new BorderLayout(5, 0));
-        comboPanel.add(courseComboBox, BorderLayout.CENTER);
-        comboPanel.add(viewButton, BorderLayout.EAST);
-        
-        selectionPanel.add(selectLabel, BorderLayout.NORTH);
-        selectionPanel.add(comboPanel, BorderLayout.CENTER);
-        
-        // Create a text area for displaying grades
-        JTextArea gradesTextArea = new JTextArea();
-        gradesTextArea.setEditable(false);
-        JScrollPane scrollPane = new JScrollPane(gradesTextArea);
-        
-        // Add action listener for view button
-        viewButton.addActionListener(e -> {
-            String selectedCourse = (String) courseComboBox.getSelectedItem();
-            if (selectedCourse != null) {
-                Course course = findCourse(courses, selectedCourse);
-                if (course != null) {
-                    double grade = controller.getGradeForCourse(course);
-                    String letterGrade = controller.getLetterGradeForCourse(course);
-                    
-                    StringBuilder sb = new StringBuilder();
-                    sb.append("Course: ").append(course.getName()).append("\n");
-                    sb.append("Grade: ").append(String.format("%.2f%%", grade)).append("\n");
-                    sb.append("Letter Grade: ").append(letterGrade).append("\n\n");
-                    
-                    // Here you would add individual assignment grades if available
-                    
-                    gradesTextArea.setText(sb.toString());
-                }
-            }
-        });
-        
-        // Add components to the grades panel
-        gradesPanel.add(instructionLabel, BorderLayout.NORTH);
-        gradesPanel.add(selectionPanel, BorderLayout.BEFORE_FIRST_LINE);
-        gradesPanel.add(scrollPane, BorderLayout.CENTER);
-        
-        // Update the content panel
-        contentPanel.removeAll();
-        contentPanel.add(gradesPanel, BorderLayout.CENTER);
-        contentPanel.revalidate();
-        contentPanel.repaint();
-    }
-    
     private void showCourselistPanel() {
-        // Create a panel for viewing courses
+        // Create a panel for viewing courses with grades
         JPanel courselistPanel = new JPanel(new BorderLayout(10, 10));
 
         // Create a label for instructions
@@ -174,33 +104,96 @@ public class StudentView implements Observer {
         // Create tabs for current and completed courses
         JTabbedPane tabbedPane = new JTabbedPane();
         
-        // Current courses panel
+        // Current courses panel with table
         JPanel currentCoursesPanel = new JPanel(new BorderLayout(10, 10));
         ArrayList<Course> currentCourses = controller.getCurrentCourses();
-        JTextArea currentCoursesTextArea = new JTextArea();
-        currentCoursesTextArea.setEditable(false);
         
-        StringBuilder currentSb = new StringBuilder();
-        for (Course c : currentCourses) {
-            currentSb.append(c.getName()).append("\n");
+        // Create table model with course name and grade columns
+        String[] currentColumnNames = {"Course Name", "Current Grade"};
+        DefaultTableModel currentTableModel = new DefaultTableModel(currentColumnNames, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Make cells non-editable
+            }
+        };
+        
+        // Populate table with course data including grades
+        for (Course course : currentCourses) {
+            double grade = controller.getGradeForCourse(course);
+            String letterGrade = controller.getLetterGradeForCourse(course);
+            Object[] rowData = {
+                course.getName(),
+                // Removed course.getTeacher() reference
+                String.format("%.2f%% (%s)", grade, letterGrade)
+            };
+            currentTableModel.addRow(rowData);
         }
-        currentCoursesTextArea.setText(currentSb.toString());
         
-        currentCoursesPanel.add(new JScrollPane(currentCoursesTextArea), BorderLayout.CENTER);
+        // Create table and scroll pane
+        JTable currentCoursesTable = new JTable(currentTableModel);
+        currentCoursesTable.setRowHeight(25);
+        currentCoursesTable.getTableHeader().setReorderingAllowed(false);
         
-        // Completed courses panel
+        // Add double-click listener to view course details
+        currentCoursesTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                if (evt.getClickCount() == 2) {
+                    int row = currentCoursesTable.getSelectedRow();
+                    if (row >= 0 && row < currentCourses.size()) {
+                        Course selectedCourse = currentCourses.get(row);
+                        openCourseDetails(selectedCourse);
+                    }
+                }
+            }
+        });
+        
+        currentCoursesPanel.add(new JScrollPane(currentCoursesTable), BorderLayout.CENTER);
+        
+        // Completed courses panel with table
         JPanel completedCoursesPanel = new JPanel(new BorderLayout(10, 10));
         ArrayList<Course> completedCourses = controller.getCompletedCourses();
-        JTextArea completedCoursesTextArea = new JTextArea();
-        completedCoursesTextArea.setEditable(false);
         
-        StringBuilder completedSb = new StringBuilder();
-        for (Course c : completedCourses) {
-            completedSb.append(c.getName()).append("\n");
+        // Create table model with course name and final grade columns
+        String[] completedColumnNames = {"Course Name", "Final Grade"};
+        DefaultTableModel completedTableModel = new DefaultTableModel(completedColumnNames, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Make cells non-editable
+            }
+        };
+        
+        // Populate table with course data including final grades
+        for (Course course : completedCourses) {
+            double grade = controller.getGradeForCourse(course);
+            String letterGrade = controller.getLetterGradeForCourse(course);
+            Object[] rowData = {
+                course.getName(),
+                String.format("%.2f%% (%s)", grade, letterGrade)
+            };
+            completedTableModel.addRow(rowData);
         }
-        completedCoursesTextArea.setText(completedSb.toString());
         
-        completedCoursesPanel.add(new JScrollPane(completedCoursesTextArea), BorderLayout.CENTER);
+        // Create table and scroll pane
+        JTable completedCoursesTable = new JTable(completedTableModel);
+        completedCoursesTable.setRowHeight(25);
+        completedCoursesTable.getTableHeader().setReorderingAllowed(false);
+        
+        // Add double-click listener for completed courses as well
+        completedCoursesTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                if (evt.getClickCount() == 2) {
+                    int row = completedCoursesTable.getSelectedRow();
+                    if (row >= 0 && row < completedCourses.size()) {
+                        Course selectedCourse = completedCourses.get(row);
+                        openCourseDetails(selectedCourse);
+                    }
+                }
+            }
+        });
+        
+        completedCoursesPanel.add(new JScrollPane(completedCoursesTable), BorderLayout.CENTER);
         
         // Add panels to tabs
         tabbedPane.addTab("Current Courses", currentCoursesPanel);
@@ -365,8 +358,6 @@ public class StudentView implements Observer {
             coursesSb.append("\n");
         }
         
-        
-        
         JTextArea coursesTextArea = new JTextArea(coursesSb.toString());
         coursesTextArea.setEditable(false);
         coursesPanel.add(new JScrollPane(coursesTextArea), BorderLayout.CENTER);
@@ -382,6 +373,72 @@ public class StudentView implements Observer {
         contentPanel.add(gpaPanel, BorderLayout.CENTER);
         contentPanel.revalidate();
         contentPanel.repaint();
+    }
+    
+    private void openCourseDetails(Course course) {
+        // Create a detail view that shows assignments and grades for the selected course
+        JFrame detailFrame = new JFrame(course.getName() + " Details");
+        detailFrame.setSize(600, 400);
+        detailFrame.setLocationRelativeTo(frame);
+        
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        
+        // Header with course info
+        JLabel headerLabel = new JLabel(course.getName() + " - Current Grade: " + 
+                              String.format("%.2f%% (%s)", 
+                              controller.getGradeForCourse(course),
+                              controller.getLetterGradeForCourse(course)), 
+                              SwingConstants.CENTER);
+        headerLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
+        headerLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+        
+        // Create table for assignments
+        String[] columnNames = {"Assignment", "Points", "Your Grade", "Status"};
+        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        
+        // Get assignments for this course
+        ArrayList<Assignment> assignments = course.getAssignments();
+        for (Assignment assignment : assignments) {
+            double grade = student.getAssgGrade(assignment, course.getName());
+            String status = grade > 0 ? "Graded" : "Not Graded";
+            
+            Object[] rowData = {
+                assignment.getName(),
+                assignment.getTotalPoints(),
+                grade > 0 ? grade : "N/A",
+                status
+            };
+            tableModel.addRow(rowData);
+        }
+        
+        JTable assignmentsTable = new JTable(tableModel);
+        assignmentsTable.setRowHeight(25);
+        assignmentsTable.getTableHeader().setReorderingAllowed(false);
+        
+        JScrollPane tableScrollPane = new JScrollPane(assignmentsTable);
+        
+        // Add components to main panel
+        mainPanel.add(headerLabel, BorderLayout.NORTH);
+        mainPanel.add(tableScrollPane, BorderLayout.CENTER);
+        
+        // Close button at the bottom
+        JButton closeButton = new JButton("Close");
+        closeButton.addActionListener(e -> detailFrame.dispose());
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        buttonPanel.add(closeButton);
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+        
+        // Add main panel to frame
+        detailFrame.add(mainPanel);
+        
+        // Show the frame
+        detailFrame.setVisible(true);
     }
     
     /**
@@ -406,9 +463,8 @@ public class StudentView implements Observer {
         frame.dispose();
     }
 
-	@Override
-	public void update() {
-		showCourselistPanel();
-		
-	}
+    @Override
+    public void update() {
+        showCourselistPanel();
+    }
 }

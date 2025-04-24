@@ -53,6 +53,14 @@ public class StudentController {
         return student.getLetterGrade(course);
     }
 
+	public Double courseGradeNeeded(Double target, Course c) {
+		return student.courseGradeNeeded(target, c);
+	}
+
+	public Double gradeNeeded(Double target, Course c, double nextAssgPoints) {
+		return student.gradeNeeded(target, c, nextAssgPoints);
+	}
+
 	
     // Add additional methods to interact with student data as needed
 }
