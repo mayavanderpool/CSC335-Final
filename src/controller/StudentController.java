@@ -16,6 +16,7 @@ public class StudentController {
     this.student = student;
     this.accountManager = accountManager;
     this.studentView = new StudentView(this, student);
+    accountManager.addObserver(studentView);
 }
     
     public void start() {

@@ -26,8 +26,9 @@ import controller.StudentController;
 import model.Student;
 import model.Assignment;
 import model.Course;
+import model.Observer;
 
-public class StudentView {
+public class StudentView implements Observer {
     private StudentController controller;
     private Student student;
     private JFrame frame;
@@ -415,4 +416,10 @@ public class StudentView {
     public void close() {
         frame.dispose();
     }
+
+	@Override
+	public void update() {
+		showCourselistPanel();
+		
+	}
 }

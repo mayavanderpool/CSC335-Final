@@ -17,6 +17,23 @@ import java.util.Scanner;
 public class AccountManager {
 
 	private ArrayList<Person> people;
+	
+	private final ArrayList<Observer> observers = new ArrayList<>();
+
+	public void addObserver(Observer o) {
+	    observers.add(o);
+	}
+
+	public void removeObserver(Observer o) {
+	    observers.remove(o);
+	}
+
+	private void notifyObservers() {
+	    for (Observer o : observers) {
+	        o.update();
+	    }
+	}
+
 
 	public AccountManager() {
 		people = new ArrayList<Person>();
@@ -62,11 +79,13 @@ public class AccountManager {
 
 	public void addTeacher(Teacher teacher){
 		people.add(teacher);
+		notifyObservers();
 	}
 
 	public void addStudent(String firstName, String lastName, String username){
 		registerStudent(firstName, lastName, username);
 		inputPeople("people.txt");
+		notifyObservers();
 	}
 
 	public void importStudents(String file, Course course) {
@@ -93,6 +112,7 @@ public class AccountManager {
 			System.out.println("File does not exist: " + file);
 			e.printStackTrace();
 		}
+		notifyObservers();
 	}
 	
 
@@ -153,6 +173,7 @@ public class AccountManager {
 			}
 		}
 		writeInFile("userinfo.txt", username + "," + salt + "," + saltedHashed + "\n", true);
+		notifyObservers();
 	}
 
 	public void registerStudent(String firstName, String lastName, String user){
