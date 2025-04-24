@@ -26,6 +26,14 @@ public class Course {
 		this.students = new StudentList();
 	}
 
+	/* COPY CONSTRUCTOR */
+	public Course(Course c){
+		this.name = c.name;
+		this.assignments = c.getAssignments();
+		this.completed = c.completed;
+		this.students = c.getStudents();
+	}
+
 	/* SETTERS AND GETTERS */
 	public void setCompleted() {
 		this.completed = true;
