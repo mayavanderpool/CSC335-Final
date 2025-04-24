@@ -24,7 +24,7 @@ public class LoginController {
 
 		if (accountManager == null) {
 			System.out.println("Creating new AccountManager because it was null!");
-			accountManager = new AccountManager();
+			accountManager = new AccountManager("people.txt");
 		}
 		
 		if (isStudent) {
@@ -57,7 +57,7 @@ public class LoginController {
     public void login(String username, String password) {
 		if (accountManager == null) {
 			System.out.println("Creating new AccountManager because it was null in login!");
-			accountManager = new AccountManager();
+			accountManager = new AccountManager("people.txt");
 		}
         if (accountManager.checkCredentials(username, password)) {
             if (isStudent) {
