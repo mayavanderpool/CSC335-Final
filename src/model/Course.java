@@ -25,7 +25,7 @@ public class Course {
 		this.completed = false;
 		this.students = new StudentList();
 	}
-
+	
 	/* COPY CONSTRUCTOR */
 	public Course(Course c){
 		this.name = c.name;
@@ -52,7 +52,6 @@ public class Course {
 		return students;
 	}
 	
-	//
 	public void addStudents(Student stu) {
 		students.addStudent(stu);
 		stu.addCourse(this);
@@ -63,6 +62,10 @@ public class Course {
 	}
 
 
+	/*
+	 * getAssignments() - gets all assignments from course
+	 * Returns: ArrayList of all Assignments in course
+	 */
 	public ArrayList<Assignment> getAssignments(){
 		ArrayList<Assignment> all = new ArrayList<Assignment>();
 		for(Assignment assg : assignments){
@@ -74,7 +77,7 @@ public class Course {
 	
 	/* addAssg(Assignment assg) - Adds an assignment to the assignment arraylist.
 	 * Returns: nothing
-	*/
+	 */
 	
 	public void addAssg(Assignment assg) {
 		assignments.add(assg);
@@ -85,7 +88,7 @@ public class Course {
 
 	/* removeAssg(Assignment assg) - Removes an assignment from the assignment arraylist.
 	 * Returns: nothing
-	*/
+	 */
 	public void removeAssg(Assignment assg) {
 		assignments.remove(assg);
 		
@@ -94,6 +97,10 @@ public class Course {
 		}
 	}
 	
+	/*
+	 * getUngradedAssignments() - Gets all assignments that have not been graded
+	 * Returns: string of all ungraded assignments
+	 */
 	public String getUngradedAssignments() {
 		String str = "";
 		for(Student s: students.getStudents()) {
