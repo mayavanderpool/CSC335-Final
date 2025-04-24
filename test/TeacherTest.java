@@ -106,7 +106,7 @@ class TeacherTest {
 		Course course = new Course("science");
 		Teacher teach = new Teacher("name1", "name2", "uname");
 		teach.addCourse(course);
-		Assignment a1 = new Assignment("a1", 10.0, AssgType.HOMEWORK);
+		Assignment a1 = new Assignment("a1", 10.0);
 		Student stu = new Student("john", "smith", "js");
 		teach.addStudent(course, stu);
 		assertEquals(teach.getUngradedAssignments(), "science:\njohn smith:\nAll Assignments Graded\n");
@@ -119,7 +119,7 @@ class TeacherTest {
 		Teacher teach = new Teacher("jane", "doe", "mdcd");
 		Course c = new Course("science");
 		teach.addCourse(c);
-		Assignment a = new Assignment("a", 10.0, AssgType.HOMEWORK);
+		Assignment a = new Assignment("a", 10.0);
 		Student s = new Student("Stu", "Dent", "st");
 		Student s2 = new Student("St", "Udent", "stt");
 		teach.addStudent(c, s2);
@@ -180,7 +180,7 @@ class TeacherTest {
 		Teacher teach = new Teacher("jane", "doe", "janed");
 		Course c = new Course("science");
 		teach.addCourse(c);
-		Assignment a = new Assignment("a", 10.0, AssgType.HOMEWORK);
+		Assignment a = new Assignment("a", 10.0);
 		Student s1 = new Student("Stu", "Dent", "dskj");
 		Student s2 = new Student("St", "Udent", "ds");
 		Student s3 = new Student("S", "Tudent", "mor");
@@ -216,7 +216,7 @@ class TeacherTest {
 		Teacher teach = new Teacher("jane", "doe", "mcfk");
 		Course c = new Course("science");
 		teach.addCourse(c);
-		Assignment a = new Assignment("a", 10.0, AssgType.HOMEWORK);
+		Assignment a = new Assignment("a", 10.0);
 		Student s = new Student("Stu", "Dent", "cew");
 		Student s2 = new Student("St", "Udent", "plk");
 		teach.addStudent(c, s2);
@@ -232,7 +232,7 @@ class TeacherTest {
 		Teacher teach = new Teacher("jane", "doe", "asd");
 		Course c = new Course("science");
 		teach.addCourse(c);
-		Assignment a = new Assignment("a", 10.0, AssgType.HOMEWORK);
+		Assignment a = new Assignment("a", 10.0);
 		Student s = new Student("Stu", "Dent", "lkn");
 		Student s2 = new Student("St", "Udent", "edf");
 		teach.addStudent(c, s2);
@@ -248,7 +248,7 @@ class TeacherTest {
 		Teacher teach = new Teacher("jane", "doe", "cfew");
 		Course c = new Course("science");
 		teach.addCourse(c);
-		Assignment a = new Assignment("a", 10.0, AssgType.HOMEWORK);
+		Assignment a = new Assignment("a", 10.0);
 		Student s1 = new Student("Stu", "Dent", "few");
 		Student s2 = new Student("St", "Udent", "red");
 		Student s3 = new Student("Stud", "Ent", "plm");
@@ -273,11 +273,11 @@ class TeacherTest {
 		teach.addStudent(course, s);
 		teach.addStudent(course, s1);
 		
-		Assignment assg1 = new Assignment("assg1", 100.0, AssgType.HOMEWORK);
+		Assignment assg1 = new Assignment("assg1", 100.0);
 		course.addAssg(assg1);
 		teach.addAssignmentGrade(s, "math", assg1, 55);
 		assertTrue(.55 - teach.getStudentGrade(course, s) < .000001);
-		Assignment assg2 = new Assignment("assg2", 80.0, AssgType.HOMEWORK);
+		Assignment assg2 = new Assignment("assg2", 80.0);
 		course.addAssg(assg2);
 		teach.addAssignmentGrade(s, "math", assg2, 89);
 		assertEquals(teach.getStudentGrade(course, s), 80.0);
@@ -288,8 +288,8 @@ class TeacherTest {
 		Teacher teach = new Teacher("jane", "doe", "qwf");
 		Course c = new Course("science");
 		teach.addCourse(c);
-		Assignment a = new Assignment("a", 10.0, AssgType.HOMEWORK);
-		Assignment b = new Assignment("b", 10.0, AssgType.HOMEWORK);
+		Assignment a = new Assignment("a", 10.0);
+		Assignment b = new Assignment("b", 10.0);
 		Student s = new Student("Stu", "Dent", "pkc");
 		Student s2 = new Student("Stu", "Pid", "spo");
 		teach.addStudent(c, s);
@@ -308,7 +308,7 @@ class TeacherTest {
 		Teacher teach = new Teacher("jane", "doe", "janed");
 		Course c = new Course("science");
 		teach.addCourse(c);
-		Assignment a = new Assignment("a", 10.0, AssgType.HOMEWORK);
+		Assignment a = new Assignment("a", 10.0);
 		Student s = new Student("Stu", "Dent", "stu");
 		Student s2 = new Student("Stu", "Pid", "pid");
 		teach.addStudent(c, s);
@@ -316,26 +316,7 @@ class TeacherTest {
 		assertEquals(teach.getCompletedData(c, a), "0/2");
 	}
 	
-	@Test
-	void testDropAssignment() {
-		Teacher teach = new Teacher("jane", "doe", "qwf");
-		Course c = new Course("science");
-		teach.addCourse(c);
-		Assignment a = new Assignment("a", 10.0, AssgType.HOMEWORK);
-		Assignment b = new Assignment("b", 10.0, AssgType.HOMEWORK);
-		Student s = new Student("Stu", "Dent", "pkc");
-		Student s2 = new Student("Stu", "Pid", "spo");
-		teach.addStudent(c, s);
-		teach.addStudent(c, s2);
-		teach.addAssignmentToCourse("science", a);
-		teach.addAssignmentToCourse("science", b);
-		teach.addAssignmentGrade(s, "science", a, 2);
-		teach.addAssignmentGrade(s2, "science", a, 3);
-		teach.addAssignmentGrade(s, "science", b, 9);
-		teach.addAssignmentGrade(s2, "science", b, 7);
-		teach.dropAssg("science", "homework", 1);
-		assertEquals(teach.getClassAverage(c), 80.0);
-	}
+
 	
 	
 }
