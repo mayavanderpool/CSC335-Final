@@ -22,6 +22,11 @@ public class StudentList implements Iterable<Student>{
 		this.students = new ArrayList<Student>();
 	}
 
+	/*COPY CONSTRUCTOR */
+	public StudentList(StudentList sList){
+		this.students = sList.getStudents();
+	}
+
 	/*SETTERS AND GETTERS */
 	
 	public void	addStudent(Student s) {

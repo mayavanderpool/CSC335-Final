@@ -17,6 +17,12 @@ public class Student extends Person {
 		courseList = new HashMap<Course, HashMap<Assignment, Double>>();
 	}
 
+	/*COPY CONSTRUCTOR */
+	public Student(Student s){
+		super(s.getFirstName(), s.getLastName(), s.getUserName(), s.getFirstName());
+		this.courseList = s.courseList;
+	}
+
 	public double getGPA() {
 		if (this.getCompletedCourses().size() == 0) {
 			return 0.0;
