@@ -101,28 +101,6 @@ public class Teacher extends Person {
 		return graded + "/" + total;
 	}
 	
-	// drops n amount of assignments with lowest average from category t
-	public void dropAssg(String c, String t, int n ) {
-		Course course = getCourse(c);
-		ArrayList<Assignment> types = course.getAssgType(t);
-		double[] numbers = new double[types.size()];
-		for (int i = 0; i < types.size(); i++) {
-			numbers[i] = getAssgClassAverage(course, types.get(i));
-		}
-		Arrays.sort(numbers);
-		for (int i = 0; i < n; i++) {
-			for (Assignment a: types) {
-				if (a.getDropped() == false && getAssgClassAverage(course, a) == numbers[i]) {
-					a.dropAssg();
-					break;
-				}
-			}
-		}
-	}
-
-	
-
-	
 	// group students
 	public String makeXGroups(String courseName, int num) {
 		StudentList slist = getCourse(courseName).getStudents();
