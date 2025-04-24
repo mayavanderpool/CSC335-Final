@@ -18,6 +18,8 @@ public class TeacherController {
 		this.teacher = teacher;
 		this.aManager = aManager;
 		this.teacherView = new TeacherView(this, teacher);
+		
+		aManager.addObserver(teacherView);
 	}
 
 	public void start() {
@@ -151,6 +153,9 @@ public class TeacherController {
 		return aManager.getStudentByName(firstName, lastName);
 	}
 	
+	public AccountManager getAccountManager() {
+		return aManager;
+	}
 
 
 }

@@ -7,7 +7,7 @@ import model.AccountManager;
 public class Main {
 	public static void main(String[] args) {
 
-		AccountManager accountManager = new AccountManager();
+		AccountManager accountManager = new AccountManager("people.txt");
 		MainController mainController = new MainController(accountManager);
 		mainController.start();
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
