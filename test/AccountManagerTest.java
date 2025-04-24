@@ -2,6 +2,9 @@ package test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -18,8 +21,25 @@ private static AccountManager aManager;
 	
 	@BeforeEach
 	void setup() {
-		aManager = new AccountManager();
-		aManager.inputPeople("testAccountManager.txt");
+		aManager = new AccountManager("testAccountManager.txt");
+	}
+	
+	@Test
+	void testImportPeople() {
+		String testFile = "testFile.txt";
+	    try (FileWriter writer = new FileWriter(testFile)) {
+	        writer.write("student, Jay, Say, jsmith\n");
+	        writer.write("teacher, Ana, Banana, asmith\n");
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+	    aManager.inputPeople(testFile);
+	    assertTrue(aManager.personExists("Jay", "Say"));
+	    assertTrue(aManager.personExists("Ana", "Banana"));
+
+	    // Clean up the test file after the test
+	    File file = new File(testFile);
+	    file.delete();
 	}
 	
 	@Test
@@ -29,6 +49,7 @@ private static AccountManager aManager;
 
 	    assertTrue(aManager.personExists("Alice", "Johnson"));
 	    assertTrue(aManager.accountExists("Alice", "Johnson"));
+	    assertFalse(aManager.accountExists("random", "person"));
 	}
 	
 	@Test
@@ -40,19 +61,21 @@ private static AccountManager aManager;
 	
 	@Test
 	void testImportStudents() {
-	    String importFileName = "testImportStudents.txt";
-	    try (FileWriter writer = new FileWriter(importFileName)) {
+	    String fname = "testImportStudents.txt";
+	    try (FileWriter writer = new FileWriter(fname)) {
 	        writer.write("Doe,John,jdoe\n");
 	        writer.write("Smith,Jane,jsmith\n");
 	    } catch (IOException e) {
-	        fail("Failed to create test input file: " + e.getMessage());
+	        fail("Failed to create test file: " + e.getMessage());
 	    }
 	    aManager.addStudent("John", "Doe", "jdoe");
 	    aManager.addStudent("Jane", "Smith", "jsmith");
 	    Course course = new Course("Test Course");
 	    
-	    aManager.importStudents(importFileName, course);
+	    aManager.importStudents(fname, course);
 	    assertFalse(course.getStudents().getStudents().isEmpty());
+	    File file = new File(fname);
+	    file.delete();
 	}
 
 	@Test
@@ -70,7 +93,6 @@ private static AccountManager aManager;
 	    aManager.addTeacher(teacher);
 	    Teacher foundTeacher = aManager.getTeacherByUsername("uname");
 
-	    // Validate the retrieved teacher
 	    assertNotNull(foundTeacher, "Teacher should be found");
 	    assertEquals("fname", foundTeacher.getFirstName());
 	    assertEquals("lname", foundTeacher.getLastName());
@@ -79,16 +101,52 @@ private static AccountManager aManager;
 
 	@Test
 	void testPersonExists() {
-	    assertTrue(aManager.personExists("Rees", "Hart"));
+		aManager.addStudent("John", "Smith", "jsmith");
+	    assertTrue(aManager.personExists("John", "Smith"));
 	    assertFalse(aManager.personExists("Snuffy", "Snuffleupagus"));
 	}
 	
 	@Test
 	void testCheckCredentials() {
-	    aManager.addPassword("John", "Smith", "jsmith", "password123");
-	    System.out.println();
+	    aManager.addStudent("John", "Smith", "jsmith");
 	    assertTrue(aManager.checkCredentials("jsmith", "password123"));
 	    assertFalse(aManager.checkCredentials("jsmith", "wrongpassword"));
 	    assertFalse(aManager.checkCredentials("wrongusername", "password123"));
+	}
+	
+	@Test
+	void testAddPassword() {
+		aManager.addStudent("John", "Smith", "jsmith");
+        aManager.addPassword("John", "Smith", "jsmith", "password123");
+
+        File file = new File("userinfo.txt");
+        boolean hasUsername = false;
+        boolean hasPassword = false;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("jsmith")) {
+                    hasUsername = true;
+                    String[] parts = line.split(",");
+                    if (parts.length == 3) {
+                        hasPassword = true;
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        assertTrue(hasUsername);
+        assertTrue(hasPassword);
+    }
+	
+	@Test
+	void testNulls() {
+		AccountManager aman = new AccountManager("testEmptyFile.txt");
+		assertNull(aman.getStudentByUsername("uname"));
+		assertNull(aman.getStudentByName("fname", "lname"));
+		assertNull(aman.getTeacherByUsername("uname"));
 	}
 }

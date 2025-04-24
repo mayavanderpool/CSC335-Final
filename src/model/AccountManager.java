@@ -34,10 +34,10 @@ public class AccountManager {
 	    }
 	}
 
-
-	public AccountManager() {
+	// CONSTRUCTOR
+	public AccountManager(String filename) {
 		people = new ArrayList<Person>();
-		inputPeople("people.txt");
+		inputPeople(filename);
 		writeInFile("userinfo.txt", "", true);
 	}
 
@@ -77,17 +77,22 @@ public class AccountManager {
 		}
 	}
 
+	// add teacher to class
 	public void addTeacher(Teacher teacher){
 		people.add(teacher);
 		notifyObservers();
 	}
 
+	// add student to class
 	public void addStudent(String firstName, String lastName, String username){
-		registerStudent(firstName, lastName, username);
-		inputPeople("people.txt");
+		if (!personExists(firstName, lastName)) {
+			people.add(new Student(firstName, lastName, username));
+			registerStudent(firstName, lastName, username);
+		}
 		notifyObservers();
 	}
 
+	// import students from given txt list to course. done through teacher account
 	public void importStudents(String file, Course course) {
 		System.out.println("IMPORT STARTED on: " + file);
 	
@@ -176,6 +181,7 @@ public class AccountManager {
 		notifyObservers();
 	}
 
+	// adds a student to the test file. now they can be added to a course
 	public void registerStudent(String firstName, String lastName, String user){
 		if(!personExists(firstName, lastName)){
 			try (FileWriter writer = new FileWriter("people.txt", true)) {  
@@ -261,6 +267,7 @@ public class AccountManager {
 		return null;
 	}
 
+	
 	public Teacher getTeacherByUsername(String username) {
 		for (Person p : getUsers()) {
 			if (p instanceof Teacher && p.getUserName().equals(username)) {
