@@ -100,6 +100,7 @@ public class AccountManager {
 			people.add(new Student(firstName, lastName, username));
 			registerStudent(firstName, lastName, username);
 		}
+		notifyObservers();
 	}
 
 	/*
