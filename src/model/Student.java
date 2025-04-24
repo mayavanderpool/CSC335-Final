@@ -64,21 +64,20 @@ public class Student extends Person {
 		return assignments;
 	}
 
-	public boolean getGraded(Assignment a, String c){
-        for(HashMap.Entry<Course, HashMap<Assignment, Double>> entry : this.courseList.entrySet()){
-			if(entry.getKey().getName().equals(c)){
+	public boolean getGraded(Assignment a, String c) {
+		for (HashMap.Entry<Course, HashMap<Assignment, Double>> entry : this.courseList.entrySet()) {
+			if (entry.getKey().getName().equals(c)) {
 				HashMap<Assignment, Double> assgnentry = entry.getValue();
-				for(Assignment key : assgnentry.keySet()){
-					if(key.getName().equals(a.getName()) && assgnentry.get(key) > 0.0){
+				for (Assignment key : assgnentry.keySet()) {
+					if (key.getName().equals(a.getName()) && assgnentry.get(key) > 0.0) {
 						return true;
 					}
 				}
 			}
-        	
-        	
-        }
-        return false;
-    }
+
+		}
+		return false;
+	}
 
 	public ArrayList<Assignment> getUngraded() {
 		ArrayList<Assignment> ungraded = new ArrayList<Assignment>();
@@ -191,10 +190,10 @@ public class Student extends Person {
 			if (entry.getKey().equals(course)) {
 				HashMap<Assignment, Double> assignentry = entry.getValue();
 				for (HashMap.Entry<Assignment, Double> entry2 : assignentry.entrySet()) {
-					if (entry2.getKey().getDropped() == false) {
-						total += entry2.getKey().getTotalPoints();
-						grade += entry2.getValue();
-					}
+
+					total += entry2.getKey().getTotalPoints();
+					grade += entry2.getValue();
+
 				}
 			}
 		}

@@ -11,15 +11,13 @@ package model;
 	/*INSTANCE VARIABLES*/
 	private String name;
 	private Double points;
-	private AssgType type;
-	private boolean dropped;
+
 
 	/*CONSTRUCTOR */
-	public Assignment(String name, Double points, AssgType t){
+	public Assignment(String name, Double points){
 		this.name = name;
 		this.points = points;
-		this.type = t;
-		dropped = false;
+		
 	}
 
 	public Assignment(Assignment assg){
@@ -37,17 +35,7 @@ package model;
 		return name;
 	}
 	
-	public AssgType getType() {
-		return type;
-	}
 	
-	public void dropAssg() {
-		dropped = true;
-	}
-	
-	public boolean getDropped() {
-		return dropped;
-	}
 	
 	
  }
