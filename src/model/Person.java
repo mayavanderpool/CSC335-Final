@@ -1,10 +1,13 @@
 package model;
 public class Person {
+	
+	/*INSTANCE VARIABLES*/
     private final String FIRST;
     private final String LAST;
     private String username;
 	private String role;
 
+	/*CONSTRUCTOR */
     /*
      * @pre first != null && last != null;
      */
@@ -15,6 +18,8 @@ public class Person {
 		this.role = role;
     }
 
+    /*SETTERS AND GETTERS */
+    
     public String getFirstName(){
         return FIRST;
     }
