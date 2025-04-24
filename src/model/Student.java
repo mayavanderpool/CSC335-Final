@@ -53,6 +53,14 @@ public class Student extends Person {
 		return complete;
 	}
 
+	public ArrayList<Course> getAllCourses() {
+		ArrayList<Course> all = new ArrayList<Course>();
+		for (HashMap.Entry<Course, HashMap<Assignment, Double>> entry : this.courseList.entrySet()) {
+			all.add(entry.getKey());
+		}
+		return all;
+	}
+
 	public ArrayList<Assignment> getAssignments() {
 		ArrayList<Assignment> assignments = new ArrayList<Assignment>();
 		for (HashMap.Entry<Course, HashMap<Assignment, Double>> entry : this.courseList.entrySet()) {

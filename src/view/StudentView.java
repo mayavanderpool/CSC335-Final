@@ -108,7 +108,7 @@ public class StudentView implements Observer {
         JPanel selectionPanel = new JPanel(new BorderLayout(10, 10));
         JLabel selectLabel = new JLabel("Select a course to view grades:");
         
-        ArrayList<Course> courses = controller.getCurrentCourses();
+        ArrayList<Course> courses = controller.getAllCourses();
         String[] courseNames = new String[courses.size()];
         for (int i = 0; i < courses.size(); i++) {
             courseNames[i] = courses.get(i).getName();
@@ -230,7 +230,7 @@ public class StudentView implements Observer {
         JPanel selectionPanel = new JPanel(new BorderLayout(10, 10));
         JLabel selectLabel = new JLabel("Select a course to view assignments:");
         
-        ArrayList<Course> courses = controller.getCurrentCourses();
+        ArrayList<Course> courses = controller.getAllCourses();
         String[] courseNames = new String[courses.size()];
         for (int i = 0; i < courses.size(); i++) {
             courseNames[i] = courses.get(i).getName();
@@ -365,18 +365,7 @@ public class StudentView implements Observer {
             coursesSb.append("\n");
         }
         
-        // Add current courses
-        ArrayList<Course> currentCourses = controller.getCurrentCourses();
-        if (!currentCourses.isEmpty()) {
-            coursesSb.append("Current Courses:\n");
-            for (Course c : currentCourses) {
-                double grade = controller.getGradeForCourse(c);
-                String letterGrade = controller.getLetterGradeForCourse(c);
-                coursesSb.append("- ").append(c.getName()).append(": ")
-                          .append(String.format("%.2f%%", grade))
-                          .append(" (").append(letterGrade).append(")\n");
-            }
-        }
+        
         
         JTextArea coursesTextArea = new JTextArea(coursesSb.toString());
         coursesTextArea.setEditable(false);

@@ -36,6 +36,10 @@ public class StudentController {
     public ArrayList<Course> getCompletedCourses() {
         return student.getCompletedCourses();
     }
+
+	public ArrayList<Course> getAllCourses() {
+        return student.getAllCourses();
+    }
     
     public double getGPA() {
         return student.getGPA();
@@ -48,6 +52,7 @@ public class StudentController {
     public String getLetterGradeForCourse(Course course) {
         return student.getLetterGrade(course);
     }
-    
+
+	
     // Add additional methods to interact with student data as needed
 }
