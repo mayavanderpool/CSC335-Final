@@ -176,6 +176,7 @@ class StudentTest {
 		Student s3 = new Student("Alice", "Smith", "c");
 		t.addCourse(course);
 		t.addStudent(course, s1);
+		assertEquals(s1.getGrade(course), 0);
 		t.addStudent(course, s2);
 		t.addStudent(course, s3);
 		Assignment a1 = new Assignment("hw1", 100.0);
