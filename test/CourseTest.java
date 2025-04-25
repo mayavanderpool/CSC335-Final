@@ -79,7 +79,25 @@ class CourseTest {
 		
 	}
 
-	
+	@Test
+	void testCopyConstructor() {
+		Course original = new Course("CS101");
+		Student student = new Student("John", "Doe", "jd123");
+		Assignment assg = new Assignment("Midterm", 100.0);
+		
+		original.addStudents(student);
+		original.addAssg(assg);
+		original.setCompleted();
+		
+		Course copy = new Course(original);
+		
+		assertEquals(original.getName(), copy.getName());
+		assertEquals(original.isCompleted(), copy.isCompleted());
+		assertEquals(1, copy.getStudents().getStudents().size());
+		assertEquals("jd123", copy.getStudents().getStudents().get(0).getUserName());
+		assertEquals(1, copy.getAssignments().size());
+		assertEquals("Midterm", copy.getAssignments().get(0).getName());
+	}
 	
 
 }
