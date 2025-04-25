@@ -68,10 +68,6 @@ public class AccountManager {
 						people.add(new Teacher(first, last, user));
 					}
 				} 
-				System.out.println("Loaded users from " + file + ":");
-				for (Person p : people) {
-					System.out.println(p.getFirstName() + " " + p.getLastName() + " → " + p.getUserName());
-				}
 
 			}
 
@@ -108,7 +104,6 @@ public class AccountManager {
 	 * Return: none
 	 */
 	public void importStudents(String file, Course course) {
-		System.out.println("IMPORT STARTED on: " + file);
 	
 		try (Scanner scanner = new Scanner(new File(file))) {
 			while (scanner.hasNextLine()) {
@@ -128,7 +123,6 @@ public class AccountManager {
 				} 
 			}
 		} catch (FileNotFoundException e) {
-			System.out.println("File does not exist: " + file);
 			e.printStackTrace();
 		}
 		notifyObservers();
