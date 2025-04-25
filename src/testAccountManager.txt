@@ -1,3 +1,0 @@
-student,John,Smith,jsmith
-teacher,Ana,Smith,asmith
-InvalidLine
