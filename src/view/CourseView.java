@@ -15,6 +15,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/*
+ * File: CourseView.java
+ * Author: Maya Vanderpool
+ * Purpose: This class represents the course view
+ */
+
 public class CourseView implements Observer {
 	private TeacherController controller;
 	private Teacher teacher;

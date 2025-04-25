@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Arrays;
 
+/*
+ * File: Teacher.java
+ * Author: Abby
+ * Purpose: This class represents a teacher
+ */
 public class Teacher extends Person {
 	
 	/*INSTANCE VARIABLES*/

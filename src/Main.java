@@ -4,6 +4,12 @@ import java.io.IOException;
 import controller.MainController;
 import model.AccountManager;
 
+/*
+ * File: CourseView.java
+ * Author: Maya Vanderpool
+ * Purpose: This class contains the main method
+ */
+
 public class Main {
 	public static void main(String[] args) {
 

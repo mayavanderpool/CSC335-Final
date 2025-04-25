@@ -14,6 +14,12 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Scanner;
 
+/*
+ * File: AccountManager.java
+ * Author: Abby
+ * Purpose: This class represents the account manager
+ */
+
 public class AccountManager {
 
 	/*INSTANCE VARIABLES*/

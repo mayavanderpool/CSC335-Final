@@ -6,6 +6,12 @@ import java.awt.event.ActionListener;
 
 import controller.LoginController;
 
+/*
+ * File: LoginView.java
+ * Author: Maya Vanderpool
+ * Purpose: This class represents the login view
+ */
+
 public class LoginView {
     private LoginController controller;
     private boolean isStudent;

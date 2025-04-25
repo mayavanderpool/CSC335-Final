@@ -5,6 +5,12 @@ import model.Student;
 import model.Teacher;
 import view.LoginView;
 
+/*
+ * File: LoginController.java
+ * Author: Maya Vanderpool
+ * Purpose: This class represents the login controller
+ */
+
 public class LoginController {
     private AccountManager accountManager;
     private boolean isStudent;
