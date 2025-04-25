@@ -72,9 +72,7 @@ public class TeacherController {
 
 	public void removeStudentFromCourse(Course course, String fName, String lName) {
 		Student student = aManager.getStudentByName(fName, lName);
-		if (student != null) {
-			teacher.removeStudent(course, student);
-		}
+		teacher.removeStudent(course, student);
 	}
 
 	public void addAssignment(Course course, String name, double points) {
@@ -88,18 +86,11 @@ public class TeacherController {
 
 	public void addAssignmentGrade(String fName, String lName, String courseName, Assignment assignment, double grade) {
 		Student student = aManager.getStudentByName(fName, lName);
-		if (student != null) {
-			teacher.addAssignmentGrade(student, courseName, assignment, grade);
-		}
-
+		teacher.addAssignmentGrade(student, courseName, assignment, grade);
 	}
 
 	public String generateGroups(Course course, int number, boolean byCount) {
-		if (byCount) {
-			return teacher.makeXGroups(course.getName(), number);
-		} else {
-			return teacher.makeGroupsOfXStudents(course.getName(), number);
-		}
+		return teacher.makeGroups(course, number, byCount);
 	}
 
 	public double getAssignmentClassAverage(Course course, Assignment assignment) {
@@ -114,8 +105,6 @@ public class TeacherController {
 		return teacher.getCompletedData(course, assignment);
 	}
 
-
-
 	public String makeXGroups(String course, int number) {
 		return teacher.makeXGroups(course, number);
 	}
@@ -125,39 +114,19 @@ public class TeacherController {
 	}
 
 	public void sortByFirst(String courseName) {
-		Course c = teacher.getCourse(courseName);
-		if (c != null) {
-			StudentList sList = c.getStudents();
-			ArrayList<Student> sorted = teacher.getStudentByFirstName(courseName);
-			sList.setStudents(sorted); // this must exist in StudentList
-		}
+		teacher.sortStudents(courseName, "f");
 	}
 	
 	public void sortByLast(String courseName) {
-		Course c = teacher.getCourse(courseName);
-		if (c != null) {
-			StudentList sList = c.getStudents();
-			ArrayList<Student> sorted = teacher.getStudentByLastName(courseName);
-			sList.setStudents(sorted);
-		}
+		teacher.sortStudents(courseName, "l");
 	}
 	
 	public void sortByUser(String courseName) {
-		Course c = teacher.getCourse(courseName);
-		if (c != null) {
-			StudentList sList = c.getStudents();
-			ArrayList<Student> sorted = teacher.getStudentByUsername(courseName);
-			sList.setStudents(sorted);
-		}
+		teacher.sortStudents(courseName, "u");
 	}
 
 	public void sortByAssignmentGrade(String assg, String course){
-		Course c = teacher.getCourse(course);
-		if (c != null) {
-			StudentList sList = c.getStudents();
-			ArrayList<Student> sorted = teacher.getStudentByAssgGrade(course, assg);
-			sList.setStudents(sorted);
-		}
+		teacher.getStudentByAssgGrade(course, assg);
 	}
 
 	public Student getStudentByName(String firstName, String lastName){

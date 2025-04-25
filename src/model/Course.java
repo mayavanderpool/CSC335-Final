@@ -91,7 +91,12 @@ public class Course {
 	 * Returns: nothing
 	 */
 	public void removeAssg(Assignment assg) {
-		assignments.remove(assg);
+		for (Assignment a: assignments) {
+			if (a.getName().equals(assg.getName())) {
+				assignments.remove(a);
+				break;
+			}
+		}
 		
 		for (Student s : students.getStudents()) {
 			s.removeAssignment(this, assg);
