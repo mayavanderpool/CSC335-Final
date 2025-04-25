@@ -168,5 +168,9 @@ public class TeacherController {
 		return aManager;
 	}
 
+	public Assignment findAssignment(ArrayList<Assignment> assignments, String name){
+		return teacher.findAssignment(assignments, name);
+	}
+
 
 }
