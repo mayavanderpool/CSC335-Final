@@ -263,4 +263,13 @@ public class Teacher extends Person {
 		return 0.0;
 	}
 
+	public Assignment findAssignment(ArrayList<Assignment> a, String name){
+		for(Assignment assg: a){
+			if(assg.getName().equals(name)){
+				return assg;
+			}
+		}
+		return null;
+	}
+
 }

@@ -742,60 +742,7 @@ public class CourseView implements Observer {
 		return null;
 	}
 
-	/**
-	 * Custom TableModelListener for handling grade entry and saving
-	 */
-	private class GradeEntryListener implements TableModelListener {
-		private TeacherController controller;
-		private String courseName;
-		private Assignment assignment;
-		private DefaultTableModel tableModel;
-		private ArrayList<Student> studentList;
-
-		public GradeEntryListener(TeacherController controller, String courseName, Assignment assignment,
-				DefaultTableModel tableModel, ArrayList<Student> studentList) {
-			this.controller = controller;
-			this.courseName = courseName;
-			this.assignment = assignment;
-			this.tableModel = tableModel;
-			this.studentList = studentList;
-		}
-
-		@Override
-		public void tableChanged(TableModelEvent e) {
-			// Only respond to edits in the "Grade" column (index 1)
-			if (e.getType() == TableModelEvent.UPDATE && e.getColumn() == 1) {
-				int row = e.getFirstRow();
-
-				// 1) Read the new value from the model
-				Object gradeObj = tableModel.getValueAt(row, 1);
-				if (gradeObj == null || gradeObj.toString().isEmpty()) {
-					return;
-				}
-
-				// 2) Parse and persist
-				try {
-					double grade = Double.parseDouble(gradeObj.toString());
-
-					// 3) Update the "Status" column (index 2) in the same model
-					tableModel.setValueAt("Graded", row, 2);
-
-					// 4) Figure out which student this is
-					String fullName = (String) tableModel.getValueAt(row, 0);
-					String[] parts = fullName.split(" ");
-					String firstName = parts[0];
-					String lastName = parts.length > 1 ? parts[1] : "";
-
-					// 5) Delegate to controller to save in your data model
-					controller.addAssignmentGrade(firstName, lastName, courseName, assignment, grade);
-
-				} catch (NumberFormatException ex) {
-					// Optional: show a dialog or revert cell
-				}
-			}
-		}
-
-	}
+	
 
 	@Override
 	public void update() {
