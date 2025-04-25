@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
-
-import model.AssgType;
 import model.Assignment;
 import model.Course;
 import model.Student;
@@ -20,8 +18,8 @@ class StudentListTest {
 	Student s2 = new Student("Bob", "Brown", "bbrown");
 	Student s3 = new Student("Carl", "Clyde", "cc");
 	Course c1 = new Course("335");
-	Assignment a1 = new Assignment("assg1", 100.0, AssgType.HOMEWORK);
-	Assignment a2 = new Assignment("assg2", 100.0, AssgType.HOMEWORK);
+	Assignment a1 = new Assignment("assg1", 100.0);
+	Assignment a2 = new Assignment("assg2", 100.0);
 			
 	
 	@Test
@@ -114,7 +112,7 @@ class StudentListTest {
 		Teacher teach = new Teacher("jane", "doe", "jd");
 		Course c = new Course("science");
 		teach.addCourse(c);
-		Assignment a = new Assignment("a", 10.0, AssgType.HOMEWORK);
+		Assignment a = new Assignment("a", 10.0);
 		Student s = new Student("Stu", "Dent", "st");
 		Student s2 = new Student("St", "Udent", "stu");
 		teach.addStudent(c, s2);
@@ -130,7 +128,7 @@ class StudentListTest {
 		Teacher teach = new Teacher("jane", "doe", "jd");
 		Course c = new Course("science");
 		teach.addCourse(c);
-		Assignment a = new Assignment("a", 10.0, AssgType.HOMEWORK);
+		Assignment a = new Assignment("a", 10.0);
 		Student s = new Student("Stu", "Dent", "stu");
 		Student s2 = new Student("St", "Udent", "st");
 		teach.addStudent(c, s2);
@@ -146,7 +144,7 @@ class StudentListTest {
 		Teacher teach = new Teacher("jane", "doe", "jd");
 		Course c = new Course("science");
 		teach.addCourse(c);
-		Assignment a = new Assignment("a", 10.0, AssgType.HOMEWORK);
+		Assignment a = new Assignment("a", 10.0);
 		Student s1 = new Student("Stu", "Dent", "stu");
 		Student s2 = new Student("St", "Udent", "st");
 		Student s3 = new Student("Stud", "Ent", "stud");
@@ -166,7 +164,7 @@ class StudentListTest {
 		Teacher teach = new Teacher("jane", "doe", "jd");
 		Course c = new Course("science");
 		teach.addCourse(c);
-		Assignment a = new Assignment("a", 10.0, AssgType.HOMEWORK);
+		Assignment a = new Assignment("a", 10.0);
 		Student s1 = new Student("Stu", "Dent", "o");
 		Student s2 = new Student("St", "Udent", "t");
 		Student s3 = new Student("S", "Tudent", "e");

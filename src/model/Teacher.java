@@ -6,21 +6,30 @@ import java.util.Map;
 import java.util.Arrays;
 
 public class Teacher extends Person {
+	
+	/*INSTANCE VARIABLES*/
 	private ArrayList<Course> courseList;
 
+	/*CONSTRUCTOR */
 	public Teacher(String fName, String lName, String user) {
 		super(fName, lName, user, "teacher");
 		this.courseList = new ArrayList<Course>();
 	}
 	
-	// COURSE METHODS
+	/*COURSE METHODS*/
 	
-	// add course and studentlist
+	/*
+	 * addCourse(Course) - adds course to teachers courselist
+	 * Returns: none
+	 */
 	public void addCourse(Course course) {
 		courseList.add(course);
 	}
 	
-	// get all courses for a teacher
+	/*
+	 * getCOurses()- get all courses for a teacher
+	 * Returns: ArrayList of Courses
+	 */
 	public ArrayList<Course> getCourses() {
 		ArrayList<Course> courses = new ArrayList<Course>();
 		for (Course c : courseList) {
@@ -29,7 +38,11 @@ public class Teacher extends Person {
 		return courses;
 	}
 	
-	// get either completed or current courses. gives completed if true.
+	/* 
+	 *getCompletedOrCurrentCourses(boolean)get either completed or current courses,
+	 * gives completed if true.
+	 * Return: ArrayList of Courses
+	 */
 	public ArrayList<Course> getCompletedOrCurrentCourses(boolean isComplete) {
 		ArrayList<Course> courses = new ArrayList<Course>();
 		for (Course c : courseList) {
@@ -39,7 +52,10 @@ public class Teacher extends Person {
 	}	
 	
 	
-	// get a course from hashmap by course name
+	/*
+	 * getCoursr(String) - get a course from hashmap by course name
+	 * Return: Course
+	 */
 	public Course getCourse(String courseName) {
 		for(Course c: courseList) {
 			if(c.getName().equals(courseName)){
@@ -50,21 +66,28 @@ public class Teacher extends Person {
 	}
 	
 	
-	// STUDENTLIST METHODS
+	/*STUDENTLIST METHODS*/
 	
-	// get student list by course. may change to string courseName or something else
+	/* 
+	 * getStudentList(Course)get student list by course
+	 * Return: StudentList of Course
+	 */
 	public StudentList getStudentList(Course c) {
-		return c.getStudents();  // slist needs a get copy method
+		return c.getStudents(); 
 	}
 	
-	// returns student mean of a student list for a course
+	/*
+	 * getClassAverage(Course)- returns student mean of a student list for a course
+	 * Return: double of average
+	 */
 	public double getClassAverage(Course c) {
 		StudentList slist = c.getStudents();
 		return slist.getCourseAverage(c);
 	}
 
 	/*
-	 * getAssgClassAverage(Course c, Assignment a) - returns the average grade on an assignment
+	 * getAssgClassAverage(Course, Assignment) - calculates the average grade on an assignment
+	 * Returns: average for assignment
 	 */
 	public double getAssgClassAverage(Course c, Assignment a){
 		StudentList slist = c.getStudents();
@@ -72,7 +95,8 @@ public class Teacher extends Person {
 	}
 
 	/*
-	 * getAssgMedian(Course c, Assignment a) - returns the median grade on an assignment
+	 * getAssgMedian(Course, Assignment) - calculates the median grade on an assignment
+	 * Returns: String of median of assignment
 	 */
 	public String getAssgMedian(Course c, Assignment a){
 		StudentList slist = c.getStudents();
@@ -84,6 +108,10 @@ public class Teacher extends Person {
 		}
 	}
 
+	/*
+	 * getCompletedData(Course, Assignment) - gets amount of assignments that are graded
+	 * Return: String representing what has been completed
+	 */
 	public String getCompletedData(Course c, Assignment a){
 		int total = 0;
 		int graded = 0;
@@ -101,23 +129,31 @@ public class Teacher extends Person {
 		return graded + "/" + total;
 	}
 	
-	
 
 	
-
-	
-	// group students
+	/*
+	 * makeXGroups(String, int)- returns students from course split into x amount of groups 
+	 * Return: returns a string with each group
+	 */
 	public String makeXGroups(String courseName, int num) {
 		StudentList slist = getCourse(courseName).getStudents();
 		return slist.makeXGroups(num);
 	}
 	
+	/*
+	 * makeGroupsOfXStudents(String, int) splits students from course into 
+	 * groups where each group will have about x members
+	 * Return: returns a string with each group
+	 */
 	public String makeGroupsOfXStudents(String courseName, int num) {
 		StudentList slist = getCourse(courseName).getStudents();
 		return slist.makeGroupsOfXStudents(num);
 	}
 	
-	// gets ungraded assignments
+	/*
+	 * getUngradedAssignments() - gets all assignments that havent been graded
+	 * Return String of ungraded assignments
+	 */
 	public String getUngradedAssignments() {
 		String str = "";
 		for(Course c : courseList) {
@@ -128,20 +164,37 @@ public class Teacher extends Person {
 	}
 	
 	// SORTING
+	
+	/*
+	 * getStudentsByFirstName(String) - gets list of students in course sorted by firstname
+	 * Return: ArrayList of sorted Students
+	 */
 	public ArrayList<Student> getStudentByFirstName(String courseName) {
 		return getCourse(courseName).getStudents().getStudentsByFirstName();
 	}
 	
+	/*
+	 * getStudentsByLasttName(String) - gets list of students in course sorted by lastname
+	 * Return: ArrayList of sorted Students
+	 */
 	public ArrayList<Student> getStudentByLastName(String courseName) {
 		StudentList list = getCourse(courseName).getStudents();
 		return list.getStudentsByLastName();
 	}
 	
+	/*
+	 * getStudentsByUsername(String) - gets list of students in course sorted by username
+	 * Return: ArrayList of sorted Students
+	 */
 	public ArrayList<Student> getStudentByUsername(String courseName) {
 		StudentList list = getCourse(courseName).getStudents();
 		return list.getStudentsByUsername();
 	}
 	
+	/*
+	 * getStudentsByFirstName(String) - gets list of students in course sorted by assgGrade
+	 * Return: ArrayList of sorted Students
+	 */
 	public ArrayList<Student> getStudentByAssgGrade(String courseName, String assgName) {
 		StudentList list = getCourse(courseName).getStudents();
 		return list.getStudentsByAssgGrade(courseName, assgName);
@@ -150,21 +203,35 @@ public class Teacher extends Person {
 	
 	// INDIVIDUAL STUDENT METHODS
 	
+	/*
+	 * addAssignmentToCourse(String, Assignment) - adds assignment to course
+	 * Return: none
+	 */
 	public void addAssignmentToCourse(String course, Assignment a) {
 		Course c = getCourse(course);
 		c.addAssg(a);
 	}
 	
+	/*
+	 * removeAssignmentFromCoure(String, Assignment) - removes assignment from course
+	 * Return : none
+	 */
 	public void removeAssignmentFromCourse(String course, Assignment a) {
 		getCourse(course).removeAssg(a);
 	}
 	
-	// add grade for student on an assignment
+	/*
+	 * addAssignmentGrade(Student, String, Assignment, double) - add grade for student on an assignment
+	 * Return: none
+	 */
 	public void addAssignmentGrade(Student s, String courseName, Assignment a, double grade) {
 		s.setAssignmentGrade(courseName, a, grade);
 	}
 	
-	// adds a student to a class
+	/*
+	 * addStudent(Course Student) - adds a student to a class
+	 * Return: none
+	 */
 	public void addStudent(Course c, Student s) {
 		c.addStudents(s);
 		s.addCourse(c);
@@ -174,12 +241,18 @@ public class Teacher extends Person {
 		}
 	}
 	
-	// removes a student from a class
+	/*
+	 * removeStudent(Course, Student)- removes a student from a class
+	 * Return: none
+	 */
 	public void removeStudent(Course c, Student s) {
 		c.removeStudents(s);
 	}
 	
-	// returns a single student's grade in decimal form
+	/*
+	 * getStudentGrade(Course, Student) - returns a single student's grade from course
+	 * Return: double of student grade
+	 */
 	public double getStudentGrade(Course c, Student s) {
 		StudentList slist = c.getStudents();
 		for (Student stu : slist) {

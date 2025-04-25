@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import org.junit.jupiter.api.Test;
-
-import model.AssgType;
 import model.Assignment;
 import model.Course;
 import model.Student;
@@ -48,7 +46,7 @@ class StudentTest {
 		t1.addStudent(c2, s1);
 		s1.addCourse(c2);
 		
-		Assignment a1 = new Assignment("a1", 100.0, AssgType.HOMEWORK);
+		Assignment a1 = new Assignment("a1", 100.0);
 		t1.addAssignmentToCourse("Art", a1);
 		
 		assertFalse(s1.getGraded(a1, "Art"));
@@ -63,8 +61,8 @@ class StudentTest {
 		Student s1 = new Student("Rees", "Hart", "rh");
 		Teacher t1 = new Teacher("Jane", "Smith", "js");
 		Course c1 = new Course("Math");
-		Assignment a1 = new Assignment("a1", 100.0, AssgType.HOMEWORK);
-		Assignment a2 = new Assignment("a2", 100.0, AssgType.HOMEWORK);
+		Assignment a1 = new Assignment("a1", 100.0);
+		Assignment a2 = new Assignment("a2", 100.0);
 		t1.addCourse(c1);
 		t1.addStudent(c1, s1);
 		s1.addCourse(c1);
@@ -84,7 +82,7 @@ class StudentTest {
 		Course c1 = new Course("Math");
 		Course c2 = new Course("Art");
 		Teacher t1 = new Teacher("Jane", "Smith", "js");
-		Assignment a1 = new Assignment("a1", 100.0, AssgType.HOMEWORK);
+		Assignment a1 = new Assignment("a1", 100.0);
 		
 		t1.addCourse(c1);
 		t1.addStudent(c1, s1);
@@ -104,9 +102,9 @@ class StudentTest {
 	void testGetUngraded() {
 		Student s = new Student("Snuffy", "Snuffles", "ss");
 		Course course = new Course("math");
-		Assignment a1 = new Assignment("hw1", 100.0, AssgType.HOMEWORK);
-		Assignment a2 = new Assignment("hw2", 100.0, AssgType.HOMEWORK);
-		Assignment a3 = new Assignment("hw3", 100.0, AssgType.HOMEWORK);
+		Assignment a1 = new Assignment("hw1", 100.0);
+		Assignment a2 = new Assignment("hw2", 100.0);
+		Assignment a3 = new Assignment("hw3", 100.0);
 		
 		s.addCourse(course);
 		s.addAssignment(course, a1);
@@ -180,7 +178,7 @@ class StudentTest {
 		t.addStudent(course, s1);
 		t.addStudent(course, s2);
 		t.addStudent(course, s3);
-		Assignment a1 = new Assignment("hw1", 100.0, AssgType.HOMEWORK);
+		Assignment a1 = new Assignment("hw1", 100.0);
 		t.addAssignmentToCourse("math", a1);
 		t.addAssignmentGrade(s1, "math", a1, 0);
 		t.addAssignmentGrade(s2, "math", a1, 100);
@@ -207,7 +205,7 @@ class StudentTest {
 		t.addStudent(course, s1);
 		t.addStudent(course, s2);
 		t.addStudent(course, s3);
-		Assignment a1 = new Assignment("hw1", 100.0, AssgType.HOMEWORK);
+		Assignment a1 = new Assignment("hw1", 100.0);
 		t.addAssignmentToCourse("math", a1);
 		t.addAssignmentGrade(s1, "math", a1, 0);
 		t.addAssignmentGrade(s2, "math", a1, 100);
@@ -239,8 +237,8 @@ class StudentTest {
         t.addStudent(course, sD);
         t.addStudent(course, sF);
         
-        Assignment a1 = new Assignment("hw1", 100.0, AssgType.HOMEWORK);
-        Assignment a2 = new Assignment("hw2", 100.0, AssgType.HOMEWORK);
+        Assignment a1 = new Assignment("hw1", 100.0);
+        Assignment a2 = new Assignment("hw2", 100.0);
         t.addAssignmentToCourse("math", a1);
         t.addAssignmentToCourse("math", a2);
         
@@ -269,7 +267,7 @@ class StudentTest {
 		t.addCourse(course);
 		Student sA = new Student("Jamie", "Lee", "jl");
         t.addStudent(course, sA);
-        Assignment a1 = new Assignment("hw1", 100.0, AssgType.HOMEWORK);     
+        Assignment a1 = new Assignment("hw1", 100.0);     
         t.addAssignmentToCourse("math", a1);    
         t.addAssignmentGrade(sA, "math", a1, 80);;
         assertEquals(100, sA.gradeNeeded(90.0, course, 100.0));
@@ -280,9 +278,9 @@ class StudentTest {
 	void testRemoveAssignment() {
 		Student s = new Student("Snuffy", "Snuffles", "ss");
 		Course course = new Course("math");
-		Assignment a1 = new Assignment("hw1", 100.0, AssgType.HOMEWORK);
-		Assignment a2 = new Assignment("hw2", 100.0, AssgType.HOMEWORK);
-		Assignment a3 = new Assignment("hw3", 100.0, AssgType.HOMEWORK);
+		Assignment a1 = new Assignment("hw1", 100.0);
+		Assignment a2 = new Assignment("hw2", 100.0);
+		Assignment a3 = new Assignment("hw3", 100.0);
 		
 		s.addCourse(course);
 		s.addAssignment(course, a1);
@@ -304,7 +302,7 @@ class StudentTest {
 		teach.addCourse(course);
 		Student s = new Student("mary", "mess", "mm");
 		teach.addStudent(course, s);
-		Assignment a = new Assignment("a", 10.0, AssgType.HOMEWORK);
+		Assignment a = new Assignment("a", 10.0);
 		course.addAssg(a);
 		teach.addAssignmentGrade(s, "math", a, 5);
 		assertEquals(s.getAssgGrade(a, "math"), 5.0);
@@ -317,7 +315,7 @@ class StudentTest {
 		teach.addCourse(course);
 		Student s = new Student("mary", "mess", "mm");
 		teach.addStudent(course, s);
-		Assignment a = new Assignment("a", 10.0, AssgType.HOMEWORK);
+		Assignment a = new Assignment("a", 10.0);
 		course.addAssg(a);
 		teach.addAssignmentGrade(s, "math", a, 5);
 		assertEquals(s.getAssgGrade("a", "math"), 5.0);
