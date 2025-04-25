@@ -129,7 +129,14 @@ public class Teacher extends Person {
 		return graded + "/" + total;
 	}
 	
-
+	public String makeGroups(Course course, int number, boolean byCount) {
+		if (byCount) {
+			return makeXGroups(course.getName(), number);
+		} else {
+			return makeGroupsOfXStudents(course.getName(), number);
+		}
+	}
+	
 	
 	/*
 	 * makeXGroups(String, int)- returns students from course split into x amount of groups 
@@ -166,6 +173,32 @@ public class Teacher extends Person {
 	// SORTING
 	
 	/*
+	 * sortStudents(String, String) uses helper methods to sort by specific way and update list
+	 * Return: none
+	 */
+	public void sortStudents(String courseName, String x) {
+		Course c = getCourse(courseName);
+		if (c != null) {
+			StudentList sList = c.getStudents();
+			ArrayList<Student> sorted;
+			switch(x) {
+			case "f" :
+				sorted = getStudentByFirstName(courseName);
+				break;
+			case "l" :
+				sorted = getStudentByLastName(courseName);
+				break;
+			case "u" :
+				sorted = getStudentByUsername(courseName);
+				break;
+			default :
+				sorted = sList.getStudents();
+			}
+			sList.setStudents(sorted);
+		}
+	}
+	
+	/*
 	 * getStudentsByFirstName(String) - gets list of students in course sorted by firstname
 	 * Return: ArrayList of sorted Students
 	 */
@@ -195,9 +228,13 @@ public class Teacher extends Person {
 	 * getStudentsByFirstName(String) - gets list of students in course sorted by assgGrade
 	 * Return: ArrayList of sorted Students
 	 */
-	public ArrayList<Student> getStudentByAssgGrade(String courseName, String assgName) {
-		StudentList list = getCourse(courseName).getStudents();
-		return list.getStudentsByAssgGrade(courseName, assgName);
+	public void getStudentByAssgGrade(String courseName, String assgName) {
+		Course c = getCourse(courseName);
+		if (c!= null) {
+			StudentList sList = c.getStudents();
+			ArrayList<Student> sorted = sList.getStudentsByAssgGrade(courseName, assgName);
+			sList.setStudents(sorted);
+		}
 	}
 	
 	
@@ -225,7 +262,7 @@ public class Teacher extends Person {
 	 * Return: none
 	 */
 	public void addAssignmentGrade(Student s, String courseName, Assignment a, double grade) {
-		s.setAssignmentGrade(courseName, a, grade);
+		if (s!= null) s.setAssignmentGrade(courseName, a, grade);
 	}
 	
 	/*
@@ -246,7 +283,8 @@ public class Teacher extends Person {
 	 * Return: none
 	 */
 	public void removeStudent(Course c, Student s) {
-		c.removeStudents(s);
+		if(s != null) c.removeStudents(s);
+		
 	}
 	
 	/*
