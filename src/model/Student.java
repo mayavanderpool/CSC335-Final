@@ -228,13 +228,13 @@ public class Student extends Person {
 	}
 
 	/*
-	 * assgFirstComparator() - compares student objects with username
+	 * assgFirstComparator() - compares student objects with assignment grade
 	 * Returns: Comparator<Student>
 	 */
 	public static Comparator<Student> assgFirstComparator(String course, String a) {
 		return new Comparator<Student>() {
 			public int compare(Student s1, Student s2) {
-				int comp = Double.compare(s1.getAssgGrade(a, course), s2.getAssgGrade(a, course));
+				int comp = Double.compare(s2.getAssgGrade(a, course), s1.getAssgGrade(a, course));
 				return comp;
 			}
 		};

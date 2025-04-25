@@ -215,9 +215,9 @@ class StudentTest {
 		students.add(s1);
 		students.add(s2);
 		students.add(s3);
-		Collections.sort(students, Student.assgFirstComparator("math", "h1"));
-		assertEquals(0.0, students.get(0).getGrade(course));
-		assertEquals("Smith", students.get(2).getLastName());
+		Collections.sort(students, Student.assgFirstComparator("math", "hw1"));
+		assertEquals(100.0, students.get(0).getGrade(course));
+		assertEquals("Johnson", students.get(2).getLastName());
 		
 	}
 	
