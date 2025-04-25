@@ -9,6 +9,12 @@ import java.awt.*;
 import java.util.ArrayList;
 import model.Observer;
 
+/*
+ * File: TeacherView.java
+ * Author: Maya Vanderpool
+ * Purpose: This class represents the teacher view
+ */
+
 public class TeacherView implements Observer {
     private TeacherController controller;
     private Teacher teacher;

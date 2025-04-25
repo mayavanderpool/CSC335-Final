@@ -3,6 +3,12 @@ package controller;
 import model.AccountManager;
 import view.MainView;
 
+/*
+ * File: MainController.java
+ * Author: Maya Vanderpool
+ * Purpose: This class represents the main controller
+ */
+
 public class MainController {
     private AccountManager accountManager;
     private MainView mainView;

@@ -28,6 +28,12 @@ import model.Assignment;
 import model.Course;
 import model.Observer;
 
+/*
+ * File: StudentView.java
+ * Author: Maya Vanderpool
+ * Purpose: This class represents the student view
+ */
+
 public class StudentView implements Observer {
 	private StudentController controller;
 	private Student student;

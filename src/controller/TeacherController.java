@@ -9,6 +9,12 @@ import model.*;
 import view.CourseView;
 import view.TeacherView;
 
+/*
+ * File: TeacherController.java
+ * Author: Maya Vanderpool
+ * Purpose: This class represents the teacher controller
+ */
+
 public class TeacherController {
 	private Teacher teacher;
 	private TeacherView teacherView;

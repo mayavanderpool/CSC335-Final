@@ -1,4 +1,10 @@
 package model;
+
+/*
+ * File: Person.java
+ * Author: Rees Hart
+ * Purpose: This class represents a person object
+ */
 public class Person {
 	
 	/*INSTANCE VARIABLES*/

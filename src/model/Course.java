@@ -4,7 +4,7 @@ package model;
 /*
  * File: Course.java
  * Author: Maya Vanderpool
- * Purpose: 
+ * Purpose: This class represents a course object
  */
 
 import java.util.ArrayList;

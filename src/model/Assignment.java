@@ -3,7 +3,7 @@ package model;
 /*
  * File: Assignment.java
  * Author: Maya Vanderpool
- * Purpose: 
+ * Purpose: This class represents an assignment 
  */
 
  public class Assignment{

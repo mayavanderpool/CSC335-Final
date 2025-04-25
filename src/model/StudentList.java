@@ -1,5 +1,5 @@
 /*File: StudentList.java
-Author: 
+Author: Lauren Greene
 Purpose: StudentList stores a list of students and defines functions for
 different ways to sort or split the students
 */

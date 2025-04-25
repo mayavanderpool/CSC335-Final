@@ -7,6 +7,12 @@ import model.Course;
 import model.Student;
 import view.StudentView;
 
+/*
+ * File: StudentController.java
+ * Author: Maya Vanderpool
+ * Purpose: This class represents the student controller
+ */
+
 public class StudentController {
     private Student student;
     private StudentView studentView;

@@ -6,6 +6,12 @@ import java.awt.BorderLayout;
 
 import controller.MainController;
 
+/*
+ * File: MainView.java
+ * Author: Maya Vanderpool
+ * Purpose: This class represents the main view
+ */
+
 public class MainView {
     private MainController controller;
     private JFrame frame;
