@@ -175,14 +175,13 @@ class TeacherTest {
 	
 	@Test
 	void testGetStudentsByAssgGrade() {
-		Teacher teach = new Teacher("jane", "doe", "janed");
+		Teacher teach = new Teacher("jane", "doe", "jd");
 		Course c = new Course("science");
 		teach.addCourse(c);
 		Assignment a = new Assignment("a", 10.0);
-		Student s1 = new Student("Stu", "Dent", "dskj");
-		Student s2 = new Student("St", "Udent", "ds");
-		Student s3 = new Student("S", "Tudent", "mor");
-		
+		Student s1 = new Student("Stu", "Dent", "o");
+		Student s2 = new Student("St", "Udent", "t");
+		Student s3 = new Student("S", "Tudent", "e");
 		teach.addStudent(c, s1);
 		teach.addStudent(c, s2);
 		teach.addStudent(c, s3);
@@ -190,10 +189,12 @@ class TeacherTest {
 		teach.addAssignmentGrade(s3, "science", a, 10.0);
 		teach.addAssignmentGrade(s2, "science", a, 8.0);
 		teach.addAssignmentGrade(s1, "science", a, 5.0);
-		ArrayList<Student> list = teach.getStudentByAssgGrade("science", "a");
-		assertEquals(list.get(0), s1);
+		teach.getStudentByAssgGrade("science", "a");  // sort the list
+		ArrayList<Student> list = teach.getCourse("science").getStudents().getStudents();
+		
+		assertEquals(list.get(2), s1);
 		assertEquals(list.get(1), s2);
-		assertEquals(list.get(2), s3);
+		assertEquals(list.get(0), s3);
 	}
 	
 	
@@ -314,7 +315,49 @@ class TeacherTest {
 		assertEquals(teach.getCompletedData(c, a), "0/2");
 	}
 	
-
+	@Test
+	void testSortStudents() {
+		Teacher teach = new Teacher("jane", "doe", "qwf");
+		Course c = new Course("science");
+		teach.addCourse(c);
+		Student s = new Student("Hate", "Dent", "pkc");
+		Student s2 = new Student("AStu", "Pid", "spo");
+		Student s3 = new Student("Zedd", "Lepplin", "alp");
+		
+		teach.addStudent(c, s);
+		teach.addStudent(c, s2);
+		teach.addStudent(c, s3);
+		Assignment a = new Assignment("a", 10.0);
+		Assignment b = new Assignment("b", 10.0);
+		teach.addAssignmentToCourse("science", a);
+		teach.addAssignmentToCourse("science", b);
+		
+		teach.sortStudents("science", "f");
+		ArrayList<Student> list= teach.getCourse("science").getStudents().getStudents();
+		assertEquals(list.get(0).getFirstName(), "AStu");
+		teach.sortStudents("science", "l");
+		ArrayList<Student> list1= teach.getCourse("science").getStudents().getStudents();
+		assertEquals(list1.get(0).getFirstName(), "Hate");
+		teach.sortStudents("science", "u");
+		ArrayList<Student> list2= teach.getCourse("science").getStudents().getStudents();
+		assertEquals(list2.get(0).getFirstName(), "Zedd");
+		teach.sortStudents("science", "t");
+		ArrayList<Student> list3= teach.getCourse("science").getStudents().getStudents();
+		assertEquals(list3.size(), 3);
+	}
 	
+	@Test
+	void testFindAssignment() {
+		Teacher teach = new Teacher("jane", "doe", "qwf");
+		assertNull(teach.findAssignment(new ArrayList<Assignment>(), "a"));
+		ArrayList<Assignment> assignments = new ArrayList<Assignment>();
+		Assignment a = new Assignment("a", 10.0);
+		Assignment b = new Assignment("b", 9.0);
+		Assignment c = new Assignment("c", 8.0);
+		assignments.add(a);
+		assignments.add(b);
+		assignments.add(c);
+		assertEquals(teach.findAssignment(assignments, "b").getTotalPoints(), 9.0);
+	}
 	
 }

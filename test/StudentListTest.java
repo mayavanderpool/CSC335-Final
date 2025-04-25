@@ -175,7 +175,9 @@ class StudentListTest {
 		teach.addAssignmentGrade(s3, "science", a, 10.0);
 		teach.addAssignmentGrade(s2, "science", a, 8.0);
 		teach.addAssignmentGrade(s1, "science", a, 5.0);
-		ArrayList<Student> list = teach.getStudentByAssgGrade("science", "a");
+		teach.getStudentByAssgGrade("science", "a");  // sort the list
+		ArrayList<Student> list = teach.getCourse("science").getStudents().getStudents();
+		
 		assertEquals(list.get(2), s1);
 		assertEquals(list.get(1), s2);
 		assertEquals(list.get(0), s3);
