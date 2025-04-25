@@ -129,6 +129,7 @@ public class Teacher extends Person {
 		return graded + "/" + total;
 	}
 	
+
 	
 	/*
 	 * makeXGroups(String, int)- returns students from course split into x amount of groups 
@@ -234,6 +235,10 @@ public class Teacher extends Person {
 	public void addStudent(Course c, Student s) {
 		c.addStudents(s);
 		s.addCourse(c);
+
+		for(Assignment a : c.getAssignments()){
+			s.addAssignment(c, a);
+		}
 	}
 	
 	/*

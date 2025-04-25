@@ -83,7 +83,7 @@ public class TeacherController {
 	}
 
 	public void removeAssignment(Course course, Assignment assignment) {
-		course.removeAssg(assignment);
+		teacher.removeAssignmentFromCourse(course.getName(), assignment);
 	}
 
 	public void addAssignmentGrade(String fName, String lName, String courseName, Assignment assignment, double grade) {
@@ -113,6 +113,8 @@ public class TeacherController {
 	public String getCompletedData(Course course, Assignment assignment) {
 		return teacher.getCompletedData(course, assignment);
 	}
+
+
 
 	public String makeXGroups(String course, int number) {
 		return teacher.makeXGroups(course, number);
@@ -145,6 +147,15 @@ public class TeacherController {
 		if (c != null) {
 			StudentList sList = c.getStudents();
 			ArrayList<Student> sorted = teacher.getStudentByUsername(courseName);
+			sList.setStudents(sorted);
+		}
+	}
+
+	public void sortByAssignmentGrade(String assg, String course){
+		Course c = teacher.getCourse(course);
+		if (c != null) {
+			StudentList sList = c.getStudents();
+			ArrayList<Student> sorted = teacher.getStudentByAssgGrade(course, assg);
 			sList.setStudents(sorted);
 		}
 	}

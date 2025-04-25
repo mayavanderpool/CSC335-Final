@@ -74,6 +74,7 @@ public class Course {
 		return all;
 	}
 	
+
 	
 	/* addAssg(Assignment assg) - Adds an assignment to the assignment arraylist.
 	 * Returns: nothing
@@ -117,6 +118,6 @@ public class Course {
 		return str;
 	}
 	
-	
+
 	
 }

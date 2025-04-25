@@ -94,27 +94,25 @@ public class TeacherView implements Observer {
         );
 
         if (selected != null) {
-			for (Course course : courses) {
-				if (course.getName().equals(selected)) {
-					try {
-						CourseView courseView = new CourseView(controller, teacher, course);
-						controller.getAccountManager().addObserver(courseView); 
-						courseView.display();
-
-					} catch (Exception ex) {
-						ex.printStackTrace();
-						JOptionPane.showMessageDialog(frame, "Failed to open course: " + ex.getMessage());
-					}
-					break;
-				}
-			}
-		}
-		
+            for (Course course : courses) {
+                if (course.getName().equals(selected)) {
+                    try {
+                        // Pass the "completed" flag to CourseView to indicate read-only mode
+                        CourseView courseView = new CourseView(controller, teacher, course, completed);
+                        controller.getAccountManager().addObserver(courseView); 
+                        courseView.display();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        JOptionPane.showMessageDialog(frame, "Failed to open course: " + ex.getMessage());
+                    }
+                    break;
+                }
+            }
+        }
     }
 
-	@Override
-	public void update() {
-		showCourseSelection(false);
-		
-	}
+    @Override
+    public void update() {
+        showCourseSelection(false);
+    }
 }
